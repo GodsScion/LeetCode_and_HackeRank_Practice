@@ -2,21 +2,19 @@
 
 
 var longestConsecutive = function(nums) {
-    if (nums.length === 0) return 0
+    if (!nums.length) return 0
     nums.sort((a,b) => a-b)
     let prev = nums[0]
     let seq = 1
-    let maxSeqLen = 1
+    let maxSeq = 1
     for (let num of nums) {
         if ( prev + 1 === num ) {
             seq++
-            maxSeqLen = Math.max(maxSeqLen, seq)
-        } else if (prev !== num) {
-            seq = 1
-        }
+            maxSeq = Math.max(maxSeq, seq)
+        } else if (prev !== num) seq = 1
         prev = num
     }
-    return maxSeqLen
+    return maxSeq
 };
 
 
