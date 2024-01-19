@@ -5,11 +5,11 @@ var longestConsecutive = function(nums) {
     let maxSeqLen = 0
     while (maxSeqLen < nums.length) {
         let num = nums.pop()
+        let longest = num
         while (nums.includes(num-1)) {
             num--
             nums.splice(nums.indexOf(num),1)
         }
-        let longest = num
         while (nums.includes(longest+1)) {
             longest++
             nums.splice(nums.indexOf(longest),1)
