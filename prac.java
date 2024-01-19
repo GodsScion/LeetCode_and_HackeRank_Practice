@@ -11,7 +11,7 @@ class Solution {
             if (prev + 1 == num) {
                 seq++;
                 maxSeq = Math.max(maxSeq, seq);
-            } else {
+            }  else if (prev != num) {
                 seq = 1;
             }
             prev = num;
@@ -20,7 +20,7 @@ class Solution {
     }
 
     public static void main(String[] args) {  
-        int[][] questions = {{1, 2, 4}, {2, 4, 5}};
+        int[][] questions = {{1, 2, 4}, {2, 4, 5}, {1,2,0,1}};
         for (int[] question : questions) {
             System.out.println(longestConsecutive(question));
         }
