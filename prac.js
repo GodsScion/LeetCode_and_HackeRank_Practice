@@ -3,25 +3,28 @@
 var longestConsecutive = function(nums) {
     let numSet = new Set(nums);
     let maxSeqLen = 0;
-
     while (maxSeqLen < numSet.size) {
         let num = [...numSet][0];
         let longest = num + 1;
-
         while (numSet.has(longest)) {
             numSet.delete(longest);
             longest++;
         }
-
         num = num - 1;
         while (numSet.has(num)) {
             numSet.delete(num);
             num--;
         }
-
         maxSeqLen = Math.max(maxSeqLen, longest - num - 1);
     }
-
     return maxSeqLen;
 };
-    
+
+
+var questions = [
+    [100,4,200,1,3,2]
+]
+
+for (let q of questions) {
+    console.log(longestConsecutive(q));
+}
