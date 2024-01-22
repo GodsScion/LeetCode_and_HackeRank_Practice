@@ -24,5 +24,5 @@ questions = [
     ("AABABBA",1)
 ]
 
-for s,a,b,k in questions:
-    print(prob(s,a,b,k))
+for s,k in questions:
+    print(prob(s,k))
