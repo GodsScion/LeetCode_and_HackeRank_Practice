@@ -11,7 +11,9 @@ var longestConsecutive = function(nums) {
         if ( prev + 1 === num ) {
             seq++
             maxSeq = Math.max(maxSeq, seq)
-        } else if (prev !== num) seq = 1
+        } else if (prev !== num) {
+            seq = 1
+        }
         prev = num
     }
     return maxSeq
