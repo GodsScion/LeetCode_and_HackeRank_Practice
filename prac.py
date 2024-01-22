@@ -1,27 +1,27 @@
-def prob(s,a,b,k):
-        i = 0
-        j = -1
-        start = 0
-        sol = []
-        while True:
-            i = s.find(a,start)
-            if i==-1:   break
-            start = i+1
-            j = s.find(b,max(i-k,0),i+k+len(b))
-            if j > -1:
-                sol.append(i)
-            else:
-                j = s.find(b,i+k)
-                if j > -1:  start = max(j-k,start)
-                else:  break
-        return sol 
+def prob(s,k):
+        maxL = 0
+        l = 0
+        while l < len(s):
+            tempK = k
+            r = l
+            while r < len(s) and s[r] == s[l]:  r+=1
+            newC = r
+            while tempK > 0 and r < len(s) and s[r] != s[l]:
+                r += 1
+                tempK -= 1
+            while r < len(s) and s[r] == s[l]:
+                while r < len(s) and s[r] == s[l]:  r+=1
+                while r < len(s) and s[r] != s[l] and tempK > 0:
+                    r += 1
+                    tempK -= 1
+            maxL = max(maxL, min(r-l+tempK, len(s)) )
+            l = newC
+        return maxL
 
 
 questions = [
-    ("isawsquirrelnearmysquirrelhouseohmy","my","squirrel",15),
-    ("dexgscgecd","gscge","d",6),
-    ("tdbnme","t","dbnme",4),
-    ("vatevavakz","va","lbda",1)
+    ("ABAB",2),
+    ("AABABBA",1)
 ]
 
 for s,a,b,k in questions:
