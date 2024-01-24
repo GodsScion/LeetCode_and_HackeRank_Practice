@@ -1,14 +1,10 @@
 from collections import Counter, defaultdict
 
 def prob(nums,k):
-        i = 0
-        window = set()
-        for j in range(len(nums)):
-            if nums[j] in window:   return True
-            window.add(nums[j])
-            if j-i >= k:
-                window.remove(nums[i])
-                i+=1
+        numIndex = {}
+        for i, num in enumerate(nums):
+            if num in numIndex and i - numIndex[num] <= k:  return True
+            numIndex[num] = i
         return False
 
 
