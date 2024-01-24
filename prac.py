@@ -3,13 +3,17 @@ from collections import Counter, defaultdict
 def prob(nums,k):
         i = 0
         window = set()
-        for i in range(min(k,len(nums))):
-            if nums[i] in window: return True
-            
+        for j in range(len(nums)):
+            if nums[j] in window:   return True
+            window.add(nums[j])
+            if j-i >= k:
+                window.remove(nums[i])
+                i+=1
+        return False
 
 
 testCases = [
-    ([1,2,3,4,5,6,7,7,8],5)      
+    ([1,2,3,4,5,6,7,7,8],3)      
 ]
 
 for num,k in testCases: print(prob(num,k))
