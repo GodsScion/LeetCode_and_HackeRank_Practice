@@ -9,7 +9,7 @@ def prob(nums,k):
 
 
 testCases = [
-    ([1,2,3,4,5,6,7,7,8],3)      
+    ([1,2,3,4,5,6,7,7,8],4)      
 ]
 
 for num,k in testCases: print(prob(num,k))
