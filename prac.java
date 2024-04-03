@@ -1,6 +1,15 @@
-import java.util.Arrays;
+import java.util.*;
 
 class Solution {
+    public static int maxProductDifference(int[] nums) {
+        int max1 = 0, max2 = 0, min1 = 100000, min2 = 100000;
+        for(int num: nums){
+            if (num > max1) {max2=max1; max1=num;} else if (num > max2) {max2=num;}
+            if (num < min1) {min2=min1; min1=num;} else if (num < min2) {min2=num;}
+        }
+        return max2*max1 - min1*min2;
+    }
+
     public static  int longestConsecutive(int[] nums) {
         if (nums.length == 0) return 0;
         Arrays.sort(nums);
@@ -20,9 +29,9 @@ class Solution {
     }
 
     public static void main(String[] args) {  
-        int[][] questions = {{1, 2, 4}, {2, 4, 5}, {1,2,0,1}};
+        int[][] questions = {{1, 2, 4,4 ,4,7,8}, {2, 4, 5, 9, 1, 10}, {1,2,0,1, 5, 7, 3}};
         for (int[] question : questions) {
-            System.out.println(longestConsecutive(question));
+            System.out.println(maxProductDifference(question));
         }
     }
 }
