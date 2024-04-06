@@ -1,40 +1,67 @@
 from collections import defaultdict, Counter
 
-# Problem 76
+# Problem 33
 class Solution:
-    def minWindow(self, s: str, t: str) -> str:
-        if len(t) == 0 or len(t) > len(s): return ""
+    def search(self, nums: [int], target: int) -> int:        
+        left, right = 0, len(nums) - 1
         
-        minSub = s+s
-        T = Counter(t)
-        window = defaultdict(int)
-
-        left = 0
-        while left<len(s) and s[left] not in T: left+=1
-        
-        for right in range(left,len(s)):
-            if s[right] in T:
-                window[s[right]]+=1
-                if T == window: 
-                    while True:
-                        while left<right and s[left] not in T: left+=1
-                        if window[s[left]] > T[s[left]]:
-                            window[s[left]]-=1
-                            left+=1
-                        else:   
-                            if len(minSub) > right-left+1: minSub = s[left:right+1]
-                            break
-        
-        return minSub if minSub != s+s else ""
-
-testcases = [
-    ["ADOBECODEBANC","ABC"],
-    ["ABABUIBWEUIFBBIWE","BWE"],
-    # ["ABAA",0],
-    # ["AAAAA",0]
+        while left <= right:
+            mid = (left + right) // 2
+            if target == nums[mid]: return mid
+            
+            if nums[left] <= nums[mid]:
+                if target > nums[mid] or target < nums[left]:   left = mid + 1
+                else:   right = mid - 1
+            else:
+                if target < nums[mid] or target > nums[right]:  right = mid - 1
+                else:   left = mid + 1
+        return -1
+    
+tests = [
+    ([4,5,6,7,0,1,2], 0, 4),
+    ([4,5,6,7,0,1,2], 3, -1),
 ]
 
-for test in testcases: print(Solution().minWindow(test[0],test[1]))
+for test in tests:
+    print(Solution().search(test[0],test[1]), test[2])
+
+# Problem 76
+# class Solution:
+#     def minWindow(self, s: str, t: str) -> str:
+#         if len(t) == 0 or len(t) > len(s): return ""
+        
+#         minSub = s+s
+#         T = Counter(t)
+#         window = defaultdict(int)
+
+#         left, have, need = 0, 0, len(T)
+        
+#         for right,ch in enumerate(s):
+#             if ch in T:
+#                 window[ch]+=1
+#                 if window[ch] == T[ch]: have+=1
+#                 if have == need: 
+#                     while True:
+#                         while left<right and s[left] not in T: left+=1
+#                         if not window[s[left]] > T[s[left]]:   
+#                             if len(minSub) > right-left+1: minSub = s[left:right+1]
+#                             have-=1
+#                             window[s[left]]-=1
+#                             left+=1 
+#                             break
+#                         window[s[left]]-=1
+#                         left+=1    
+        
+#         return minSub if minSub != s+s else ""
+
+# testcases = [
+#     ["ADOBECODEBANC","ABC"],
+#     ["ABABUIBWEUIFBBIWE","BWE"],
+#     # ["ABAA",0],
+#     # ["AAAAA",0]
+# ]
+
+# for test in testcases: print(Solution().minWindow(test[0],test[1]))
 
 
 # Problem 424
