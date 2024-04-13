@@ -1,29 +1,78 @@
 from collections import defaultdict, Counter
 
-# Problem 33
-class Solution:
-    def search(self, nums: [int], target: int) -> int:        
-        left, right = 0, len(nums) - 1
-        
-        while left <= right:
-            mid = (left + right) // 2
-            if target == nums[mid]: return mid
-            
-            if nums[left] <= nums[mid]:
-                if target > nums[mid] or target < nums[left]:   left = mid + 1
-                else:   right = mid - 1
-            else:
-                if target < nums[mid] or target > nums[right]:  right = mid - 1
-                else:   left = mid + 1
-        return -1
-    
-tests = [
-    ([4,5,6,7,0,1,2], 0, 4),
-    ([4,5,6,7,0,1,2], 3, -1),
-]
+# Problem 212
+class Trie:
+    def __init__(self):
+        self.children = {}
+        self.isWord = False
 
-for test in tests:
-    print(Solution().search(test[0],test[1]), test[2])
+    def add(self, word: str):
+        cur = self
+        for i, ch in enumerate(word):
+            if ch not in cur.children: cur.children[ch] = Trie()
+            cur = cur.children[ch]
+        cur.isWord = True
+
+    def remove(self, word: str):
+        cur = self
+        nodes = []
+        for i, ch in enumerate(word):
+            if ch not in cur.children: return
+            nodes.append(cur)
+            cur = cur.children[ch]
+        cur.isWord = False
+        i = -1
+        while nodes:
+            parent = nodes.pop()
+            if len(cur.children) > 0 or cur.isWord: return
+            parent.children.pop(word[i])
+            cur = parent
+            i -= 1
+
+
+
+trie = Trie()
+words = ["abcd","ab","abcdef","abxyz","as",]
+for word in words: trie.add(word)
+
+trie.remove("oa")
+trie.remove("ab")
+trie.remove("abxyz")
+
+
+
+# class Solution:
+#     def findWords(self, board: List[List[str]], words: List[str]) -> List[str]:
+        
+
+            
+
+
+
+# # Problem 33
+# class Solution:
+#     def search(self, nums: [int], target: int) -> int:        
+#         left, right = 0, len(nums) - 1
+        
+#         while left <= right:
+#             mid = (left + right) // 2
+#             if target == nums[mid]: return mid
+            
+#             if nums[left] <= nums[mid]:
+#                 if target > nums[mid] or target < nums[left]:   left = mid + 1
+#                 else:   right = mid - 1
+#             else:
+#                 if target < nums[mid] or target > nums[right]:  right = mid - 1
+#                 else:   left = mid + 1
+#         return -1
+    
+# tests = [
+#     ([4,5,6,7,0,1,2], 0, 4),
+#     ([4,5,6,7,0,1,2], 3, -1),
+# ]
+
+# for test in tests:
+#     print(Solution().search(test[0],test[1]), test[2])
 
 # Problem 76
 # class Solution:
