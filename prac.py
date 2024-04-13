@@ -30,14 +30,50 @@ class Trie:
             i -= 1
 
 
+class Solution:
+    def findWords(self, board: list[list[str]], words: list[str]) -> list[str]:
+        found = set()
+        
+        trie = Trie()
+        for word in words: trie.add(word)
 
-trie = Trie()
-words = ["abcd","ab","abcdef","abxyz","as",]
-for word in words: trie.add(word)
+        row, col = len(board), len(board[0])
+        
+        visited = set()
+        def search(r, c, parent, visited, word):
+            if (r < 0 or c < 0 or r >= row or c >= col or (r,c) in visited or board[r][c] not in parent.children): return
 
-trie.remove("oa")
-trie.remove("ab")
-trie.remove("abxyz")
+            word += board[r][c]
+
+            parent = parent.children[board[r][c]]
+            if parent.isWord:
+                found.add(word)
+                trie.remove(word)
+
+            visited.add((r,c))
+
+            search(r+1, c, parent, visited, word)
+            search(r, c+1, parent, visited, word)
+            search(r-1, c, parent, visited, word)
+            search(r, c-1, parent, visited, word)
+            
+            visited.remove((r, c))
+
+
+        for r in range(row):
+            for c in range(col):
+                search(r, c, trie, visited, "")
+
+        return list(found)
+
+
+testCases = [
+    ([["o","a","a","n"],["e","t","a","e"],["i","h","k","r"],["i","f","l","v"]], ["oath","pea","eat","rain"], ["oath","eat"]),
+    ([["a","a"]], ["aa"], ["aa"])
+]
+
+for board, words, ans in testCases:
+    print(Solution().findWords(board, words), ans)
 
 
 
