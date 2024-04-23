@@ -1,7 +1,7 @@
 // const x = 2; let y = 4; function update(arg) { return Math.random() + y * arg; } y = 2; y=3; const result = update(x); console.log(result);;
 
 // Problem 424 
-var characterReplacement = function(s, k) {
+var characterReplacement = function(s,k) {
     let window = {}, i = 0, maxLen = 1;
     for (let j=0; j<s.length; j++) {
         if (s[j] in window) { 
