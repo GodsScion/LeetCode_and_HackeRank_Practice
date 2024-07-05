@@ -3,28 +3,31 @@ import java.util.*;
 // 347
 class Solution {
     public int[] topKFrequent(int[] nums, int k) {
-        Map<Integer, Integer> freq = new HashMap<Integer, Integer>();
-        List<Set<Integer>> buckets = new ArrayList<Set<Integer>>();
-        for (int num: nums) {
-            // if key is present, remove from val - 1 (prev bucket) and add it to current bucket, keep updating the buckets
-            if (!freq.containsKey(num)) {
-                freq.put(num, 0);
-            }
+        List<List<Integer>> buckets = new ArrayList<>();
+        Map<Integer, Integer> freq = new HashMap<>();
+
+        for ( int num: nums) {
             freq.putIfAbsent(num, 0);
-            int val = freq.get(num) + 1;
-            freq.put(num, val);
-            buckets.get(val).add(num);
-            
+            int val = freq.get(num);
+            if (val > 0) {
+                buckets.get(val).remove(num);
+            }
+            buckets.get(val+1).add(num);
         }
-        List<Integer> output = new ArrayList<Integer>();
-        while (output.size() != k) {
-            Set<Integer> bucket = buckets.remove(buckets.size()-1);
-            for (int num: bucket) {
-                output.add(num);
-                if (k==output.size()) { return output.stream().mapToInt(x->x).toArray(); };
+
+        int[] output = new int[k];
+        while (k>0) {
+            List<Integer> bucket = buckets.remove(buckets.size() - 1);
+            for (Integer n: bucket) {
+                if ( k <= 0) {
+                    break;
+                }
+                output[k-1] = n;
+                k--;
             }
         }
-        return buckets.get(0).stream().mapToInt(x->x).toArray();
+
+        return output;
     }
 }
 
