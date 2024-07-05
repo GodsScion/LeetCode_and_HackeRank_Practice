@@ -1,17 +1,19 @@
 import java.util.*;
 
-// 1
+// 49
 class Solution {
-    public int[] twoSum(int[] nums, int target) {
-        Map<Integer, Integer> prev = new HashMap<>();
-        for (int i=0; i<nums.length; i++) {
-            int need = target-nums[i];
-            if (prev.containsKey(need)) {
-                return new int[] { prev.get(need) , i};
+    public List<List<String>> groupAnagrams(String[] strs) {
+        Map<String,ArrayList<String>> hash = new HashMap<>();
+        for(String word: strs) {
+            char[] idArr = word.toCharArray();
+            Arrays.sort(idArr);
+            String id = new String(idArr);
+            if(!hash.containsKey(id)){
+                hash.put(id, new ArrayList<String>());
             }
-            prev.put(nums[i], i);
+            hash.get(id).add(word);
         }
-        return null;
+        return new ArrayList<>(hash.values());
     }
 }
 
