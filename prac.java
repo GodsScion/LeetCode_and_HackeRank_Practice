@@ -1,36 +1,20 @@
 import java.util.*;
 
-// 217
-// class Solution {
-//     public boolean containsDuplicate(int[] nums) {
-//         Set<Integer> prevNums = new HashSet<Integer>();
-//         for(int num: nums) {
-//             if(prevNums.contains(num)) {
-//                 return true;
-//             }
-//             prevNums.add(num);
-//         }
-//         return false;
-//     }
-// }
-
-// 242
+// 1
 class Solution {
-    public boolean isAnagram(String s, String t) {
-        if (s.length() != t.length()) { return false; }
-        int[] count = new int[26];
-        for (int i=0; i<s.length(); i++) {
-            count[s.charAt(i) - 'a']++;
-            count[t.charAt(i) - 'a']--;
-        }
-        for (int i=0; i<26; i++) {
-            if(count[i] != 0) {
-                return false;
+    public int[] twoSum(int[] nums, int target) {
+        Map<Integer, Integer> prev = new HashMap<>();
+        for (int i=0; i<nums.length; i++) {
+            int need = target-nums[i];
+            if (prev.containsKey(need)) {
+                return new int[] { prev.get(need) , i};
             }
+            prev.put(nums[i], i);
         }
-        return true;
+        return null;
     }
 }
+
 
 // class Solution {
 //     public static int maxProductDifference(int[] nums) {
