@@ -3,28 +3,18 @@ import java.util.*;
 // 49
 class Solution {
     public List<List<String>> groupAnagrams(String[] strs) {
-        Map<String, ArrayList<String>> map = new HashMap<>();
-
-        for (String word: strs) {
-            int[] count = new int[26];
-            for (char c: word.toCharArray()) {
-                count[c - 'a']++;
+        Map<String,ArrayList<String>> hash = new HashMap<>();
+        for(String word: strs) {
+            char[] count = new char[26];
+            for(char c: word.toCharArray()) {
+                count[c-'a']++;
             }
-            StringBuilder sb = new StringBuilder();
-            for (int i: count) {
-                sb.append(i).append("#");
-            }
-            String id = sb.toString();
-            
-            if(!map.containsKey(id)) {
-                map.put(id, new ArrayList<String>());
-            }
-            map.get(id).add(word);
+            String id = String.valueOf(count);
+            hash.putIfAbsent(id, new ArrayList<String>());
+            hash.get(id).add(word);
         }
-
-        return new ArrayList<List<String>>(map.values());
+        return new ArrayList<>(hash.values());
     }
-
 }
 
 class Main {
