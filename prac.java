@@ -3,7 +3,7 @@ import java.util.*;
 // 347
 class Solution {
     public int[] topKFrequent(int[] nums, int k) {
-        List<Integer>[] buckets = new List[nums.length + 1];
+        ArrayList<Integer>[] buckets = new ArrayList[nums.length + 1];
         Map<Integer, Integer> freq = new HashMap<>();
 
         for (int num: nums) {
@@ -25,8 +25,7 @@ class Solution {
                     if (k==0) {
                         return output;
                     }
-                    output[k-1] = num;
-                    k--;
+                    output[--k] = num;
                 }
             } 
         }
