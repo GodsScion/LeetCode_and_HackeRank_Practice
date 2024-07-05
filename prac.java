@@ -3,18 +3,41 @@ import java.util.*;
 // 49
 class Solution {
     public List<List<String>> groupAnagrams(String[] strs) {
-        Map<String,ArrayList<String>> hash = new HashMap<>();
-        for(String word: strs) {
-            char[] idArr = word.toCharArray();
-            Arrays.sort(idArr);
-            String id = new String(idArr);
-            if(!hash.containsKey(id)){
-                hash.put(id, new ArrayList<String>());
+        Map<String, ArrayList<String>> map = new HashMap<>();
+
+        for (String word: strs) {
+            int[] count = new int[26];
+            for (char c: word.toCharArray()) {
+                count[c - 'a']++;
             }
-            hash.get(id).add(word);
+            StringBuilder sb = new StringBuilder();
+            for (int i: count) {
+                sb.append(i).append("#");
+            }
+            String id = sb.toString();
+            
+            if(!map.containsKey(id)) {
+                map.put(id, new ArrayList<String>());
+            }
+            map.get(id).add(word);
         }
-        return new ArrayList<>(hash.values());
+
+        return new ArrayList<List<String>>(map.values());
     }
+
+}
+
+class Main {
+    public static void main(String[] args) {
+        ArrayList<List<String>> questions = new ArrayList<List<String>>();
+        questions.add(Arrays.asList("eat", "tea", "tan", "ate", "nat", "bat"));
+        questions.add(Arrays.asList("e", "at", "ta", "ate", ""));                
+    
+        Solution sol = new Solution();
+        for (List<String> question: questions) {
+            System.out.println(sol.groupAnagrams(question.toArray(new String[0])));
+        }
+    };        
 }
 
 
