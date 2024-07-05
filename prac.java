@@ -3,28 +3,32 @@ import java.util.*;
 // 347
 class Solution {
     public int[] topKFrequent(int[] nums, int k) {
-        List<List<Integer>> buckets = new ArrayList<>();
+        List<Integer>[] buckets = new List[nums.length + 1];
         Map<Integer, Integer> freq = new HashMap<>();
 
-        for ( int num: nums) {
-            freq.putIfAbsent(num, 0);
-            int val = freq.get(num);
-            if (val > 0) {
-                buckets.get(val).remove(num);
+        for (int num: nums) {
+            freq.put(num, freq.getOrDefault(num,0) + 1);
+        }
+
+        for (int num: freq.keySet()) {
+            int count = freq.get(num);
+            if (buckets[count] == null) {
+                buckets[count] = new ArrayList<Integer>();
             }
-            buckets.get(val+1).add(num);
+            buckets[count].add(num);
         }
 
         int[] output = new int[k];
-        while (k>0) {
-            List<Integer> bucket = buckets.remove(buckets.size() - 1);
-            for (Integer n: bucket) {
-                if ( k <= 0) {
-                    break;
+        for (int i = buckets.length-1; i >= 0 ; i--) {
+            if(buckets[i] != null) {
+                for(int num: buckets[i]) {
+                    if (k==0) {
+                        return output;
+                    }
+                    output[k-1] = num;
+                    k--;
                 }
-                output[k-1] = n;
-                k--;
-            }
+            } 
         }
 
         return output;
@@ -33,14 +37,14 @@ class Solution {
 
 class Main {
     public static void main(String[] args) {
-        ArrayList<List<String>> questions = new ArrayList<List<String>>();
-        questions.add(Arrays.asList("eat", "tea", "tan", "ate", "nat", "bat"));
-        questions.add(Arrays.asList("e", "at", "ta", "ate", ""));                
+        // ArrayList<List<String>> questions = new ArrayList<List<String>>();
+        // questions.add(Arrays.asList("eat", "tea", "tan", "ate", "nat", "bat"));
+        // questions.add(Arrays.asList("e", "at", "ta", "ate", ""));                
     
-        Solution sol = new Solution();
-        for (List<String> question: questions) {
-            System.out.println(sol.groupAnagrams(question.toArray(new String[0])));
-        }
+        // Solution sol = new Solution();
+        // for (List<String> question: questions) {
+        //     System.out.println(sol.groupAnagrams(question.toArray(new String[0])));
+        // }
     };        
 }
 
