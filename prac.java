@@ -1,19 +1,36 @@
 import java.util.*;
 
-// Question 217
+// 217
+// class Solution {
+//     public boolean containsDuplicate(int[] nums) {
+//         Set<Integer> prevNums = new HashSet<Integer>();
+//         for(int num: nums) {
+//             if(prevNums.contains(num)) {
+//                 return true;
+//             }
+//             prevNums.add(num);
+//         }
+//         return false;
+//     }
+// }
+
+// 242
 class Solution {
-    public boolean containsDuplicate(int[] nums) {
-        Set<Integer> prevNums = new HashSet<Integer>();
-        for(int num: nums) {
-            if(prevNums.contains(num)) {
-                return true;
-            }
-            prevNums.add(num);
+    public boolean isAnagram(String s, String t) {
+        if (s.length() != t.length()) { return false; }
+        int[] count = new int[26];
+        for (int i=0; i<s.length(); i++) {
+            count[s.charAt(i) - 'a']++;
+            count[t.charAt(i) - 'a']--;
         }
-        return false;
+        for (int i=0; i<26; i++) {
+            if(count[i] != 0) {
+                return false;
+            }
+        }
+        return true;
     }
 }
-
 
 // class Solution {
 //     public static int maxProductDifference(int[] nums) {
