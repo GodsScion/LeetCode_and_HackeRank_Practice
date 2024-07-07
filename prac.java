@@ -1,16 +1,14 @@
 import java.util.*;
 
-// 11
+// 121
 class Solution {
-    public int maxArea(int[] height) {
-        int max = 0, left = 0, right = height.length-1;
-        while (left < right) {
-            if ( height[left] < height[right] ) {
-                max = Math.max(max, height[left]*(right-left));
-                left++;
+    public int maxProfit(int[] prices) {
+        int max = 0, buy = prices[0];
+        for (int i=1; i<prices.length; i++) {
+            if (prices[i] < buy) {
+                buy = prices[i];
             } else {
-                max = Math.max(max, height[right]*(right-left));
-                right--;
+                max = Math.max(prices[i] - buy, max);
             }
         }
         return max;
