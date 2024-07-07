@@ -1,31 +1,35 @@
 import java.util.*;
 
-// 125
+// 15
 class Solution {
-    public boolean isAlNum(char c) {
-        return (c >= '0' && c <= '9') || (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'); 
-    }
+    public List<List<Integer>> threeSum(int[] nums) {
+        int len = nums.length;
+        Arrays.sort(nums);
+        List<List<Integer>> out = new ArrayList<>();
 
-    public boolean isPalindrome(String s) {
-        s = s.toLowerCase();
-        int left = 0, right = s.length()-1;
-        while (left < right) {
-            while ( !isAlNum(s.charAt(left)) && left < right ) {
-                left++;
+        for (int i=0; i<len; i++) {
+            if (i > 0 && nums[i-1] == nums[i]) { continue; }
+            int left = i+1;
+            int right = len-1;
+            while (left < right) {
+                int sum = nums[i] + nums[left] + nums[right];
+                if ( sum == 0 ) {
+                    out.add(Arrays.asList(nums[i], nums[left], nums[right]));
+                    left++;
+                    while (left <= right && nums[left-1] == nums[left]) {
+                        left++;
+                    }
+                } else if (sum > 0) {
+                    right--;
+                } else {
+                    left++;
+                }
             }
-            while ( !isAlNum(s.charAt(right)) && right > left ) {
-                right--;
-            }
-            if ( s.charAt(left) != s.charAt(right) ) {
-                return false;
-            }
-            left++;
-            right--;
         }
-        return true;
+
+        return out;
     }
 }
-
 
 class Main {
     public static void main(String[] args) {
