@@ -10,16 +10,14 @@ class Solution {
         
         int maxCount = 0;
         while (set.size() > maxCount) {
-            int count = 0;
+            int count = 1;
             int num = set.iterator().next();
             set.remove(num);
             int prev = num;
-            while (set.contains(--prev)) {
-                set.remove(prev);
+            while (set.remove(--prev)) {
                 count++;
             }
-            while (set.contains(++num)) {
-                set.remove(num);
+            while (set.remove(++num)) {
                 count++;
             }
             maxCount = Math.max(maxCount, count);
