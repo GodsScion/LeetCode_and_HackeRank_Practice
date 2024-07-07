@@ -1,33 +1,19 @@
 import java.util.*;
 
-// 15
+// 11
 class Solution {
-    public List<List<Integer>> threeSum(int[] nums) {
-        int len = nums.length;
-        Arrays.sort(nums);
-        List<List<Integer>> out = new ArrayList<>();
-
-        for (int i=0; i<len; i++) {
-            if (i > 0 && nums[i-1] == nums[i]) { continue; }
-            int left = i+1;
-            int right = len-1;
-            while (left < right) {
-                int sum = nums[i] + nums[left] + nums[right];
-                if ( sum == 0 ) {
-                    out.add(Arrays.asList(nums[i], nums[left], nums[right]));
-                    left++;
-                    while (left <= right && nums[left-1] == nums[left]) {
-                        left++;
-                    }
-                } else if (sum > 0) {
-                    right--;
-                } else {
-                    left++;
-                }
+    public int maxArea(int[] height) {
+        int max = 0, left = 0, right = height.length-1;
+        while (left < right) {
+            if ( height[left] < height[right] ) {
+                max = Math.max(max, height[left]*(right-left));
+                left++;
+            } else {
+                max = Math.max(max, height[right]*(right-left));
+                right--;
             }
         }
-
-        return out;
+        return max;
     }
 }
 
