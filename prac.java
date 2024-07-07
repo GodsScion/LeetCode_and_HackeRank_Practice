@@ -1,15 +1,20 @@
 import java.util.*;
 
-// 121
+// 3
 class Solution {
-    public int maxProfit(int[] prices) {
-        int max = 0, buy = prices[0];
-        for (int i=1; i<prices.length; i++) {
-            if (prices[i] < buy) {
-                buy = prices[i];
-            } else {
-                max = Math.max(prices[i] - buy, max);
+    public int lengthOfLongestSubstring(String s) {
+        Set<Character> set = new HashSet<>();
+        int left = 0, right = 0, max = 0;
+        while ( right < s.length() ) {
+            while (set.contains(s.charAt(right))) {
+                set.remove(s.charAt(left));
+                left++;
+                // set.add(s.charAt(right));
+                // right++;
             }
+            set.add(s.charAt(right));
+            max = Math.max(max, set.size());
+            right++;
         }
         return max;
     }
