@@ -1,36 +1,37 @@
 import java.util.*;
 
-// 347
+// 128
 class Solution {
-    public int[] topKFrequent(int[] nums, int k) {
-        // Create a frequency map to count the occurrences of each number
-        Map<Integer, Integer> freq = new HashMap<>();
+    public int longestConsecutive(int[] nums) {
+        Set<Integer> set = new HashSet<>();
         for (int num : nums) {
-            freq.put(num, freq.getOrDefault(num, 0) + 1);
+            set.add(num);
         }
-
-        // Create a max-heap (priority queue) based on the frequency
-        PriorityQueue<Map.Entry<Integer, Integer>> maxHeap = new PriorityQueue<>(
-            (a, b) -> b.getValue() - a.getValue()
-        );
-
-        // Add all entries from the frequency map to the max-heap
-        maxHeap.addAll(freq.entrySet());
-
-        // Extract the top k frequent elements
-        int[] output = new int[k];
-        for (int i = 0; i < k; i++) {
-            output[i] = maxHeap.poll().getKey();
+        
+        int maxCount = 0;
+        while (set.size() > maxCount) {
+            int count = 0;
+            int num = set.iterator().next();
+            set.remove(num);
+            int prev = num;
+            while (set.contains(--prev)) {
+                set.remove(prev);
+                count++;
+            }
+            while (set.contains(++num)) {
+                set.remove(num);
+                count++;
+            }
+            maxCount = Math.max(maxCount, count);
         }
-
-        return output;
+        return maxCount;
     }
 }
 
 
 class Main {
     public static void main(String[] args) {
-        // ArrayList<List<String>> questions = new ArrayList<List<String>>();
+         ArrayList<List<String>> questions = new ArrayList<List<String>>();
         // questions.add(Arrays.asList("eat", "tea", "tan", "ate", "nat", "bat"));
         // questions.add(Arrays.asList("e", "at", "ta", "ate", ""));                
     
