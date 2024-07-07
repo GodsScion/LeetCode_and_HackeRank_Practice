@@ -1,23 +1,28 @@
 import java.util.*;
 
-// 128
+// 125
 class Solution {
-    public int longestConsecutive(int[] nums) {
-        if (nums.length == 0) { return 0; }
-        Arrays.sort(nums);
-        int max = 1;
-        int count = 1;
-        for (int i=1; i<nums.length; i++) {
-            if (nums[i] == nums[i-1] + 1) {
-                count++;
-            } else if (nums[i] == nums[i-1]) {
-                continue;
-            } else {
-                max = Math.max(count, max);
-                count = 1;
+    public boolean isAlNum(char c) {
+        return (c >= '0' && c <= '9') || (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'); 
+    }
+
+    public boolean isPalindrome(String s) {
+        s = s.toLowerCase();
+        int left = 0, right = s.length()-1;
+        while (left < right) {
+            while ( !isAlNum(s.charAt(left)) && left < right ) {
+                left++;
             }
+            while ( !isAlNum(s.charAt(right)) && right > left ) {
+                right--;
+            }
+            if ( s.charAt(left) != s.charAt(right) ) {
+                return false;
+            }
+            left++;
+            right--;
         }
-        return Math.max(count,max);
+        return true;
     }
 }
 
