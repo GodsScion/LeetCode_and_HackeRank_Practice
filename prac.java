@@ -336,12 +336,118 @@ class Solution {
         return max;
     }
 
-    
+    //STACK
+    //20
+    public boolean isValid(String s) {
+        Stack<Character> stack = new Stack<>();
+        String par = "{([";
+        for (char c: s.toCharArray()) {
+            if (par.indexOf(c) != -1) {
+                stack.push(c);
+            } else {
+                switch(c) {                
+                    case '}':
+                        if (stack.isEmpty() || stack.pop() != '{') return false;
+                        break;
+                    case ']':
+                        if (stack.isEmpty() || stack.pop() != '[') return false;
+                        break;
+                    case ')':
+                        if (stack.isEmpty() || stack.pop() != '(') return false;
+                        break;
+                }
+            }
+        }
+        return stack.isEmpty();
+    }
+
+    //LINKED LIST
+    //206
+    /**
+    * Definition for singly-linked list. */
+    public class ListNode {
+        int val;
+        ListNode next;
+        ListNode() {}
+        ListNode(int val) { this.val = val; }
+        ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+    }
+    // def end */
+
+    public ListNode reverseList(ListNode head) {
+        ListNode prev = null;
+        while (head != null) {
+            ListNode next = head.next;
+            head.next = prev;
+            prev = head;
+            head = next;
+        }
+        return prev;
+    }
+
+    // 21
+    //Same def as 206
+    public ListNode mergeTwoLists(ListNode list1, ListNode list2) {
+        ListNode dummy = new ListNode();
+        ListNode cur = dummy;
+        while (list1 != null && list2 != null) {
+            if (list1.val < list2.val) {
+                cur.next = list1;
+                list1 = list1.next;
+            } else {
+                cur.next = list2;
+                list2 = list2.next;
+            }
+            cur = cur.next;
+        }
+        if (list1 != null) {
+            cur.next = list1;
+        } else {
+            cur.next = list2;
+        }
+        return dummy.next;
+    }
+
+    // 143
+    // Same def as 206
+    public void reorderList(ListNode head) {
+        ListNode slowPointer = head;
+        ListNode fastPointer = head;
+        while (fastPointer.next != null) {
+            fastPointer = fastPointer.next;
+            if (fastPointer.next != null) {
+                fastPointer = fastPointer.next;
+                slowPointer = slowPointer.next;
+            }
+        }
+        
+        ListNode prev = null;
+        ListNode cur = slowPointer.next;
+        slowPointer.next = null;
+        while (cur != null) {
+            ListNode next = cur.next;
+            cur.next = prev;
+            prev = cur;
+            cur = next;
+        }
+
+        slowPointer = head;
+        while (slowPointer != null && fastPointer != null) {
+            cur = slowPointer.next;
+            slowPointer.next = fastPointer;
+            slowPointer = cur;
+            prev = fastPointer.next;
+            fastPointer.next = cur;
+            fastPointer = prev;
+        }
+
+    }
+
 }
 
 class Main {
     public static void main(String[] args) {
-         ArrayList<List<String>> questions = new ArrayList<List<String>>();
+        //  ArrayList<List<String>> questions = new ArrayList<List<String>>();
         // questions.add(Arrays.asList("eat", "tea", "tan", "ate", "nat", "bat"));
         // questions.add(Arrays.asList("e", "at", "ta", "ate", ""));                
     
