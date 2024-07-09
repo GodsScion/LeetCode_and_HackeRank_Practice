@@ -1,7 +1,8 @@
 import java.util.*;
 
 class Solution {
-    //217
+    //#######  ARRAYS AND HASHING  #######//
+    // 217
     public boolean containsDuplicate(int[] nums) {
         Set<Integer> prevNums = new HashSet<Integer>();
         for(int num: nums) {
@@ -13,7 +14,7 @@ class Solution {
         return false;
     }
 
-    //242
+    // 242
     public boolean isAnagram(String s, String t) {
         if (s.length() != t.length()) { return false; }
         int[] count = new int[26];
@@ -29,7 +30,7 @@ class Solution {
         return true;
     }
 
-    //1
+    // 1
     public int[] twoSum(int[] nums, int target) {
         Map<Integer, Integer> prev = new HashMap<>();
         for (int i=0; i<nums.length; i++) {
@@ -42,7 +43,7 @@ class Solution {
         return null;
     }
 
-    //49
+    // 49
     public List<List<String>> groupAnagrams(String[] strs) {
         HashMap<String,List<String>> hash_map = new HashMap<>();
         for (String word: strs) {
@@ -58,6 +59,7 @@ class Solution {
 
         return new ArrayList<>(hash_map.values());
     }
+    // 49
     public List<List<String>> groupAnagrams2(String[] strs) {
         Map<String,ArrayList<String>> hash = new HashMap<>();
         for(String word: strs) {
@@ -71,6 +73,7 @@ class Solution {
         }
         return new ArrayList<>(hash.values());
     }
+    // 49
     public List<List<String>> groupAnagrams3(String[] strs) {
         Map<String, ArrayList<String>> map = new HashMap<>();
         for (String word: strs) {
@@ -91,7 +94,7 @@ class Solution {
         return new ArrayList<List<String>>(map.values());
     }
 
-    //347
+    // 347
     public int[] topKFrequent(int[] nums, int k) {
         Map<Integer, Integer> freq = new HashMap<>();
         for (int num : nums) {
@@ -111,7 +114,7 @@ class Solution {
 
         return output;
     }
-
+    // 347
     public int[] topKFrequent2(int[] nums, int k) {
         List<Integer>[] buckets = new List[nums.length + 1];
         Map<Integer, Integer> freq = new HashMap<>();
@@ -144,7 +147,7 @@ class Solution {
         return output;
     }
 
-    //238
+    // 238
     public int[] productExceptSelf(int[] nums) {
         int n = nums.length;
         int[] back = new int[n];
@@ -163,7 +166,7 @@ class Solution {
         }
         return output;
     }
-
+    // 238
     public int[] productExceptSelf2(int[] nums) {
         int n = nums.length;
         int[] arr = new int[n];
@@ -179,7 +182,7 @@ class Solution {
         return arr;
     }
 
-    //128
+    // 128
     public int longestConsecutive(int[] nums) {
         if (nums.length == 0) { return 0; }
         Arrays.sort(nums);
@@ -197,7 +200,7 @@ class Solution {
         }
         return Math.max(count,max);
     }
-
+    // 128
     public int longestConsecutive2(int[] nums) {
         Set<Integer> set = new HashSet<>();
         for (int num : nums) {
@@ -217,7 +220,8 @@ class Solution {
         return maxCount;
     }
 
-    //125
+    //#######  TWO POINTERS  #######//
+    // 125
     public boolean isAlNum(char c) {
         return (c >= '0' && c <= '9') || (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'); 
     }
@@ -240,7 +244,7 @@ class Solution {
         return true;
     }
 
-    //15
+    // 15
     public List<List<Integer>> threeSum(int[] nums) {
         int len = nums.length;
         Arrays.sort(nums);
@@ -268,7 +272,23 @@ class Solution {
         return out;
     }
 
-    //121
+    // 11
+    public int maxArea(int[] height) {
+        int max = 0, left = 0, right = height.length-1;
+        while (left < right) {
+            if ( height[left] < height[right] ) {
+                max = Math.max(max, height[left]*(right-left));
+                left++;
+            } else {
+                max = Math.max(max, height[right]*(right-left));
+                right--;
+            }
+        }
+        return max;
+    }
+
+    //#######  SLIDING WINDOW  #######//
+    // 121
     public int maxProfit(int[] prices) {
         int max = 0, buy = prices[0];
         for (int i=1; i<prices.length; i++) {
@@ -289,22 +309,6 @@ class Solution {
         return max;
     }
 
-
-    //11
-    public int maxArea(int[] height) {
-        int max = 0, left = 0, right = height.length-1;
-        while (left < right) {
-            if ( height[left] < height[right] ) {
-                max = Math.max(max, height[left]*(right-left));
-                left++;
-            } else {
-                max = Math.max(max, height[right]*(right-left));
-                right--;
-            }
-        }
-        return max;
-    }
-
     // 3
     public int lengthOfLongestSubstring(String s) {
         Set<Character> set = new HashSet<>();
@@ -320,6 +324,7 @@ class Solution {
         }
         return max;
     }
+    // 3
     public int lengthOfLongestSubstring2(String s) {
         Set<Character> set = new HashSet<>();
         int left = 0, right = 0, max = 0;
@@ -336,8 +341,8 @@ class Solution {
         return max;
     }
 
-    //STACK
-    //20
+    //#######  STACK  #######//
+    // 20
     public boolean isValid(String s) {
         Stack<Character> stack = new Stack<>();
         String par = "{([";
@@ -361,8 +366,8 @@ class Solution {
         return stack.isEmpty();
     }
 
-    //LINKED LIST
-    //206
+    //#######  LINKED LIST  #######//
+    // 206
     /**
     * Definition for singly-linked list. */
     public class ListNode {
@@ -372,7 +377,7 @@ class Solution {
         ListNode(int val) { this.val = val; }
         ListNode(int val, ListNode next) { this.val = val; this.next = next; }
     }
-    // def end */
+    /* def end */
 
     public ListNode reverseList(ListNode head) {
         ListNode prev = null;
@@ -386,7 +391,7 @@ class Solution {
     }
 
     // 21
-    //Same def as 206
+    // Same def as 206
     public ListNode mergeTwoLists(ListNode list1, ListNode list2) {
         ListNode dummy = new ListNode();
         ListNode cur = dummy;
@@ -440,10 +445,11 @@ class Solution {
             fastPointer.next = cur;
             fastPointer = prev;
         }
-
     }
 
 }
+
+
 
 class Main {
     public static void main(String[] args) {
