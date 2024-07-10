@@ -341,6 +341,21 @@ class Solution {
         return max;
     }
 
+    // 424
+    public int characterReplacement(String s, int k) {
+        int[] freq = new int[26];
+        int start = 0, count = 0;
+        for (int end = 0; end < s.length(); end++) {
+            freq[s.charAt(end) - 'A']++;
+            count = Math.max(count, freq[s.charAt(end) - 'A']);
+            if ( end - start + 1  >  count + k ) {
+                freq[s.charAt(start) - 'A']--;
+                start++;
+            }
+        }
+        return s.length() - start;
+    }
+
     //#######  STACK  #######//
     // 20
     public boolean isValid(String s) {
