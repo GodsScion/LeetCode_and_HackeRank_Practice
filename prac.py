@@ -11,7 +11,9 @@ class Solution:
                 return True
             prev.add(n)
         return False
-
+    # 217
+    def containsDuplicate2(self, nums: list[int]) -> bool:
+        return len(nums) != len(set(nums))
 
 # Problem 212
 class Trie:
