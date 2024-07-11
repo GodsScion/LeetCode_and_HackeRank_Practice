@@ -1,5 +1,18 @@
 from collections import defaultdict, Counter
 
+class Solution:
+
+    #######  ARRAYS AND HASHING  #######
+    # 217
+    def containsDuplicate(self, nums: list[int]) -> bool:
+        prev = set()
+        for n in nums:
+            if n in prev:
+                return True
+            prev.add(n)
+        return False
+
+
 # Problem 212
 class Trie:
     def __init__(self):
@@ -8,8 +21,9 @@ class Trie:
 
     def add(self, word: str):
         cur = self
-        for i, ch in enumerate(word):
-            if ch not in cur.children: cur.children[ch] = Trie()
+        for ch in word:
+            if ch not in cur.children:
+                cur.children[ch] = Trie()
             cur = cur.children[ch]
         cur.isWord = True
 
@@ -17,14 +31,16 @@ class Trie:
         cur = self
         nodes = []
         for i, ch in enumerate(word):
-            if ch not in cur.children: return
+            if ch not in cur.children:
+                return
             nodes.append(cur)
             cur = cur.children[ch]
         cur.isWord = False
         i = -1
         while nodes:
             parent = nodes.pop()
-            if len(cur.children) > 0 or cur.isWord: return
+            if len(cur.children) > 0 or cur.isWord:
+                return
             parent.children.pop(word[i])
             cur = parent
             i -= 1
