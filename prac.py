@@ -14,6 +14,10 @@ class Solution:
     # 217
     def containsDuplicate2(self, nums: list[int]) -> bool:
         return len(nums) != len(set(nums))
+    
+    # 242
+    def isAnagram(self, s: str, t: str) -> bool:
+        return Counter(s) == Counter(t)
 
 # Problem 212
 class Trie:
