@@ -19,6 +19,41 @@ class Solution:
     def isAnagram(self, s: str, t: str) -> bool:
         return Counter(s) == Counter(t)
 
+    #######  SLIDING WINDOW  #######
+    # 76
+    def minWindow(self, s, t):
+        if len(t) > len(s):
+            return ""
+        
+        oStart = 0
+        oEnd = len(s) + len(t)
+        need = len(freq)
+        freq = Counter(t)
+        available = defaultdict(int)
+        important = []
+        i = 0
+        
+        for end,c in enumerate(s):
+            if c in freq:
+                important.append(end)
+                available[c] += 1
+                if available[c] == freq[c]:
+                    need -= 1
+                if need == 0:
+                    while important[i] < end and available[s[important[i]]] > freq[s[important[i]]]:
+                        available[s[important[i]]] -= 1
+                        i+=1
+                    if oEnd-oStart > end-important[i]:
+                        oEnd = end
+                        oStart = important[i]
+                    available[s[important[i]]] -= 1
+                    i+=1
+                    need += 1
+        
+        return s[oStart: oEnd+1] if oEnd != len(s) + len(t) else ""
+
+
+
 # Problem 212
 class Trie:
     def __init__(self):
