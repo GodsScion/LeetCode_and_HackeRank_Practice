@@ -27,8 +27,8 @@ class Solution:
         
         oStart = 0
         oEnd = len(s) + len(t)
-        need = len(freq)
         freq = Counter(t)
+        need = len(freq)
         available = defaultdict(int)
         important = []
         i = 0
