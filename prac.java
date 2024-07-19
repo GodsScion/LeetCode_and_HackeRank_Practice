@@ -356,6 +356,51 @@ class Solution {
         return s.length() - start;
     }
 
+    // 76
+    public String minWindow(String s, String t) {
+        if (t.length() > s.length()) { return ""; }
+        int need = 0, have = 0, i = 0, oi = 0, oj = s.length()+t.length();
+        Map<Character, Integer> want = new HashMap<>();
+        Map<Character, Integer> window = new HashMap<>();
+        List<Integer> indices = new ArrayList<>();
+
+        for (char c: t.toCharArray()) {
+            want.put(c, want.getOrDefault(c,0) + 1);
+        }
+        need = want.size();
+
+        for (int k=0; k<s.length(); k++) {
+            char c = s.charAt(k);
+            if (want.containsKey(c)) {
+                indices.add(k);
+                window.put(c, window.getOrDefault(c, 0) + 1 );
+                if (window.get(c) == want.get(c)) {
+                    have++;
+                }
+                if (need == have) {
+                    while (indices.get(i) < k && window.get(s.charAt(indices.get(i))) > want.get(s.charAt(indices.get(i))) ) {
+                        c = s.charAt(indices.get(i));
+                        window.put(c ,window.get(c)-1);
+                        i++;
+                    }
+                    if (k-indices.get(i) < oj-oi) {
+                        oj = k;
+                        oi = indices.get(i);
+                    }
+                    c = s.charAt(indices.get(i));
+                    window.put(c,window.get(c)-1);
+                    have--;
+                    i++;
+                }
+            }
+        }
+
+        if (oj == s.length()+t.length()) {
+            return "";
+        }
+        return s.substring(oi,oj+1);
+    }
+
     //#######  STACK  #######//
     // 20
     public boolean isValid(String s) {
