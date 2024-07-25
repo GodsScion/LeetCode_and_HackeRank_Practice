@@ -401,6 +401,71 @@ class Solution {
         return s.substring(oi,oj+1);
     }
 
+    // 76.2 Debug
+    class Solution {
+    public String minWindow2(String s, String t) {
+        if (t.length() > s.length()) { return ""; }
+        int need = 0, i = 0, oi = 0, oj = s.length()+t.length();
+        System.out.println("s len = "+s.length());
+        System.out.println("t len = "+t.length());
+        System.out.println("s+t len = "+oj);
+        Map<Character, Integer> want = new HashMap<>();
+        Map<Character, Integer> window = new HashMap<>();
+        List<Integer> indices = new ArrayList<>();        
+        
+
+        for (char c: t.toCharArray()) {
+            want.put(c, want.getOrDefault(c,0) + 1);
+        }
+        need = want.size();
+
+        System.out.println("need = "+need);
+
+        for (int k=0; k<s.length(); k++) {
+            char c = s.charAt(k);
+            if (want.containsKey(c)) {
+                indices.add(k);
+                window.put(c, window.getOrDefault(c, 0) + 1 );
+                if (c == 's' && window.get(c) > 409) { System.out.println(c + " : " + window.get(c) + ", needed is " + want.get(c));}
+                if (Integer.valueOf(window.get(c)) == Integer.valueOf(want.get(c))) {
+                    need--;
+                    System.out.println("For '"+c+"' we got window.get(c) == want.get(c), need = "+need);
+                }
+                if (need == 0) {
+                    System.out.println("need = 0, triggered");
+                    while (indices.get(i) < k && window.get(s.charAt(indices.get(i))) > want.get(s.charAt(indices.get(i))) ) {
+                        c = s.charAt(indices.get(i));
+                        window.put(c ,window.get(c)-1);
+                        i++;
+                    }
+                    if (oj-oi > k-indices.get(i)) {
+                        oj = k;
+                        oi = indices.get(i);
+                    }
+                    c = s.charAt(indices.get(i));
+                    window.put(c,window.get(c)-1);
+                    need++;
+                    i++;
+                }
+            }
+        }
+
+        int diff = oj-oi;
+        System.out.println("oi = " + oi + ", oj = " + oj + ", oj-oi = " + diff + ", need = " + need);
+        want.forEach((key, val) -> System.out.println(key + ": " + val));
+        System.out.println("What we found...");
+        window.forEach((key, val) -> System.out.println(key + ": " + val));
+        System.out.println(indices);
+        
+
+        if (oj != s.length()+t.length()) {
+            return s.substring(oi,oj+1);
+        }
+        return "";
+    }
+}
+
+    
     //#######  STACK  #######//
     // 20
     public boolean isValid(String s) {
