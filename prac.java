@@ -427,6 +427,26 @@ class Solution {
         return stack.isEmpty();
     }
 
+    //#######  BINARY SEARCH  #######//
+    // 153
+    public int findMin(int[] nums) {
+        int left = 0, right = nums.length-1, mid;
+        while (left < right) {
+            mid = (right + left)/2;
+            if (nums[left] > nums[mid]) {
+                right = mid;
+                left++;
+            } 
+            else if (nums[mid] > nums[right]) {
+                left = mid+1;
+            }
+            else {
+                return nums[left];
+            }
+        }
+        return nums[right];
+    }
+
     //#######  LINKED LIST  #######//
     // 206
     /**
