@@ -448,35 +448,29 @@ class Solution {
     }
     // 33
     public int search(int[] nums, int target) {
-        // t = 2
-        // 0,1,2,4,5,6,7;   1,2,4,5,6,7,0;   4,5,6,7,0,1,3;   5,6,7,0,1,2,4;   7,0,1,2,4,5,6;   6,7,0,1,2,4,5;
-        // t>l, t<m, t<r    t>l, t<m, t>r    t<l, t<m, t<r    t<l, t>m, t<r
-        // t = 6
-        //                  5,6,7,0,1,2,4; 
-        // 0,1,2,4,5,6,7;   1,2,4,5,6,7,0;   4,5,6,7,0,1,3;   
-        // t>l, t>m, t<r    t>l, t>m, t>r    t>l, t<m, t>r
-        int l = 0, r = nums.length, m;
-        while () {
-            m = (r + l)/2;
-            if (nums[m] == target) {
-                return m;
-            }
-            
-            if (nums[l] < nums[m]) {
-                if (nums[l] < target && nums[m] > target) {
-                    r = m;
+        int left = 0, right = nums.length-1, mid;
+        while (left <= right) {
+            mid = (left + right)/2;
+            if (target == nums[mid]) { return mid; }
+
+            if (nums[left] <= nums[mid]) {
+                if (target >= nums[left] && target < nums[mid]) {
+                    right = mid-1;
+                } else {
+                    left = mid+1;
                 }
-            }
-            if (nums[m] < nums[r]) {
-                if (nums[m] <= target && nums[r] > target) {
-                    l = m;
-                    r--;
+            } else {
+                if (target >= nums[left] && target < nums[mid]) {
+                    right = mid-1;
+                } else {
+                    left = mid+1;
                 }
             }
         }
         return -1;
     }
 
+    
     //#######  LINKED LIST  #######//
     // 206
     /**
