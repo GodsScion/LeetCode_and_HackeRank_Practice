@@ -553,6 +553,23 @@ class Solution {
         }
     }
 
+    // 19
+    // Same def as 206
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+        ListNode dummy = new ListNode(0, head);
+        ListNode end = dummy;
+        ListNode nNode = dummy;
+        for (int i=0; i<=n; i++) {
+            end = end.next;
+        }
+        while (end != null) {
+            nNode = nNode.next;
+            end = end.next;
+        }
+        nNode.next = nNode.next.next;
+        return dummy.next;
+    }
+
 }
 
 
