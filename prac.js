@@ -18,6 +18,35 @@ var characterReplacement = function(s,k) {
     return s.length - i
 };
 
+// ##### LINKED LIST ##### //
+// 141
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val) {
+ *     this.val = val;
+ *     this.next = null;
+ * }
+ */
+
+/**
+ * @param {ListNode} head
+ * @return {boolean}
+ */
+var hasCycle = function(head) {
+    let runner = head, chaser = head;
+    while (runner && runner.next) {
+        runner = runner.next.next;
+        chaser = chaser.next;
+        if ( runner === chaser ) {
+            return true;
+        }
+    }
+    return false;
+};
+
+
+
+
 testcases = [
     ["ABABA",2],
     ["ABAB",1],
