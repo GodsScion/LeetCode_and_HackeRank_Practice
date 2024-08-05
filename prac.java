@@ -570,6 +570,21 @@ class Solution {
         return dummy.next;
     }
 
+    // 141
+    // Same def as 206
+    public boolean hasCycle(ListNode head) {
+        ListNode runner = head, chaser = head;
+        while (runner != null && runner.next != null) {
+            runner = runner.next.next;
+            chaser = chaser.next;
+            if (runner == chaser) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    
 }
 
 
