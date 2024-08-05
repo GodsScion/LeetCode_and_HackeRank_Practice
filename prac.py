@@ -52,6 +52,26 @@ class Solution:
         
         return s[oStart: oEnd+1] if oEnd != len(s) + len(t) else ""
 
+    ####### LINKED LIST #######
+    # 141. Linked List Cycle (https://leetcode.com/problems/linked-list-cycle/)
+    # Definition for singly-linked list.
+    # class ListNode:
+    #     def __init__(self, x):
+    #         self.val = x
+    #         self.next = None
+    def hasCycle(self, head: Optional[ListNode]) -> bool:
+        chaser = runner = head
+        while runner:
+            runner = runner.next
+            if not runner:
+                return False 
+            runner = runner.next
+            chaser = chaser.next
+            if runner == chaser:
+                return True
+        return False
+
+
 
 
 # Problem 212
