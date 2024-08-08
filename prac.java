@@ -584,6 +584,68 @@ class Solution {
         return false;
     }
 
+    // 23. Merge k Sorted Lists (https://leetcode.com/problems/merge-k-sorted-lists/description/)
+    // Same def as 206
+    public ListNode mergeKLists(ListNode[] lists) {
+        ListNode dummy = new ListNode();
+        ListNode current = dummy;
+        Queue<ListNode> pq = new PriorityQueue<>(new Comparator<ListNode>() {
+                @Override
+                public int compare(ListNode l1, ListNode l2) {
+                    return l1.val - l2.val;
+                }
+            });
+        
+        for (ListNode list: lists) {
+            if (list != null) {
+                pq.add(list);
+            }
+        }
+
+        while (pq.size() > 1) {
+            current.next = pq.poll();
+            current = current.next;
+            if (current.next != null) {
+                pq.add(current.next);
+            }
+        }
+
+        current.next = pq.poll();
+
+        return dummy.next;
+    }
+
+    // 23. Merge k Sorted Lists (https://leetcode.com/problems/merge-k-sorted-lists/description/)
+    // Same def as 206
+    public ListNode mergeKLists2(ListNode[] lists) {
+        if (lists == null || lists.length == 0) return null;
+        return mergeKLists(lists, 0, lists.length - 1);
+    }
+    private ListNode mergeKLists(ListNode[] lists, int start, int end) {
+        if (start == end) return lists[start];
+        int mid = start + (end - start) / 2;
+        ListNode left = mergeKLists(lists, start, mid);
+        ListNode right = mergeKLists(lists, mid + 1, end);
+        return mergeTwoListsHelper(left, right);
+    }
+    private ListNode mergeTwoListsHelper(ListNode l1, ListNode l2) {
+        ListNode dummy = new ListNode();
+        ListNode current = dummy;
+        while (l1 != null && l2 != null) {
+            if (l1.val < l2.val) {
+                current.next = l1;
+                l1 = l1.next;
+            } else {
+                current.next = l2;
+                l2 = l2.next;
+            }
+            current = current.next;
+        }
+        if (l1 != null) current.next = l1;
+        if (l2 != null) current.next = l2;
+        return dummy.next;
+    }
+
     
 }
 
