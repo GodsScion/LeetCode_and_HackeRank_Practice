@@ -3,7 +3,7 @@
 
 #---------------------- TREES ----------------------#
 
-#<< Tree: Height of a Binary Tree
+#<< Tree: Height of a Binary Tree (https://www.hackerrank.com/challenges/tree-height-of-a-binary-tree/problem)
 
 # class Node:
 #     def __init__(self, info): 
@@ -75,7 +75,8 @@ def height(root):
 #>>
 
 
-#<< Tree: Level Order Traversal
+
+#<< Tree: Level Order Traversal (https://www.hackerrank.com/challenges/tree-level-order-traversal/problem)
 
 # class Node:
 #     def __init__(self, info): 
@@ -143,3 +144,66 @@ def levelOrder(root):
 #     tree.create(arr[i])
 
 # levelOrder(tree.root)
+
+#>>
+
+
+
+
+
+#---------------------- STACKS ----------------------#
+
+#<< Balanced Brackets (https://www.hackerrank.com/challenges/balanced-brackets/problem)
+
+# #!/bin/python3
+
+# import math
+# import os
+# import random
+# import re
+# import sys
+
+# #
+# # Complete the 'isBalanced' function below.
+# #
+# # The function is expected to return a STRING.
+# # The function accepts STRING s as parameter.
+# #
+
+def isBalanced(s):
+    # Write your code here
+    bras = []
+    braOpen = set(['(', '[', '{'])
+    braClose = {
+        ')': '(',
+        '}': '{',
+        ']': '['
+    }
+    
+    for bra in s:
+        if bra in braOpen:
+            bras.append(bra)
+        elif bra in braClose:
+            if not bras or bras[-1] != braClose[bra]:
+                return "NO"
+            else:
+                bras.pop(-1)
+    
+    return "NO" if bras else "YES"
+
+
+# if __name__ == '__main__':
+#     fptr = open(os.environ['OUTPUT_PATH'], 'w')
+
+#     t = int(input().strip())
+
+#     for t_itr in range(t):
+#         s = input()
+
+#         result = isBalanced(s)
+
+#         fptr.write(result + '\n')
+
+#     fptr.close()
+
+#>>
