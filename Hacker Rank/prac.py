@@ -512,4 +512,51 @@ def runningMedian(a):
 
 
 
+#---------------------- GRAPHS ----------------------#
 
+#<< BFS: Shortest Reach in a Graph (https://www.hackerrank.com/challenges/ctci-bfs-shortest-reach/problem)
+
+# Dijkstra's Shortest Path Algorithm
+from heapq import heapify, heappop, heappush
+class Graph:
+    def __init__(self, n: int):
+        self.neighbors = [[] for i in range(n)]
+        
+    def connect(self, source: int, destination: int, weight: int = 6) -> None:
+        self.neighbors[source].append((destination, weight))
+        self.neighbors[destination].append((source, weight))
+        
+    def find_all_distances(self, source: int) -> None:
+        output = ""
+        shortest = dict()
+        minDistance = [(0, source)]
+        heapify(minDistance)
+        
+        while minDistance:
+            w1, n1 = heappop(minDistance)
+            if n1 in shortest:
+                continue
+            for n2, w2 in self.neighbors[n1]:
+                if n2 not in shortest:
+                    heappush(minDistance, (w1 + w2, n2))
+            shortest[n1] = w1
+        
+        for node in range(len(self.neighbors)):
+            if node not in shortest:
+                shortest[node] = -1
+            if node != source:
+                output += f"{shortest[node]} "
+        print(output)
+
+
+# t = int(input())
+# for i in range(t):
+#     n, m = [int(value) for value in input().split()]
+#     graph = Graph(n)
+#     for i in range(m):
+#         x, y = [int(x) for x in input().split()]
+#         graph.connect(x-1, y-1)
+#     s = int(input())
+#     graph.find_all_distances(s-1)
+
+#>>
