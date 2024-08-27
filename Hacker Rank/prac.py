@@ -293,3 +293,73 @@ def contacts(queries):
 
 
 #>>
+
+
+
+
+#---------------------- HEAP ----------------------#
+
+#<< Find the Running Median (https://www.hackerrank.com/challenges/find-the-running-median/problem)
+
+# #!/bin/python3
+
+# import math
+# import os
+# import random
+# import re
+# import sys
+
+# #
+# # Complete the 'runningMedian' function below.
+# #
+# # The function is expected to return a DOUBLE_ARRAY.
+# # The function accepts INTEGER_ARRAY a as parameter.
+# #
+
+
+import heapq
+def runningMedian(a):
+    # Write your code here
+    isEven = True
+    left, right, output = [], [], []
+    heapq.heapify(left)
+    heapq.heapify(right)
+    
+    for n in a:
+        if right and n > right[0]:
+            if isEven:
+                res = heapq.heappushpop(right, n)
+                heapq.heappush(left, -1*res)
+            else:
+                heapq.heappush(right, n)
+        else:
+            if isEven:
+                heapq.heappush(left, -1*n)
+            else:
+                res = -1*heapq.heappushpop(left, -1*n)
+                heapq.heappush(right, res)
+        isEven = not isEven
+        median = (right[0]-left[0])/2 if isEven else -1*left[0]
+        output.append(median)
+    return output
+        
+
+# if __name__ == '__main__':
+#     fptr = open(os.environ['OUTPUT_PATH'], 'w')
+
+#     a_count = int(input().strip())
+
+#     a = []
+
+#     for _ in range(a_count):
+#         a_item = int(input().strip())
+#         a.append(a_item)
+
+#     result = runningMedian(a)
+
+#     fptr.write('\n'.join(map(str, result)))
+#     fptr.write('\n')
+
+#     fptr.close()
+
+#>>
