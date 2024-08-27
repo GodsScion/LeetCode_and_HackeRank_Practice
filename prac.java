@@ -473,9 +473,6 @@ class Solution {
 
     
     //#######  LINKED LIST  #######//
-    // 206
-    /**
-    * Definition for singly-linked list. */
     public class ListNode {
         int val;
         ListNode next;
@@ -483,7 +480,18 @@ class Solution {
         ListNode(int val) { this.val = val; }
         ListNode(int val, ListNode next) { this.val = val; this.next = next; }
     }
-    /* def end */
+
+    // 206
+    /**
+     * Definition for singly-linked list.
+     * public class ListNode {
+     *     int val;
+     *     ListNode next;
+     *     ListNode() {}
+     *     ListNode(int val) { this.val = val; }
+     *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+     * }
+     */
 
     public ListNode reverseList(ListNode head) {
         ListNode prev = null;
@@ -497,7 +505,16 @@ class Solution {
     }
 
     // 21
-    // Same def as 206
+    /**
+     * Definition for singly-linked list.
+     * public class ListNode {
+     *     int val;
+     *     ListNode next;
+     *     ListNode() {}
+     *     ListNode(int val) { this.val = val; }
+     *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+     * }
+     */
     public ListNode mergeTwoLists(ListNode list1, ListNode list2) {
         ListNode dummy = new ListNode();
         ListNode cur = dummy;
@@ -520,7 +537,16 @@ class Solution {
     }
 
     // 143
-    // Same def as 206
+    /**
+     * Definition for singly-linked list.
+     * public class ListNode {
+     *     int val;
+     *     ListNode next;
+     *     ListNode() {}
+     *     ListNode(int val) { this.val = val; }
+     *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+     * }
+     */
     public void reorderList(ListNode head) {
         ListNode slowPointer = head;
         ListNode fastPointer = head;
@@ -554,7 +580,16 @@ class Solution {
     }
 
     // 19
-    // Same def as 206
+    /**
+     * Definition for singly-linked list.
+     * public class ListNode {
+     *     int val;
+     *     ListNode next;
+     *     ListNode() {}
+     *     ListNode(int val) { this.val = val; }
+     *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+     * }
+     */
     public ListNode removeNthFromEnd(ListNode head, int n) {
         ListNode dummy = new ListNode(0, head);
         ListNode end = dummy;
@@ -571,7 +606,16 @@ class Solution {
     }
 
     // 141
-    // Same def as 206
+    /**
+     * Definition for singly-linked list.
+     * public class ListNode {
+     *     int val;
+     *     ListNode next;
+     *     ListNode() {}
+     *     ListNode(int val) { this.val = val; }
+     *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+     * }
+     */
     public boolean hasCycle(ListNode head) {
         ListNode runner = head, chaser = head;
         while (runner != null && runner.next != null) {
@@ -585,7 +629,16 @@ class Solution {
     }
 
     // 23. Merge k Sorted Lists (https://leetcode.com/problems/merge-k-sorted-lists/description/)
-    // Same def as 206
+    /**
+     * Definition for singly-linked list.
+     * public class ListNode {
+     *     int val;
+     *     ListNode next;
+     *     ListNode() {}
+     *     ListNode(int val) { this.val = val; }
+     *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+     * }
+     */
     public ListNode mergeKLists(ListNode[] lists) {
         ListNode dummy = new ListNode();
         ListNode current = dummy;
@@ -616,7 +669,16 @@ class Solution {
     }
 
     // 23. Merge k Sorted Lists (https://leetcode.com/problems/merge-k-sorted-lists/description/)
-    // Same def as 206
+    /**
+     * Definition for singly-linked list.
+     * public class ListNode {
+     *     int val;
+     *     ListNode next;
+     *     ListNode() {}
+     *     ListNode(int val) { this.val = val; }
+     *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+     * }
+     */
     public ListNode mergeKLists2(ListNode[] lists) {
         if (lists == null || lists.length == 0) return null;
         return mergeKLists(lists, 0, lists.length - 1);
@@ -646,7 +708,22 @@ class Solution {
         return dummy.next;
     }
 
+
+
     //#######  TREES  #######//
+    public class TreeNode {
+        int val;
+        TreeNode left;
+        TreeNode right;
+        TreeNode() {}
+        TreeNode(int val) { this.val = val; }
+        TreeNode(int val, TreeNode left, TreeNode right) {
+            this.val = val;
+            this.left = left;
+            this.right = right;
+        }
+    }
+
     // 226. Invert Binary Tree (https://leetcode.com/problems/invert-binary-tree/description/)
     /**
      * Definition for a binary tree node.
@@ -663,6 +740,7 @@ class Solution {
      *     }
      * }
      */
+
     public TreeNode invertTree(TreeNode root) {
         if (root == null) {
             return null;
