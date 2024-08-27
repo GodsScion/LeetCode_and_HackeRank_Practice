@@ -1,7 +1,7 @@
 ############################### DATA STRUCTURES ###############################
 
 
-#---------------------- TREES ----------------------#
+#---------------------- TREE ----------------------#
 
 #<< Tree: Height of a Binary Tree (https://www.hackerrank.com/challenges/tree-height-of-a-binary-tree/problem)
 
@@ -151,7 +151,7 @@ def levelOrder(root):
 
 
 
-#---------------------- STACKS ----------------------#
+#---------------------- STACK ----------------------#
 
 #<< Balanced Brackets (https://www.hackerrank.com/challenges/balanced-brackets/problem)
 
@@ -205,5 +205,91 @@ def isBalanced(s):
 #         fptr.write(result + '\n')
 
 #     fptr.close()
+
+#>>
+
+
+
+
+
+#---------------------- TRIE ----------------------#
+
+#<< Contacts (https://www.hackerrank.com/challenges/contacts/problem)
+
+# #!/bin/python3
+
+# # import math
+# import os
+# # import random
+# # import re
+# # import sys
+
+# #
+# # Complete the 'contacts' function below.
+# #
+# # The function is expected to return an INTEGER_ARRAY.
+# # The function accepts 2D_STRING_ARRAY queries as parameter.
+# #
+
+class Node:
+    def __init__(self, children: dict = None, end: bool = False, count: int = 0):
+        self.children = children if children else dict()
+        self.endOfWord = end
+        self.countOfWords = count
+        
+class Contacts:
+    def __init__(self, node: Node = None):
+        self.root = node if node else Node()
+    
+    def find(self, word):
+        root: Node = self.root
+        for ch in word:
+            if ch not in root.children:
+                return 0
+            root = root.children[ch]
+        return root.countOfWords
+    
+    def add(self, word):
+        root: Node = self.root
+        for ch in word:
+            if ch not in root.children:
+                root.children[ch] = Node()
+            root.countOfWords += 1
+            root = root.children[ch]
+        root.endOfWord = True
+        root.countOfWords += 1
+        return root.countOfWords
+    
+def contacts(queries):
+    # Write your code here
+    contacts = Contacts()
+    output = []
+    
+    for query in queries:
+        if "add" == query[0]:
+            contacts.add(query[1])
+        else:
+            output.append(contacts.find(query[1]))
+    return output
+    
+    
+# if __name__ == '__main__':
+#     fptr = open(os.environ['OUTPUT_PATH'], 'w')
+
+#     queries_rows = int(input().strip())
+
+#     queries = []
+
+#     for _ in range(queries_rows):
+#         queries.append(input().rstrip().split())
+
+#     result = contacts(queries)
+
+#     fptr.write('\n'.join(map(str, result)))
+#     fptr.write('\n')
+
+#     fptr.close()
+
+
 
 #>>
