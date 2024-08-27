@@ -151,6 +151,151 @@ def levelOrder(root):
 
 
 
+
+#<< Swap Nodes [Algo] (https://www.hackerrank.com/challenges/swap-nodes-algo/problem)
+
+# #!/bin/python3
+
+# # import math
+# import os
+# # import random
+# # import re
+# # import sys
+
+# #
+# # Complete the 'swapNodes' function below.
+# #
+# # The function is expected to return a 2D_INTEGER_ARRAY.
+# # The function accepts following parameters:
+# #  1. 2D_INTEGER_ARRAY indexes
+# #  2. INTEGER_ARRAY queries
+# #
+
+from collections import deque
+class Node:
+    def __init__(self, val: int = -1, height: int = -1):
+        self.val: int = val
+        self.height: int = height
+        self.left: Node | None = None
+        self.right: Node | None = None
+        
+class Tree:
+    def __init__(self, arr: list = []):
+        self.root = Node(1, 1)
+        queue: deque = deque([(self.root, 2)])
+        i: int = 0
+        while queue and i < len(arr):
+            (root, childHeight) = queue.popleft()
+            [left, right] = arr[i]
+            if left > -1:
+                root.left = Node(left, childHeight)
+                queue.append((root.left, childHeight+1))
+            if right > -1:
+                root.right = Node(right, childHeight)
+                queue.append((root.right, childHeight+1))
+            i += 1
+        print()
+    
+    def __inOrderTraversal(self, root, output) -> list:
+        if not root:
+            return output
+        output = self.__inOrderTraversal(root.left, output)
+        output.append(root.val)
+        output = self.__inOrderTraversal(root.right, output)
+        return output
+        
+    def getInorderListRecursive(self) -> list:
+        return self.__inOrderTraversal(self.root, [])
+        
+    def getInorderListIterative(self) -> list:
+        stack, result = [], []
+        current = self.root
+        while stack or current:
+            while current:
+                stack.append(current)
+                current = current.left
+            current = stack.pop()
+            result.append(current.val)
+            current = current.right
+        return result
+
+    def __preOrderTraversal(self, root, output) -> list:
+        if not root:
+            return output
+        output.append(root.val)
+        output = self.__preOrderTraversal(root.left, output)
+        output = self.__preOrderTraversal(root.right, output)
+        return output
+    
+    def getPreorderListRecursive(self) -> list:
+        return self.__preOrderTraversal(self.root, [])
+    
+    def getLevelOrderPairs(self) -> list:
+        output: list = []
+        queue: deque = deque([self.root])
+        while queue:
+            root = queue.popleft()
+            left, right = -1, -1
+            if root.left:
+                left = root.left.val
+                queue.append(root.left)
+            if root.right:
+                right = root.right.val
+                queue.append(root.right)
+            output.append([left, right])
+        return output
+    
+    def swap(self, height: int = 1) -> None:
+        queue: deque = deque([self.root])
+        while queue:
+            root: Node = queue.popleft()
+            if root.height % height == 0:
+                root.left, root.right = root.right, root.left
+            if root.left:
+                queue.append(root.left)
+            if root.right:
+                queue.append(root.right)
+
+def swapNodes(indexes, queries):
+    # Write your code here
+    tree = Tree(indexes)
+    output = []
+    for query in queries:
+        tree.swap(query)
+        output.append(tree.getInorderListIterative())
+    return output
+
+# if __name__ == '__main__':
+#     fptr = open(os.environ['OUTPUT_PATH'], 'w')
+
+#     n = int(input().strip())
+
+#     indexes = []
+
+#     for _ in range(n):
+#         indexes.append(list(map(int, input().rstrip().split())))
+
+#     queries_count = int(input().strip())
+
+#     queries = []
+
+#     for _ in range(queries_count):
+#         queries_item = int(input().strip())
+#         queries.append(queries_item)
+
+#     result = swapNodes(indexes, queries)
+
+#     fptr.write('\n'.join([' '.join(map(str, x)) for x in result]))
+#     fptr.write('\n')
+
+#     fptr.close()
+
+#>>
+
+
+
+
+
 #---------------------- STACK ----------------------#
 
 #<< Balanced Brackets (https://www.hackerrank.com/challenges/balanced-brackets/problem)
@@ -363,3 +508,8 @@ def runningMedian(a):
 #     fptr.close()
 
 #>>
+
+
+
+
+
