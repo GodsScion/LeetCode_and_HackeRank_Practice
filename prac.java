@@ -771,7 +771,36 @@ class Solution {
         if (root == null) return 0;
         return Math.max(maxDepth(root.left), maxDepth(root.right)) + 1;
     }
+
+
+    //#######  2-D DYNAMIC PROGRAMMING  #######//
+    // 62. Unique Paths (https://leetcode.com/problems/unique-paths/description/)
+
+    int[][] visited;
+    public int uniquePaths(int m, int n) {
+        visited = new int[m][n];
+        for(int r=0; r<m; r++) {
+            visited[r][n-1] = 1;
+        }
+        for(int c=0; c<n; c++) {
+            visited[m-1][c] = 1;
+        }
+        return getUniquePaths(0, 0, m, n);
+    }
+    private int getUniquePaths(int r, int c, int m, int n) {
+        if (r >= m | c >= n) {
+            return 0;
+        }
+        if (visited[r][c] > 0) {
+            return visited[r][c];
+        }
+        visited[r][c] = getUniquePaths(r+1, c, m, n) + getUniquePaths(r, c+1, m, n);
+        return visited[r][c];
+    }
+
+
     
+
 }
 
 
