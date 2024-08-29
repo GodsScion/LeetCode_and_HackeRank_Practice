@@ -2,7 +2,7 @@ import java.util.*;
 
 class Solution {
     //#######  ARRAYS AND HASHING  #######//
-    // 217
+    // 217. Contains Duplicate (https://leetcode.com/problems/contains-duplicate/description/) - Easy
     public boolean containsDuplicate(int[] nums) {
         Set<Integer> prevNums = new HashSet<Integer>();
         for(int num: nums) {
@@ -14,7 +14,7 @@ class Solution {
         return false;
     }
 
-    // 242
+    // 242. Valid Anagram (https://leetcode.com/problems/valid-anagram/description/) - Easy
     public boolean isAnagram(String s, String t) {
         if (s.length() != t.length()) { return false; }
         int[] count = new int[26];
@@ -30,7 +30,7 @@ class Solution {
         return true;
     }
 
-    // 1
+    // 1. Two Sum (https://leetcode.com/problems/two-sum/description/) - Easy
     public int[] twoSum(int[] nums, int target) {
         Map<Integer, Integer> prev = new HashMap<>();
         for (int i=0; i<nums.length; i++) {
@@ -43,7 +43,7 @@ class Solution {
         return null;
     }
 
-    // 49
+    // 49. Group Anagrams (https://leetcode.com/problems/group-anagrams/description/) - Medium
     public List<List<String>> groupAnagrams(String[] strs) {
         HashMap<String,List<String>> hash_map = new HashMap<>();
         for (String word: strs) {
@@ -59,7 +59,7 @@ class Solution {
 
         return new ArrayList<>(hash_map.values());
     }
-    // 49
+    // 49. Group Anagrams (https://leetcode.com/problems/group-anagrams/description/) - Medium
     public List<List<String>> groupAnagrams2(String[] strs) {
         Map<String,ArrayList<String>> hash = new HashMap<>();
         for(String word: strs) {
@@ -73,7 +73,7 @@ class Solution {
         }
         return new ArrayList<>(hash.values());
     }
-    // 49
+    // 49. Group Anagrams (https://leetcode.com/problems/group-anagrams/description/) - Medium
     public List<List<String>> groupAnagrams3(String[] strs) {
         Map<String, ArrayList<String>> map = new HashMap<>();
         for (String word: strs) {
@@ -94,7 +94,7 @@ class Solution {
         return new ArrayList<List<String>>(map.values());
     }
 
-    // 347
+    // 347. Top K Frequent Elements (https://leetcode.com/problems/top-k-frequent-elements/description/) - Medium
     public int[] topKFrequent(int[] nums, int k) {
         Map<Integer, Integer> freq = new HashMap<>();
         for (int num : nums) {
@@ -114,7 +114,7 @@ class Solution {
 
         return output;
     }
-    // 347
+    // 347. Top K Frequent Elements (https://leetcode.com/problems/top-k-frequent-elements/description/) - Medium
     public int[] topKFrequent2(int[] nums, int k) {
         List<Integer>[] buckets = new List[nums.length + 1];
         Map<Integer, Integer> freq = new HashMap<>();
@@ -147,7 +147,7 @@ class Solution {
         return output;
     }
 
-    // 238
+    // 238. Product of Array Except Self (https://leetcode.com/problems/product-of-array-except-self/description/) - Medium
     public int[] productExceptSelf(int[] nums) {
         int n = nums.length;
         int[] back = new int[n];
@@ -166,7 +166,7 @@ class Solution {
         }
         return output;
     }
-    // 238
+    // 238. Product of Array Except Self (https://leetcode.com/problems/product-of-array-except-self/description/) - Medium
     public int[] productExceptSelf2(int[] nums) {
         int n = nums.length;
         int[] arr = new int[n];
@@ -182,7 +182,7 @@ class Solution {
         return arr;
     }
 
-    // 128
+    // 128. Longest Consecutive Sequence (https://leetcode.com/problems/longest-consecutive-sequence/description/) - Medium
     public int longestConsecutive(int[] nums) {
         if (nums.length == 0) { return 0; }
         Arrays.sort(nums);
@@ -200,7 +200,7 @@ class Solution {
         }
         return Math.max(count,max);
     }
-    // 128
+    // 128. Longest Consecutive Sequence (https://leetcode.com/problems/longest-consecutive-sequence/description/) - Medium
     public int longestConsecutive2(int[] nums) {
         Set<Integer> set = new HashSet<>();
         for (int num : nums) {
@@ -221,7 +221,7 @@ class Solution {
     }
 
     //#######  TWO POINTERS  #######//
-    // 125
+    // 125. Valid Palindrome (https://leetcode.com/problems/valid-palindrome/description/) - Easy
     public boolean isAlNum(char c) {
         return (c >= '0' && c <= '9') || (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'); 
     }
@@ -244,7 +244,7 @@ class Solution {
         return true;
     }
 
-    // 15
+    // 15. 3Sum (https://leetcode.com/problems/3sum/description/) - Medium
     public List<List<Integer>> threeSum(int[] nums) {
         int len = nums.length;
         Arrays.sort(nums);
@@ -272,7 +272,7 @@ class Solution {
         return out;
     }
 
-    // 11
+    // 11. Container With Most Water (https://leetcode.com/problems/container-with-most-water/description/) - Medium
     public int maxArea(int[] height) {
         int max = 0, left = 0, right = height.length-1;
         while (left < right) {
@@ -288,7 +288,7 @@ class Solution {
     }
 
     //#######  SLIDING WINDOW  #######//
-    // 121
+    // 121. Best Time to Buy and Sell Stock (https://leetcode.com/problems/best-time-to-buy-and-sell-stock/description/) - Easy
     public int maxProfit(int[] prices) {
         int max = 0, buy = prices[0];
         for (int i=1; i<prices.length; i++) {
@@ -309,23 +309,9 @@ class Solution {
         return max;
     }
 
-    // 3
+    // 3. Longest Substring Without Repeating Characters (https://leetcode.com/problems/longest-substring-without-repeating-characters/description/) - Medium
+    // // Best Solution
     public int lengthOfLongestSubstring(String s) {
-        Set<Character> set = new HashSet<>();
-        int left = 0, right = 0, max = 0;
-        while ( right < s.length() ) {
-            while (set.contains(s.charAt(right))) {
-                set.remove(s.charAt(left));
-                left++;
-            }
-            set.add(s.charAt(right));
-            max = Math.max(max, set.size());
-            right++;
-        }
-        return max;
-    }
-    // 3
-    public int lengthOfLongestSubstring2(String s) {
         Set<Character> set = new HashSet<>();
         int left = 0, right = 0, max = 0;
         while (right < s.length()) {
@@ -340,8 +326,24 @@ class Solution {
         }
         return max;
     }
+    // 3. Longest Substring Without Repeating Characters (https://leetcode.com/problems/longest-substring-without-repeating-characters/description/) - Medium
+    // // Easy to understand
+    public int lengthOfLongestSubstring2(String s) {
+        Set<Character> set = new HashSet<>();
+        int left = 0, right = 0, max = 0;
+        while ( right < s.length() ) {
+            while (set.contains(s.charAt(right))) {
+                set.remove(s.charAt(left));
+                left++;
+            }
+            set.add(s.charAt(right));
+            max = Math.max(max, set.size());
+            right++;
+        }
+        return max;
+    }
 
-    // 424
+    // 424. Longest Repeating Character Replacement (https://leetcode.com/problems/longest-repeating-character-replacement/description/) - Medium
     public int characterReplacement(String s, int k) {
         int[] freq = new int[26];
         int start = 0, count = 0;
@@ -356,7 +358,7 @@ class Solution {
         return s.length() - start;
     }
 
-    // 76
+    // 76. Minimum Window Substring (https://leetcode.com/problems/minimum-window-substring/description/) - Hard
     public String minWindow(String s, String t) {
         if (t.length() > s.length()) { return ""; }
         int need = 0, have = 0, i = 0, oi = 0, oj = s.length()+t.length();
@@ -403,7 +405,7 @@ class Solution {
 
     
     //#######  STACK  #######//
-    // 20
+    // 20. Valid Parentheses (https://leetcode.com/problems/valid-parentheses/description/) - Easy
     public boolean isValid(String s) {
         Stack<Character> stack = new Stack<>();
         String par = "{([";
@@ -428,7 +430,7 @@ class Solution {
     }
 
     //#######  BINARY SEARCH  #######//
-    // 153
+    // 153. Find Minimum in Rotated Sorted Array (https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/description/) - Medium
     public int findMin(int[] nums) {
         int left = 0, right = nums.length-1, mid;
         while (left < right) {
@@ -447,7 +449,7 @@ class Solution {
         return nums[right];
     }
     
-    // 33
+    // 33. Search in Rotated Sorted Array (https://leetcode.com/problems/search-in-rotated-sorted-array/description/) - Medium
     public int search(int[] nums, int target) {
         int left = 0, right = nums.length-1, mid;
         while (left <= right) {
@@ -481,7 +483,7 @@ class Solution {
         ListNode(int val, ListNode next) { this.val = val; this.next = next; }
     }
 
-    // 206
+    // 206. Reverse Linked List (https://leetcode.com/problems/reverse-linked-list/description/) - Easy
     /**
      * Definition for singly-linked list.
      * public class ListNode {
