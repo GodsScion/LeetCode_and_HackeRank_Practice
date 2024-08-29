@@ -204,10 +204,10 @@ class Tree:
         output = self.__inOrderTraversal(root.right, output)
         return output
         
-    def getInorderListRecursive(self) -> list:
+    def getInOrderListRecursive(self) -> list:
         return self.__inOrderTraversal(self.root, [])
         
-    def getInorderListIterative(self) -> list:
+    def getInOrderListIterative(self) -> list:
         stack, result = [], []
         current = self.root
         while stack or current:
@@ -227,7 +227,7 @@ class Tree:
         output = self.__preOrderTraversal(root.right, output)
         return output
     
-    def getPreorderListRecursive(self) -> list:
+    def getPreOrderListRecursive(self) -> list:
         return self.__preOrderTraversal(self.root, [])
     
     def getLevelOrderPairs(self) -> list:
@@ -262,7 +262,7 @@ def swapNodes(indexes, queries):
     output = []
     for query in queries:
         tree.swap(query)
-        output.append(tree.getInorderListIterative())
+        output.append(tree.getInOrderListIterative())
     return output
 
 # if __name__ == '__main__':
@@ -416,6 +416,26 @@ def contacts(queries):
         else:
             output.append(contacts.find(query[1]))
     return output
+
+# Brute Force Solution (Not recommended because of time complexity)
+# def contacts(queries):
+#     # Write your code here
+#     contacts = []
+#     output = []
+    
+#     for query in queries:
+#         if "a" == query[0]:
+#             contacts.append(query[4:])
+#         else:
+#             search = query[5:]
+#             n = len(search)
+#             count = 0
+#             for contact in contacts:
+#                 if contact[:n] == search:
+#                     count+=1
+#             output.append(count)
+#     print(contacts)
+#     return output
     
     
 # if __name__ == '__main__':

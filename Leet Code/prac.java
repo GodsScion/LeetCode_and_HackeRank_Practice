@@ -49,12 +49,12 @@ class Solution {
         for (String word: strs) {
             char[] id = word.toCharArray();
             Arrays.sort(id);
-            String idword = new String(id);
+            String wordId = new String(id);
 
-            if (!hash_map.containsKey(idword)) {
-                hash_map.put(idword, new ArrayList<String>());
+            if (!hash_map.containsKey(wordId)) {
+                hash_map.put(wordId, new ArrayList<String>());
             }
-            hash_map.get(idword).add(word);
+            hash_map.get(wordId).add(word);
         }
 
         return new ArrayList<>(hash_map.values());
