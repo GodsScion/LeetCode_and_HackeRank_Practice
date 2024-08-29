@@ -1,4 +1,12 @@
 // ##### LINKED LIST ##### //
+class ListNode {
+    val: number
+    next: ListNode | null
+    constructor(val?: number, next?: ListNode | null) {
+        this.val = (val===undefined ? 0 : val)
+        this.next = (next===undefined ? null : next)
+    }
+}
 // 141
 /**
  * Definition for singly-linked list.
@@ -16,7 +24,7 @@ function hasCycle(head: ListNode | null): boolean {
     let chaser: ListNode | null = head;
     while (runner && runner.next) {
         runner = runner.next.next;
-        chaser = chaser.next;
+        chaser = chaser.next;  // chaser will never be null in this line 
         if ( runner === chaser ) {
             return true;
         }
@@ -27,6 +35,16 @@ function hasCycle(head: ListNode | null): boolean {
 
 
 // ##### TREES ##### //
+class TreeNode {
+    val: number
+    left: TreeNode | null
+    right: TreeNode | null
+    constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+        this.val = (val===undefined ? 0 : val)
+        this.left = (left===undefined ? null : left)
+        this.right = (right===undefined ? null : right)
+    }
+}
 
 // 226. Invert Binary Tree (https://leetcode.com/problems/invert-binary-tree/description/)
 /**
