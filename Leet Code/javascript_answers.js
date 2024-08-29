@@ -92,14 +92,14 @@ var maxDepth = function(root) {
 
 // ##########  TESTING  ########## //
 
-testcases = [
+testCases = [
     ["ABABA",2],
     ["ABAB",1],
     ["ABAA",0],
     ["AAAAA",0]
 ]
 
-for (let test of testcases) { console.log(characterReplacement(test[0],test[1])); }
+for (let test of testCases) { console.log(characterReplacement(test[0],test[1])); }
 
 // var maxProductDifference = function(nums) {
 //     nums.sort((a,b) => a-b);

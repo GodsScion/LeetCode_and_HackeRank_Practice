@@ -53,6 +53,11 @@ class Solution:
         return s[oStart: oEnd+1] if oEnd != len(s) + len(t) else ""
 
     ####### LINKED LIST #######
+    class ListNode:
+        def __init__(self, x):
+            self.val = x
+            self.next = None
+
     # 141. Linked List Cycle (https://leetcode.com/problems/linked-list-cycle/)
     # Definition for singly-linked list.
     # class ListNode:
@@ -74,6 +79,12 @@ class Solution:
     
 
     ###### TREES ######
+    class TreeNode:
+        def __init__(self, val=0, left=None, right=None):
+            self.val = val
+            self.left = left
+            self.right = right
+
     # 104. Maximum Depth of Binary Tree (https://leetcode.com/problems/maximum-depth-of-binary-tree/description/)
     # Definition for a binary tree node.
     # class TreeNode:
