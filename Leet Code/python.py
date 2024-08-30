@@ -1,9 +1,10 @@
 from collections import defaultdict, Counter
 
-class Solution:
 
-    #######  ARRAYS AND HASHING  #######
-    # 217
+
+#######  ARRAYS AND HASHING  #######
+# 217. Contains Duplicate (https://leetcode.com/problems/contains-duplicate/description/) - Easy
+class Solution:
     def containsDuplicate(self, nums: list[int]) -> bool:
         prev = set()
         for n in nums:
@@ -11,17 +12,22 @@ class Solution:
                 return True
             prev.add(n)
         return False
-    # 217
-    def containsDuplicate2(self, nums: list[int]) -> bool:
+# 217. Contains Duplicate (https://leetcode.com/problems/contains-duplicate/description/) - Easy
+class Solution:
+    def containsDuplicate(self, nums: list[int]) -> bool:
         return len(nums) != len(set(nums))
     
-    # 242
+
+# 242. Valid Anagram (https://leetcode.com/problems/valid-anagram/description/) - Easy
+class Solution:
     def isAnagram(self, s: str, t: str) -> bool:
         return Counter(s) == Counter(t)
 
-    #######  SLIDING WINDOW  #######
-    # 76
-    def minWindow(self, s, t):
+
+#######  SLIDING WINDOW  #######
+# 76. Minimum Window Substring (https://leetcode.com/problems/minimum-window-substring/description/) - Hard
+class Solution:
+    def minWindow(self, s: str, t: str) -> str:
         if len(t) > len(s):
             return ""
         
@@ -52,20 +58,22 @@ class Solution:
         
         return s[oStart: oEnd+1] if oEnd != len(s) + len(t) else ""
 
-    ####### LINKED LIST #######
-    class ListNode:
-        def __init__(self, x):
-            self.val = x
-            self.next = None
 
-    # 141. Linked List Cycle (https://leetcode.com/problems/linked-list-cycle/)
-    # Definition for singly-linked list.
-    # class ListNode:
-    #     def __init__(self, x):
-    #         self.val = x
-    #         self.next = None
+####### LINKED LIST #######
+class ListNode:
+    def __init__(self, x):
+        self.val = x
+        self.next = None
+
+# 141. Linked List Cycle (https://leetcode.com/problems/linked-list-cycle/description/) - Easy
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+class Solution:
     def hasCycle(self, head: Optional[ListNode]) -> bool:
-        chaser = runner = head
+        runner = chaser = head
         while runner:
             runner = runner.next
             if not runner:
@@ -76,32 +84,31 @@ class Solution:
                 return True
         return False
 
-    
 
-    ###### TREES ######
-    class TreeNode:
-        def __init__(self, val=0, left=None, right=None):
-            self.val = val
-            self.left = left
-            self.right = right
 
-    # 104. Maximum Depth of Binary Tree (https://leetcode.com/problems/maximum-depth-of-binary-tree/description/)
-    # Definition for a binary tree node.
-    # class TreeNode:
-    #     def __init__(self, val=0, left=None, right=None):
-    #         self.val = val
-    #         self.left = left
-    #         self.right = right
+###### TREES ######
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+# 104. Maximum Depth of Binary Tree (https://leetcode.com/problems/maximum-depth-of-binary-tree/description/) - Easy
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
     def maxDepth(self, root: Optional[TreeNode]) -> int:
         return 1 + max(self.maxDepth(root.left), self.maxDepth(root.right)) if root else 0
 
 
 
 
-
-
-
-# Problem 212
+###### TRIES ######
+# 212. Word Search II (https://leetcode.com/problems/word-search-ii/description/) - Hard
 class Trie:
     def __init__(self):
         self.children = {}
@@ -109,9 +116,8 @@ class Trie:
 
     def add(self, word: str):
         cur = self
-        for ch in word:
-            if ch not in cur.children:
-                cur.children[ch] = Trie()
+        for i, ch in enumerate(word):
+            if ch not in cur.children: cur.children[ch] = Trie()
             cur = cur.children[ch]
         cur.isWord = True
 
@@ -119,20 +125,17 @@ class Trie:
         cur = self
         nodes = []
         for i, ch in enumerate(word):
-            if ch not in cur.children:
-                return
+            if ch not in cur.children: return
             nodes.append(cur)
             cur = cur.children[ch]
         cur.isWord = False
         i = -1
         while nodes:
             parent = nodes.pop()
-            if len(cur.children) > 0 or cur.isWord:
-                return
+            if len(cur.children) > 0 or cur.isWord: return
             parent.children.pop(word[i])
             cur = parent
             i -= 1
-
 
 class Solution:
     def findWords(self, board: list[list[str]], words: list[str]) -> list[str]:
@@ -163,7 +166,6 @@ class Solution:
             
             visited.remove((r, c))
 
-
         for r in range(row):
             for c in range(col):
                 search(r, c, trie, visited, "")
@@ -171,13 +173,28 @@ class Solution:
         return list(found)
 
 
-testCases = [
-    ([["o","a","a","n"],["e","t","a","e"],["i","h","k","r"],["i","f","l","v"]], ["oath","pea","eat","rain"], ["oath","eat"]),
-    ([["a","a"]], ["aa"], ["aa"])
-]
 
-for board, words, ans in testCases:
-    print(Solution().findWords(board, words), ans)
+
+
+
+
+
+
+
+
+
+
+
+
+############## TEST CASES ##############
+
+# testCases = [
+#     ([["o","a","a","n"],["e","t","a","e"],["i","h","k","r"],["i","f","l","v"]], ["oath","pea","eat","rain"], ["oath","eat"]),
+#     ([["a","a"]], ["aa"], ["aa"])
+# ]
+
+# for board, words, ans in testCases:
+#     print(Solution().findWords(board, words), ans)
 
 
 
