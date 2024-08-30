@@ -3,8 +3,8 @@
 
 #---------------------- TREE ----------------------#
 
-#<< Tree: Height of a Binary Tree (https://www.hackerrank.com/challenges/tree-height-of-a-binary-tree/problem)
-
+#<< Tree: Height of a Binary Tree (https://www.hackerrank.com/challenges/tree-height-of-a-binary-tree/problem) - Easy
+#< Stub Code
 # class Node:
 #     def __init__(self, info): 
 #         self.info = info  
@@ -41,17 +41,18 @@
 #                 else:
 #                     break
 
-# Enter your code here. Read input from STDIN. Print output to STDOUT
-'''
-class Node:
-      def __init__(self,info): 
-          self.info = info  
-          self.left = None  
-          self.right = None 
+# # Enter your code here. Read input from STDIN. Print output to STDOUT
+# '''
+# class Node:
+#       def __init__(self,info): 
+#           self.info = info  
+#           self.left = None  
+#           self.right = None 
            
 
-       // this is a node of the tree , which contains info as data, left , right
-'''
+#        // this is a node of the tree , which contains info as data, left , right
+# '''
+#> Stub Code
 def heightHelper(root):
     if not root:
         return 0
@@ -62,6 +63,7 @@ def height(root):
         return 0
     return max(heightHelper(root.left), heightHelper(root.right))
 
+#< Stub Code
 # tree = BinarySearchTree()
 # t = int(input())
 
@@ -71,13 +73,14 @@ def height(root):
 #     tree.create(arr[i])
 
 # print(height(tree.root))
-
+#> Stub Code
 #>>
 
 
 
-#<< Tree: Level Order Traversal (https://www.hackerrank.com/challenges/tree-level-order-traversal/problem)
 
+#<< Tree: Level Order Traversal (https://www.hackerrank.com/challenges/tree-level-order-traversal/problem) - Easy
+#< Stub Code
 # class Node:
 #     def __init__(self, info): 
 #         self.info = info  
@@ -114,14 +117,16 @@ def height(root):
 #                 else:
 #                     break
 
-"""
-Node is defined as
-self.left (the left child of the node)
-self.right (the right child of the node)
-self.info (the value of the node)
-"""
+# """
+# Node is defined as
+# self.left (the left child of the node)
+# self.right (the right child of the node)
+# self.info (the value of the node)
+# """
+#> Stub Code
+
 def levelOrder(root):
-    # Write your code here
+    #Write your code here
     output = []
     unvisited = [root]
     while unvisited:
@@ -133,8 +138,8 @@ def levelOrder(root):
             unvisited.append(root.right)
     
     print(" ".join(output))
-    
 
+#< Stub Code
 # tree = BinarySearchTree()
 # t = int(input())
 
@@ -144,7 +149,7 @@ def levelOrder(root):
 #     tree.create(arr[i])
 
 # levelOrder(tree.root)
-
+#> Stub Code
 #>>
 
 
@@ -152,15 +157,15 @@ def levelOrder(root):
 
 
 
-#<< Swap Nodes [Algo] (https://www.hackerrank.com/challenges/swap-nodes-algo/problem)
-
+#<< Swap Nodes [Algo] (https://www.hackerrank.com/challenges/swap-nodes-algo/problem) - Medium
+#< Stub Code
 # #!/bin/python3
 
-# # import math
+# import math
 # import os
-# # import random
-# # import re
-# # import sys
+# import random
+# import re
+# import sys
 
 # #
 # # Complete the 'swapNodes' function below.
@@ -170,6 +175,7 @@ def levelOrder(root):
 # #  1. 2D_INTEGER_ARRAY indexes
 # #  2. INTEGER_ARRAY queries
 # #
+#> Stub Code
 
 from collections import deque
 class Node:
@@ -265,6 +271,7 @@ def swapNodes(indexes, queries):
         output.append(tree.getInOrderListIterative())
     return output
 
+#< Stub Code
 # if __name__ == '__main__':
 #     fptr = open(os.environ['OUTPUT_PATH'], 'w')
 
@@ -289,7 +296,7 @@ def swapNodes(indexes, queries):
 #     fptr.write('\n')
 
 #     fptr.close()
-
+#> Stub Code
 #>>
 
 
@@ -298,8 +305,9 @@ def swapNodes(indexes, queries):
 
 #---------------------- STACK ----------------------#
 
-#<< Balanced Brackets (https://www.hackerrank.com/challenges/balanced-brackets/problem)
+#<< Balanced Brackets (https://www.hackerrank.com/challenges/balanced-brackets/problem) - Medium
 
+#< Stub Code
 # #!/bin/python3
 
 # import math
@@ -314,6 +322,7 @@ def swapNodes(indexes, queries):
 # # The function is expected to return a STRING.
 # # The function accepts STRING s as parameter.
 # #
+#> Stub Code
 
 def isBalanced(s):
     # Write your code here
@@ -336,7 +345,7 @@ def isBalanced(s):
     
     return "NO" if bras else "YES"
 
-
+#< Stub Code
 # if __name__ == '__main__':
 #     fptr = open(os.environ['OUTPUT_PATH'], 'w')
 
@@ -350,7 +359,7 @@ def isBalanced(s):
 #         fptr.write(result + '\n')
 
 #     fptr.close()
-
+#> Stub Code
 #>>
 
 
@@ -359,8 +368,8 @@ def isBalanced(s):
 
 #---------------------- TRIE ----------------------#
 
-#<< Contacts (https://www.hackerrank.com/challenges/contacts/problem)
-
+#<< Contacts (https://www.hackerrank.com/challenges/contacts/problem) - Medium
+#< Stub Code
 # #!/bin/python3
 
 # # import math
@@ -375,6 +384,7 @@ def isBalanced(s):
 # # The function is expected to return an INTEGER_ARRAY.
 # # The function accepts 2D_STRING_ARRAY queries as parameter.
 # #
+#> Stub Code
 
 class Node:
     def __init__(self, children: dict = None, end: bool = False, count: int = 0):
@@ -437,7 +447,7 @@ def contacts(queries):
 #     print(contacts)
 #     return output
     
-    
+#< Stub Code    
 # if __name__ == '__main__':
 #     fptr = open(os.environ['OUTPUT_PATH'], 'w')
 
@@ -454,9 +464,7 @@ def contacts(queries):
 #     fptr.write('\n')
 
 #     fptr.close()
-
-
-
+#> Stub Code
 #>>
 
 
@@ -464,8 +472,8 @@ def contacts(queries):
 
 #---------------------- HEAP ----------------------#
 
-#<< Find the Running Median (https://www.hackerrank.com/challenges/find-the-running-median/problem)
-
+#<< Find the Running Median (https://www.hackerrank.com/challenges/find-the-running-median/problem) - Hard
+#< Stub Code
 # #!/bin/python3
 
 # import math
@@ -480,7 +488,7 @@ def contacts(queries):
 # # The function is expected to return a DOUBLE_ARRAY.
 # # The function accepts INTEGER_ARRAY a as parameter.
 # #
-
+#> Stub Code
 
 import heapq
 def runningMedian(a):
@@ -508,7 +516,7 @@ def runningMedian(a):
         output.append(median)
     return output
         
-
+#< Stub Code
 # if __name__ == '__main__':
 #     fptr = open(os.environ['OUTPUT_PATH'], 'w')
 
@@ -526,7 +534,7 @@ def runningMedian(a):
 #     fptr.write('\n')
 
 #     fptr.close()
-
+#> Stub Code
 #>>
 
 
@@ -534,7 +542,7 @@ def runningMedian(a):
 
 #---------------------- GRAPHS ----------------------#
 
-#<< BFS: Shortest Reach in a Graph (https://www.hackerrank.com/challenges/ctci-bfs-shortest-reach/problem)
+#<< BFS: Shortest Reach in a Graph (https://www.hackerrank.com/challenges/ctci-bfs-shortest-reach/problem) - Hard
 
 # Dijkstra's Shortest Path Algorithm
 from heapq import heapify, heappop, heappush
@@ -568,7 +576,7 @@ class Graph:
                 output += f"{shortest[node]} "
         print(output)
 
-
+#< Stub Code
 # t = int(input())
 # for i in range(t):
 #     n, m = [int(value) for value in input().split()]
@@ -578,5 +586,5 @@ class Graph:
 #         graph.connect(x-1, y-1)
 #     s = int(input())
 #     graph.find_all_distances(s-1)
-
+#> Stub Code
 #>>
