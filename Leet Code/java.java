@@ -506,7 +506,7 @@ class Solution {
         return prev;
     }
 
-    // 21
+    // 21. Merge Two Sorted Lists (https://leetcode.com/problems/merge-two-sorted-lists/description/) - Easy
     /**
      * Definition for singly-linked list.
      * public class ListNode {
@@ -538,7 +538,7 @@ class Solution {
         return dummy.next;
     }
 
-    // 143
+    // 143. Reorder List (https://leetcode.com/problems/reorder-list/description/) - Medium
     /**
      * Definition for singly-linked list.
      * public class ListNode {
@@ -581,7 +581,7 @@ class Solution {
         }
     }
 
-    // 19
+    // 19. Remove Nth Node From End of List (https://leetcode.com/problems/remove-nth-node-from-end-of-list/description/) - Medium
     /**
      * Definition for singly-linked list.
      * public class ListNode {
@@ -607,7 +607,7 @@ class Solution {
         return dummy.next;
     }
 
-    // 141
+    // 141. Linked List Cycle (https://leetcode.com/problems/linked-list-cycle/description/) - Easy
     /**
      * Definition for singly-linked list.
      * public class ListNode {
@@ -630,7 +630,8 @@ class Solution {
         return false;
     }
 
-    // 23. Merge k Sorted Lists (https://leetcode.com/problems/merge-k-sorted-lists/description/)
+    // 23. Merge k Sorted Lists (https://leetcode.com/problems/merge-k-sorted-lists/description/) - Hard
+    // // Priority Queue (As quick as Divide and Conquer, theoretical time complexity is best)
     /**
      * Definition for singly-linked list.
      * public class ListNode {
@@ -670,7 +671,8 @@ class Solution {
         return dummy.next;
     }
 
-    // 23. Merge k Sorted Lists (https://leetcode.com/problems/merge-k-sorted-lists/description/)
+    // 23. Merge k Sorted Lists (https://leetcode.com/problems/merge-k-sorted-lists/description/) - Hard
+    // // Divide and Conquer (Better than Priority Queue in real world, not by theoretical time complexity)
     /**
      * Definition for singly-linked list.
      * public class ListNode {
@@ -726,7 +728,7 @@ class Solution {
         }
     }
 
-    // 226. Invert Binary Tree (https://leetcode.com/problems/invert-binary-tree/description/)
+    // 226. Invert Binary Tree (https://leetcode.com/problems/invert-binary-tree/description/) - Easy
     /**
      * Definition for a binary tree node.
      * public class TreeNode {
@@ -753,7 +755,7 @@ class Solution {
         return root;
     }
 
-    // 104. Maximum Depth of Binary Tree (https://leetcode.com/problems/maximum-depth-of-binary-tree/description/)
+    // 104. Maximum Depth of Binary Tree (https://leetcode.com/problems/maximum-depth-of-binary-tree/description/) - Easy
     /**
      * Definition for a binary tree node.
      * public class TreeNode {
@@ -776,8 +778,7 @@ class Solution {
 
 
     //#######  2-D DYNAMIC PROGRAMMING  #######//
-    // 62. Unique Paths (https://leetcode.com/problems/unique-paths/description/)
-
+    // 62. Unique Paths (https://leetcode.com/problems/unique-paths/description/) - Medium
     int[][] visited;
     public int uniquePaths(int m, int n) {
         visited = new int[m][n];
