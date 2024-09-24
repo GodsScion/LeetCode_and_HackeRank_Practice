@@ -1,11 +1,11 @@
 from collections import defaultdict, Counter
-
+from types import List, Optional
 
 
 #######  ARRAYS AND HASHING  #######
 # 217. Contains Duplicate (https://leetcode.com/problems/contains-duplicate/description/) - Easy
 class Solution:
-    def containsDuplicate(self, nums: list[int]) -> bool:
+    def containsDuplicate(self, nums: List[int]) -> bool:
         prev = set()
         for n in nums:
             if n in prev:
@@ -14,7 +14,7 @@ class Solution:
         return False
 # 217. Contains Duplicate (https://leetcode.com/problems/contains-duplicate/description/) - Easy
 class Solution:
-    def containsDuplicate(self, nums: list[int]) -> bool:
+    def containsDuplicate(self, nums: List[int]) -> bool:
         return len(nums) != len(set(nums))
     
 
@@ -138,7 +138,7 @@ class Trie:
             i -= 1
 
 class Solution:
-    def findWords(self, board: list[list[str]], words: list[str]) -> list[str]:
+    def findWords(self, board: List[List[str]], words: List[str]) -> List[str]:
         found = set()
         
         trie = Trie()
@@ -175,8 +175,19 @@ class Solution:
 
 
 
-
-
+###### BACKTRACKING ######
+# 78. Subsets (https://leetcode.com/problems/subsets/description/) - Medium
+# NOT THE  MOST EFFICIENT SOLUTION
+from copy import deepcopy
+class Solution:
+    def subsets(self, nums: List[int]) -> List[List[int]]:
+        output = [[]]
+        for n in nums:
+            l = len(output)
+            output = output + deepcopy(output)
+            for i in range(l):
+                output[i].append(n)
+        return output    
 
 
 
