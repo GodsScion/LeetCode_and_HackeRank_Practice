@@ -854,6 +854,35 @@ class Solution {
      */
     
 
+
+    
+    //#######  GRAPHS  #######//
+    // 200. Number of Islands (https://leetcode.com/problems/number-of-islands/description/) - Medium
+    char[][] grid;
+
+    public int markIslands(int a, int b) {
+        if (a < 0 || b < 0 || a >= grid.length || b >= grid[0].length || this.grid[a][b] == '0') {
+            return 0;
+        }
+        this.grid[a][b] = '0';
+        markIslands(a-1, b);
+        markIslands(a+1, b);
+        markIslands(a, b-1);
+        markIslands(a, b+1);
+        return 1;
+    }
+
+    public int numIslands(char[][] grid) {
+        int count = 0;
+        this.grid = grid;
+        for (int r = 0; r < grid.length; r++) {
+            for (int c = 0; c < grid[0].length; c++) {
+                count += markIslands(r, c);
+            }
+        }
+        return count;
+    }
+    
 }
 
 
