@@ -1,6 +1,5 @@
 import java.util.*;
-
-import javax.crypto.MacSpi;
+import java.util.stream.Collectors;
 
 
 //##### Class ######
@@ -77,6 +76,7 @@ class Solution {
  * Queue
  * Lists
  * Priority Queues
+ * Streams
 */
     //##### Lists #####
     public void lists() {
@@ -99,8 +99,26 @@ class Solution {
         list.toArray();
 
     }
-    
 
+
+    //##### Lists #####
+    public void streams() {
+        int[] arr = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+        List<Integer> list = new ArrayList<>(Arrays.stream(arr).boxed().collect(Collectors.toList()));
+
+        int total = list.stream().filter(x -> x % 2 != 0).map(x -> x * x).reduce(0, (x, y) -> x + y);
+        System.out.println(total);
+
+
+    }
+
+}
+
+class Main {
+    public static void main(String[] args) {
+        Solution sol = new Solution();
+        sol.streams();
+    }
 }
 
 
