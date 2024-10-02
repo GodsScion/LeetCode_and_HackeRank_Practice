@@ -883,6 +883,25 @@ class Solution {
         return count;
     }
     
+
+
+
+    //#######  SUBSETS  #######//
+    // 78. Subsets (https://leetcode.com/problems/subsets/description/) - Medium
+    public List<List<Integer>> subsets(int[] nums) {
+        List<List<Integer>> output = new ArrayList<>();
+        output.add(new ArrayList<Integer>());
+        for(Integer n: nums) {
+            int l = output.size();
+            for(int i=0; i<l; i++) {
+                List<Integer> newList = new ArrayList<>(output.get(i));
+                newList.add(n);
+                output.add(newList);
+            }
+        }
+        return output;
+    }
+    
 }
 
 
