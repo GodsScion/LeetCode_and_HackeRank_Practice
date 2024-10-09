@@ -22,6 +22,24 @@ class Solution:
 class Solution:
     def isAnagram(self, s: str, t: str) -> bool:
         return Counter(s) == Counter(t)
+    
+
+# 36. Valid Sudoku (https://leetcode.com/problems/valid-sudoku/description/) - Medium
+class Solution:
+    def isValidSudoku(self, board: List[List[str]]) -> bool:
+        boxes = [[set() for _ in range(3)] for _ in range(3)]
+        col = [set() for _ in range(9)]
+        for i in range(9):
+            row = set()
+            for j in range(9):
+                num = board[i][j]
+                if num == ".": continue
+                if num in row or num in col[j] or num in boxes[i//3][j//3]: return False
+                row.add(num)
+                col[j].add(num)
+                boxes[i//3][j//3].add(num)
+        return True
+
 
 
 #######  SLIDING WINDOW  #######
