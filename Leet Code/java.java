@@ -182,6 +182,101 @@ class Solution {
         return arr;
     }
 
+    // 36. Valid Sudoku (https://leetcode.com/problems/valid-sudoku/description/) - Medium
+    public boolean isValidSudoku(char[][] board) {
+        for (int i = 0; i < 9; i++) {
+            int[] rowDuplicates = new int[10];
+            for (int j = 0; j < 9; j++) {
+                if (board[i][j] != '.') {
+                    if (rowDuplicates[board[i][j] - '0'] > 0) {
+                        return false;
+                    }
+                    rowDuplicates[board[i][j] - '0']++;
+                }
+            }
+        }
+        for (int i = 0; i < 9; i++) {
+            int[] colDuplicates = new int[10];
+            for (int j = 0; j < 9; j++) {
+                if (board[j][i] != '.') {
+                    if (colDuplicates[board[j][i] - '0'] > 0) {
+                        return false;
+                    }
+                    colDuplicates[board[j][i] - '0']++;
+                }
+            }
+        }
+        for (int i = 0; i < 9; i+=3) {
+            for (int j = 0; j < 9; j+=3) {
+                int[] boxDuplicates = new int[10];
+                for (int r = i; r < i + 3; r++) {
+                    for (int c = j; c < j + 3; c++) {
+                        if (board[r][c] != '.') {
+                            if (boxDuplicates[board[r][c] - '0'] > 0) {
+                                return false;
+                            }
+                            boxDuplicates[board[r][c] - '0']++;
+                        }
+                    }
+                }
+            }
+        }
+        return true;
+    }
+    // 36. Valid Sudoku (https://leetcode.com/problems/valid-sudoku/description/) - Medium
+    public boolean isValidSudoku2(char[][] board) {
+        for (int i=0; i<9; i++) {
+            Set<Character> row = new HashSet<>();
+            Set<Character> col = new HashSet<>();
+            Set<Character> box = new HashSet<>();
+            for (int j=0; j<9; j++) {
+                if (board[i][j] != '.' && !row.add(board[i][j])) {
+                    return false;
+                }
+                if (board[j][i] != '.' && !col.add(board[j][i])) {
+                    return false;
+                }
+                if (board[3*(i/3) + j/3][3*(i%3) + j%3] != '.' && !box.add(board[3*(i/3) + j/3][3*(i%3) + j%3])) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    // 36. Valid Sudoku (https://leetcode.com/problems/valid-sudoku/description/) - Medium
+    public boolean isValidSudoku3(char[][] board) {
+        for (int i=0; i<9; i++) {
+            int[] row = new int[9];
+            int[] col = new int[9];
+            int[] box = new int[9];
+            for (int j=0; j<9; j++) {
+                if (board[i][j] != '.') {
+                    if(row[board[i][j] - '1'] > 0) {
+                        return false;
+                    }
+                    row[board[i][j] - '1']++;
+                }
+                if (board[j][i] != '.') {
+                    if(col[board[j][i] - '1'] > 0) {
+                        return false;
+                    }
+                    col[board[j][i] - '1']++;
+                }
+                int r = 3*(i/3) + j/3;
+                int c = 3*(i%3) + j%3;
+                if (board[r][c] != '.') {
+                    if (box[board[r][c] - '1'] > 0) {
+                        return false;
+                    }
+                    box[board[r][c] - '1']++;
+                }
+            }
+        }
+        return true;
+    }
+    
+
+
     // 128. Longest Consecutive Sequence (https://leetcode.com/problems/longest-consecutive-sequence/description/) - Medium
     public int longestConsecutive(int[] nums) {
         if (nums.length == 0) { return 0; }
