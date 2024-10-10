@@ -1,5 +1,6 @@
 from collections import defaultdict, Counter
 from types import List, Optional
+import re
 
 
 #######  ARRAYS AND HASHING  #######
@@ -129,6 +130,41 @@ class Solution:
                 num -= 1
             maxSeqLen = max(maxSeqLen, longest-num-1)
         return maxSeqLen
+
+
+
+
+#######  TWO POINTERS  #######
+# 125. Valid Palindrome (https://leetcode.com/problems/valid-palindrome/description/) - Easy
+class Solution:
+    def isPalindrome(self, s: str) -> bool:
+        s = s.lower()
+        left = 0
+        right = len(s)-1
+        while left < len(s)-1 and not s[left].isalnum(): left += 1
+        while right > 0 and not s[right].isalnum(): right -= 1
+        while left < right:
+            if s[left] != s[right]: return False
+            left += 1
+            right -= 1
+            while left < len(s)-1 and not s[left].isalnum(): left += 1
+            while right > 0 and not s[right].isalnum(): right -= 1
+        return True
+# 125. Valid Palindrome (https://leetcode.com/problems/valid-palindrome/description/) - Easy
+class Solution:
+    def isPalindrome(self, s: str) -> bool:
+        s = re.sub(r'[^a-z0-9]+', '', s.lower())
+        return s == s[::-1]
+# 125. Valid Palindrome (https://leetcode.com/problems/valid-palindrome/description/) - Easy
+class Solution:
+    def isPalindrome(self, s: str) -> bool:
+        s = [ch for ch in s.lower() if ch.isalnum()]
+        return s == list(reversed(s))
+# 125. Valid Palindrome (https://leetcode.com/problems/valid-palindrome/description/) - Easy
+class Solution:
+    def isPalindrome(self, s: str) -> bool:
+        s = ''.join([ch for ch in s.lower() if ch.isalnum()])
+        return s[:len(s)//2] == s[-1:-(len(s)//2)-1:-1]
 
 
 
