@@ -1,7 +1,7 @@
-from collections import defaultdict, Counter
 from types import List, Optional
+from collections import defaultdict, Counter
 import re
-
+import bisect
 
 #######  ARRAYS AND HASHING  #######
 # 217. Contains Duplicate (https://leetcode.com/problems/contains-duplicate/description/) - Easy
@@ -165,6 +165,23 @@ class Solution:
     def isPalindrome(self, s: str) -> bool:
         s = ''.join([ch for ch in s.lower() if ch.isalnum()])
         return s[:len(s)//2] == s[-1:-(len(s)//2)-1:-1]
+
+
+# 167. Two Sum II - Input Array Is Sorted (https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/description/) - Medium
+class Solution:
+    def twoSum(self, numbers: List[int], target: int) -> List[int]:
+        '''
+        Classic example of over engineering 😑
+        '''
+        leftPointer = 0
+        rightPointer = bisect.bisect_right(numbers, target-numbers[leftPointer])-1 
+        while rightPointer > leftPointer:
+            newTarget = target - numbers[rightPointer]
+            leftPointer = bisect.bisect_left(numbers, newTarget, leftPointer, rightPointer)
+            if numbers[leftPointer] == newTarget:
+                return [leftPointer+1, rightPointer+1]
+            rightPointer = bisect.bisect_right(numbers, target-numbers[leftPointer], leftPointer, rightPointer)-1
+        return []
 
 
 
