@@ -80,6 +80,21 @@ class Solution:
         return output
 
 
+# 238. Product of Array Except Self (https://leetcode.com/problems/product-of-array-except-self/description/) - Medium
+class Solution:
+    def productExceptSelf(self, nums: List[int]) -> List[int]:
+        p = 1
+        result = []
+        for num in nums:
+            result.append(p)
+            p *= num
+        p = nums[-1]
+        for i in range(len(nums)-2,-1,-1):
+            result[i] *= p
+            p *= nums[i]
+        return result
+
+
 # 36. Valid Sudoku (https://leetcode.com/problems/valid-sudoku/description/) - Medium
 class Solution:
     def isValidSudoku(self, board: List[List[str]]) -> bool:
