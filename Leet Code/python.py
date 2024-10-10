@@ -201,6 +201,15 @@ class Solution:
 # 15. 3Sum (https://leetcode.com/problems/3sum/description/) - Medium
 class Solution:
     def threeSum(self, nums: List[int]) -> List[List[int]]:
+        '''
+        Classic example of over engineering 😑.
+            
+        - Time complexity: `nlog(n) + nk - k^2 : O( n^2 )`.
+        Where, `n` and `k` are total number of integers and negative integers respectively in given array, and `0 <= k <= n`.
+
+        - Space complexity: `O( log(n) )`.
+        Assuming, output array is not considered.
+        '''
         nums.sort()
         mid = bisect.bisect_left(nums, 0)
         end = bisect.bisect_right(nums, -1*min(nums[0]+nums[1],nums[0]))-1
