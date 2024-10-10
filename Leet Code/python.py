@@ -24,6 +24,49 @@ class Solution:
         return Counter(s) == Counter(t)
     
 
+# 1. Two Sum (https://leetcode.com/problems/two-sum/description/) - Easy
+class Solution:
+    def twoSum(self, nums: List[int], target: int) -> List[int]:
+        visited = {}
+        for i,num in enumerate(nums):
+            if target - num in visited: return [i,visited[target-num]]
+            visited[num] = i
+
+
+# 49. Group Anagrams (https://leetcode.com/problems/group-anagrams/description/) - Medium
+class Solution:
+    def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
+        hashMap = dict()
+        for word in strs:
+            key = "".join(sorted(word))
+            if key not in hashMap:
+                hashMap[key] = [word]
+            else:
+                hashMap[key].append(word)
+        return hashMap.values()
+# 49. Group Anagrams (https://leetcode.com/problems/group-anagrams/description/) - Medium
+class Solution:
+    def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
+        hashMap = defaultdict(list)
+        for word in strs:
+            key = [0] * 26
+            for ch in word:
+                key[ord(ch) - ord('a')] += 1
+            key = str(key)
+            hashMap[key].append(word)
+        return hashMap.values()
+# 49. Group Anagrams (https://leetcode.com/problems/group-anagrams/description/) - Medium
+class Solution:
+    def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
+        values = {'a':2,'b':3,'c':5,'d':7,'e':11,'f':13,'g':17,'h':19,'i':23,'j':29,'k':31,'l':37,'m':41,'n':43,'o':47,'p':53,'q':59,'r':61,'s':67,'t':71,'u':73,'v':79,'w':83,'x':89,'y':97,'z':101}
+        hashSet = defaultdict(list)
+        for word in strs:
+            h = 1
+            for ch in word: h *= values[ch]
+            hashSet[h].append(word)
+        return hashSet.values()
+
+
 # 36. Valid Sudoku (https://leetcode.com/problems/valid-sudoku/description/) - Medium
 class Solution:
     def isValidSudoku(self, board: List[List[str]]) -> bool:
