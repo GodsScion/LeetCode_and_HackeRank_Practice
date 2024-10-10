@@ -185,7 +185,7 @@ class Solution:
 class Solution:
     def twoSum(self, numbers: List[int], target: int) -> List[int]:
         '''
-        Classic example of over engineering 😑
+        Classic example of over engineering 😑. Don't follow this!
         '''
         left = 0
         right = bisect.bisect_right(numbers, target-numbers[left])-1 
@@ -196,6 +196,31 @@ class Solution:
                 return [left+1, right+1]
             right = bisect.bisect_right(numbers, target-numbers[left], left, right)-1
         return []
+
+
+# 15. 3Sum (https://leetcode.com/problems/3sum/description/) - Medium
+class Solution:
+    def threeSum(self, nums: List[int]) -> List[List[int]]:
+        nums.sort()
+        mid = bisect.bisect_left(nums, 0)
+        end = bisect.bisect_right(nums, -1*min(nums[0]+nums[1],nums[0]))-1
+        output = []
+        for end in range(end, mid-1, -1):
+            if end < len(nums)-1 and nums[end+1] == nums[end]:
+                continue
+            start = bisect.bisect_left(nums, -nums[end] -nums[end-1])
+            while start < mid:
+                target = -nums[end] - nums[start]
+                if target < nums[start]:
+                    break
+                if nums[bisect.bisect_right(nums, target, start+2, end)-1] == target:
+                    output.append( [nums[start], target, nums[end]] )
+                while start < mid and nums[start] == nums[start+1]:
+                    start+=1
+                start += 1
+        if mid < len(nums)-2 and nums[mid+2] == 0:
+            output.append([0,0,0])
+        return output
 
 
 
