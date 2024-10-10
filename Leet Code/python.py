@@ -67,6 +67,19 @@ class Solution:
         return hashSet.values()
 
 
+# 347. Top K Frequent Elements (https://leetcode.com/problems/top-k-frequent-elements/description/) - Medium
+class Solution:
+    def topKFrequent(self, nums: List[int], k: int) -> List[int]:
+        freq = Counter(nums)
+        buckets = [[] for _ in range(len(nums))]
+        for num, count in freq.items():
+            buckets[count-1].append(num)
+        output = []
+        while len(output) != k:
+            output += buckets.pop()[0: k-len(output)]
+        return output
+
+
 # 36. Valid Sudoku (https://leetcode.com/problems/valid-sudoku/description/) - Medium
 class Solution:
     def isValidSudoku(self, board: List[List[str]]) -> bool:
