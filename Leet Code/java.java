@@ -339,6 +339,27 @@ class Solution {
         return true;
     }
 
+    // 167. Two Sum II - Input Array Is Sorted (https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/description/) - Medium
+    public int[] twoSumII(int[] numbers, int target) {
+        /* 
+         * Change function name from twoSumII to twoSum
+        */
+        int left = 0;
+        int right = numbers.length - 1;
+        while (left < right) {
+            int current = numbers[left] + numbers[right];
+            if (current == target) {
+                return new int[] { left + 1, right + 1 };
+            }
+            if (current > target) {
+                right--;
+            } else {
+                left++;
+            }
+        }
+        return new int[] {};
+    }
+    
     // 15. 3Sum (https://leetcode.com/problems/3sum/description/) - Medium
     public List<List<Integer>> threeSum(int[] nums) {
         int len = nums.length;
