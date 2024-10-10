@@ -170,17 +170,31 @@ class Solution:
 # 167. Two Sum II - Input Array Is Sorted (https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/description/) - Medium
 class Solution:
     def twoSum(self, numbers: List[int], target: int) -> List[int]:
+        left = 0
+        right = len(numbers)-1
+        while left < right:
+            current = numbers[right] + numbers[left]
+            if current == target:
+                return [left+1, right+1]
+            if current > target:
+                right -= 1
+            else:
+                left += 1
+        return []
+# 167. Two Sum II - Input Array Is Sorted (https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/description/) - Medium
+class Solution:
+    def twoSum(self, numbers: List[int], target: int) -> List[int]:
         '''
         Classic example of over engineering 😑
         '''
-        leftPointer = 0
-        rightPointer = bisect.bisect_right(numbers, target-numbers[leftPointer])-1 
-        while rightPointer > leftPointer:
-            newTarget = target - numbers[rightPointer]
-            leftPointer = bisect.bisect_left(numbers, newTarget, leftPointer, rightPointer)
-            if numbers[leftPointer] == newTarget:
-                return [leftPointer+1, rightPointer+1]
-            rightPointer = bisect.bisect_right(numbers, target-numbers[leftPointer], leftPointer, rightPointer)-1
+        left = 0
+        right = bisect.bisect_right(numbers, target-numbers[left])-1 
+        while right > left:
+            need = target - numbers[right]
+            left = bisect.bisect_left(numbers, need, left, right)
+            if numbers[left] == need:
+                return [left+1, right+1]
+            right = bisect.bisect_right(numbers, target-numbers[left], left, right)-1
         return []
 
 
