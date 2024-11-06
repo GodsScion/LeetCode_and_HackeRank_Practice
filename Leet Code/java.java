@@ -116,25 +116,26 @@ class Solution {
     }
     // 347. Top K Frequent Elements (https://leetcode.com/problems/top-k-frequent-elements/description/) - Medium
     public int[] topKFrequent2(int[] nums, int k) {
-        List<Integer>[] buckets = new List[nums.length + 1];
-        Map<Integer, Integer> freq = new HashMap<>();
+        
+        List<List<Integer>> buckets = new ArrayList<>();
+        for (int i=0; i<=nums.length; i++) {
+            buckets.add(new ArrayList<>());
+        }
 
+        Map<Integer, Integer> freq = new HashMap<>();
         for (int num: nums) {
             freq.put(num, freq.getOrDefault(num,0) + 1);
         }
 
         for (int num: freq.keySet()) {
             int count = freq.get(num);
-            if (buckets[count] == null) {
-                buckets[count] = new ArrayList<Integer>();
-            }
-            buckets[count].add(num);
+            buckets.get(count).add(num);
         }
 
         int[] output = new int[k];
-        for (int i = buckets.length-1; i >= 0 ; i--) {
-            if(buckets[i] != null) {
-                for(int num: buckets[i]) {
+        for (int i = buckets.size()-1; i >= 0 ; i--) {
+            if(buckets.get(i) != null) {
+                for(int num: buckets.get(i)) {
                     if (k==0) {
                         return output;
                     }
