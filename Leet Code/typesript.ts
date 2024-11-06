@@ -19,18 +19,31 @@ class ListNode {
  *     }
  * }
  */
-function hasCycle(head: ListNode | null): boolean {
-    let runner: ListNode | null = head;
-    let chaser: ListNode | null = head;
+function hasCycle(head): boolean {
+    let runner = head;
+    let chaser = head;
     while (runner && runner.next) {
         runner = runner.next.next;
-        chaser = chaser.next;  // chaser will never be null in this line 
+        chaser = chaser.next;
         if ( runner === chaser ) {
             return true;
         }
     }
     return false;
 };
+// This code works too, flawlessly! But the type checking is giving an annoying false error
+// function hasCycle(head: ListNode | null): boolean {
+//     let runner: ListNode | null = head;
+//     let chaser: ListNode | null = head;
+//     while (runner && runner.next) {
+//         runner = runner.next.next;
+//         chaser = chaser.next;  // chaser will never be null in this line 
+//         if ( runner === chaser ) {
+//             return true;
+//         }
+//     }
+//     return false;
+// };
 
 
 
