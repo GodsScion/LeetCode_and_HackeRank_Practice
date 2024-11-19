@@ -459,6 +459,21 @@ class Solution {
         }
         return max;
     }
+    // 3. Longest Substring Without Repeating Characters (https://leetcode.com/problems/longest-substring-without-repeating-characters/description/) - Medium
+    // // Easy to understand - Set is optimized
+    public int lengthOfLongestSubstring3(String s) {
+        boolean[] visited = new boolean[256];
+        int left = 0, max = 0;
+        for (int right = 0; right < s.length(); right++) {
+            while (visited[s.charAt(right)]) {
+                visited[s.charAt(left)] = false;
+                left++;
+            }
+            visited[s.charAt(right)] = true;
+            max = Math.max(max, right-left+1);
+        }
+        return max;
+    }
 
     // 424. Longest Repeating Character Replacement (https://leetcode.com/problems/longest-repeating-character-replacement/description/) - Medium
     public int characterReplacement(String s, int k) {
