@@ -14,6 +14,38 @@ import java.util.stream.Collectors;
 
 class Solution {
 
+    //##### STRINGs ######
+    public void strings() {
+        String s1 = "Hello world!";
+        String s2 = new String("Hello world!");
+
+        if (s1.equals(s2)) { System.out.println("equals"); }
+        if (s1 != s2) { System.out.println("Although equal, prints not equal, because they are different objects."); }
+
+        String sub = s1.substring(0, s1.indexOf(' '));
+
+        char[] chars = s1.toCharArray();
+
+        int length = s1.length();
+
+        // Convert to string
+        String s3 = String.valueOf(chars);
+
+        //#### StringBuilder ####
+        StringBuilder sb = new StringBuilder();
+        for (char c: chars) {
+            sb.append(c);
+        }
+
+        sb.append("String Builder - ");
+
+        sb.deleteCharAt(sb.length()-1);
+        sb.delete(0, 0);
+
+        String s4 = sb.toString();
+    }
+
+
     //##### SETs ######
     public void sets() {
 
@@ -101,7 +133,7 @@ class Solution {
     }
 
 
-    //##### Lists #####
+    //##### STREAMs #####
     public void streams() {
         int[] arr = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
         List<Integer> list = new ArrayList<>(Arrays.stream(arr).boxed().collect(Collectors.toList()));

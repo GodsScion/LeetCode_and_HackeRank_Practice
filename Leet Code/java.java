@@ -534,7 +534,58 @@ class Solution {
         }
         return s.substring(oi,oj+1);
     }
+    // 76. Minimum Window Substring (https://leetcode.com/problems/minimum-window-substring/description/) - Hard
+    // // Similar logic but is quicker because of using arrays as hashmaps
+    public String minWindow2(String s, String t) {
+        if (t.length() > s.length()) {return "";}
+        int[] need = new int[256];
+        int[] window = new int[256];
+        
+        for (char c : t.toCharArray()) {
+            need[c]++;
+        }
+        
+        int left = 0;
+        int right = 0;
+        int minLen = s.length() + 1;
+        int minLeft = 0;
+        
+        int count = 0;
+        
+        while (right < s.length()) {
+            char rightChar = s.charAt(right);
+            window[rightChar]++;
 
+            if (window[rightChar] <= need[rightChar]) {
+                count++;
+            }
+
+            while (count == t.length()) {
+                if (right - left + 1 < minLen) {
+                    minLen = right - left + 1;
+                    minLeft = left;
+                }
+
+                char leftChar = s.charAt(left);
+                window[leftChar]--;
+                
+                if (window[leftChar] < need[leftChar]) {
+                    count--;
+                }
+                
+                left++;
+            }
+            
+            right++;
+        }
+        
+        if (minLen == s.length() + 1) {
+            return "";
+        }
+
+        return s.substring(minLeft, minLeft + minLen);
+    }
+        
     
     //#######  STACK  #######//
     // 20. Valid Parentheses (https://leetcode.com/problems/valid-parentheses/description/) - Easy
