@@ -74,10 +74,11 @@ public class Main {
         // Return [("Dean", 90), ("Alice", 88), ("Eve", 72)] // List of top 3 students who scored above 50, sorted by score descending
 
         // Stream operations to process the list of students 
-        List<Student> topStudents = students.stream()
+        List<String> topStudents = students.stream()
                 .filter(student -> student.getScore() > 50)
-                .sorted((studentA, studentB) -> studentB.getScore() - studentA.getScore())
-                .limit(3).collect(Collectors.toList());
+                .sorted(Comparator.comparingInt(Student::getScore).reversed())
+                .limit(3).map(student -> String.format("(%s, %d)", student.getName(), student.getScore()))
+                .collect(Collectors.toList());
 
 
         // Print the top students
