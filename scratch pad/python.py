@@ -1,10 +1,15 @@
 from typing import List
 from bisect import bisect_left
+from collections import defaultdict
 
 class Solution:
-    def minArraySum(self, nums: List[int], k: int, op1: int, op2: int) -> int:
+    def minArraySum2(self, nums: List[int], k: int, op1: int, op2: int) -> int:
+        '''
+        Couldn't figure out the corner case on my own, below solution doesn't work!
+        Solution using greedy approach that works: https://leetcode.com/problems/minimum-array-sum/solutions/6078002/o-n-log-n-greedy
+        '''
         nums.sort()
-        largeNums = max(bisect_left(nums, 2*k-1), len(nums) - min(op1, op2))
+        largeNums = bisect_left(nums, 2*k-1)
         mediumNums = bisect_left(nums, k)
 
         i = len(nums)-1
@@ -16,14 +21,13 @@ class Solution:
                 op2 -= 1
             i -= 1
 
-        i = mediumNums
-        while op2 and i < largeNums:
-            nums[i] -= k
+        j = mediumNums
+        while op2 and j <= i:
+            nums[j] -= k
             op2 -= 1
-            i += 1
+            j += 1
 
-        nums = sorted(nums[:largeNums]) + nums[largeNums:]
-        i = largeNums-1
+        nums = sorted(nums[:i+1]) + nums[i+1:]
         while op1 and i > -1:
             if nums[i] < 2: break
             nums[i] = (nums[i]+1) //2
@@ -32,46 +36,33 @@ class Solution:
 
         return sum(nums)
     
-## Chatgpt sol doesn't work
-    # def minArraySum2(self, nums: List[int], k: int, op1: int, op2: int) -> int:
-    #     # Store the potential impact of operations on each number
-    #     reductions = []
+    
+    # Solution 2 using dynamic programming
+    def minArraySum(self, nums: List[int], k: int, op1: int, op2: int) -> int:
+        '''
+        Works flawlessly.
+        Time Complexity: O(n * op1 * op2)
+        Space Complexity: O(n * op1 * op2)
+        '''
+        memo = dict()
 
-    #     for i, num in enumerate(nums):
-    #         # Calculate results of applying the operations
-    #         # Only Operation 1
-    #         op1_only = (num + 1) // 2
-    #         # Only Operation 2
-    #         op2_only = num - k if num >= k else num
-    #         # Both operations in different orders
-    #         both_op1_then_op2 = (num + 1)//2 - k if (num + 1)//2 >= k else (num + 1)//2
-    #         both_op2_then_op1 = (num - k + 1) // 2 if num >= k else num
+        def apply(i: int, op1: int, op2: int) -> int:
+            if i >= len(nums): return 0
+            if (i, op1, op2) in memo: return memo[(i, op1, op2)]
 
-    #         # Choose the best result for this number
-    #         best_result = min(op1_only, op2_only, both_op1_then_op2, both_op2_then_op1)
-    #         reductions.append((num - best_result, i, best_result))  # (reduction, index, resulting value)
+            n = nums[i]
+            answer = n + apply(i+1, op1, op2)
+            if op1: answer = min(answer, (n+1)//2 + apply(i+1, op1-1, op2))
+            if op2 and n >= k: answer = min(answer, n-k + apply(i+1, op1, op2-1))
+            if op1 and op2:
+                if n >= k: answer = min(answer, (n-k+1)//2 + apply(i+1, op1-1, op2-1))
+                if n >= 2*k-1: answer = min(answer, (n+1)//2 - k + apply(i+1, op1-1, op2-1))
+            memo[(i, op1, op2)] = answer
+            return answer
 
-    #     # Sort by reduction in descending order
-    #     reductions.sort(reverse=True, key=lambda x: x[0])
+        return apply(0, op1, op2)
 
-    #     # Track which operations have been used
-    #     used_op1 = set()
-    #     used_op2 = set()
-    #     result = nums[:]
 
-    #     for reduction, index, new_value in reductions:
-    #         if op1 > 0 and index not in used_op1:
-    #             if result[index] > new_value:
-    #                 result[index] = new_value
-    #                 op1 -= 1
-    #                 used_op1.add(index)
-    #         elif op2 > 0 and index not in used_op2:
-    #             if result[index] > new_value:
-    #                 result[index] = new_value
-    #                 op2 -= 1
-    #                 used_op2.add(index)
-
-    #     return sum(result)
 
 
 
@@ -110,7 +101,7 @@ if __name__ == "__main__":
 
     for question, answer in questions:
         original = list(question[0])
-        result = sol.minArraySum2(*question)
+        result = sol.minArraySum(*question)
         if result == answer:
             print(f"Success! {original} -> {result}")
         else:

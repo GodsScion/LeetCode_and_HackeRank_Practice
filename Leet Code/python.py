@@ -401,6 +401,39 @@ class Solution:
 
 
 
+#########  EXTRA PROBLEMS  #########
+
+#######  DYNAMIC PROGRAMMING  #######
+
+# 3366. Minimum Array Sum (https://leetcode.com/problems/minimum-array-sum/description/) - Medium
+# NOT THE  MOST EFFICIENT SOLUTION
+class Solution:
+    def minArraySum(self, nums: List[int], k: int, op1: int, op2: int) -> int:
+        '''
+        Works flawlessly! This is Dynamic Programming approach, but Greedy algorithm is also possible, and is the best implementation!
+        Time Complexity: O(n * op1 * op2)
+        Space Complexity: O(n * op1 * op2)
+        '''
+        memo = dict()
+
+        def apply(i: int, op1: int, op2: int) -> int:
+            if i >= len(nums): return 0
+            if (i, op1, op2) in memo: return memo[(i, op1, op2)]
+
+            n = nums[i]
+            answer = n + apply(i+1, op1, op2)
+            if op1: answer = min(answer, (n+1)//2 + apply(i+1, op1-1, op2))
+            if op2 and n >= k: answer = min(answer, n-k + apply(i+1, op1, op2-1))
+            if op1 and op2:
+                if n >= k: answer = min(answer, (n-k+1)//2 + apply(i+1, op1-1, op2-1))
+                if n >= 2*k-1: answer = min(answer, (n+1)//2 - k + apply(i+1, op1-1, op2-1))
+            memo[(i, op1, op2)] = answer
+            return answer
+
+        return apply(0, op1, op2)
+
+####################################
+
 
 
 
