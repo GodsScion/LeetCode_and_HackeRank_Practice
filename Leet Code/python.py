@@ -397,11 +397,30 @@ class Solution:
             output = output + deepcopy(output)
             for i in range(l):
                 output[i].append(n)
-        return output    
+        return output
 
 
 
 #########  EXTRA PROBLEMS  #########
+
+
+# 3365. Rearrange K Substrings to Form Target String (https://leetcode.com/problems/rearrange-k-substrings-to-form-target-string/description/) - Medium
+class Solution:
+    def isPossibleToRearrange(self, s: str, t: str, k: int) -> bool:
+        eqLen = len(s)//k
+        sCounter = defaultdict(int)
+        for i in range(0, len(s), eqLen):
+            sCounter[s[i:i+eqLen]] += 1
+            
+        for i in range(0, len(t), eqLen):
+            part = t[i:i+eqLen]
+            if sCounter[part] < 1:
+                return False
+            sCounter[part] -= 1
+        return True
+                
+
+
 
 #######  DYNAMIC PROGRAMMING  #######
 
@@ -410,7 +429,7 @@ class Solution:
 class Solution:
     def minArraySum(self, nums: List[int], k: int, op1: int, op2: int) -> int:
         '''
-        Works flawlessly! This is Dynamic Programming approach, but Greedy algorithm is also possible, and is the best implementation!
+        Works flawlessly! This is Dynamic Programming approach, but Greedy algorithm is also possible, and is the best implementation (Implementing greedy algo is little hard, to figure out the corner case)!
         Time Complexity: O(n * op1 * op2)
         Space Complexity: O(n * op1 * op2)
         '''
