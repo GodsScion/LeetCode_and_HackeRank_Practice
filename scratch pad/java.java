@@ -31,6 +31,9 @@ class Solution {
         // Convert to string
         String s3 = String.valueOf(chars);
 
+        // Remove special characters and convert to lowercase
+        s3 = s3.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
+
         //#### StringBuilder ####
         StringBuilder sb = new StringBuilder();
         for (char c: chars) {
