@@ -18,8 +18,7 @@ let arr = [1, 2, 3];
 // Objects
 let obj = { a: 1, b: 2 };
 
-// Priority Queue
-
+// Priority Queue, there is no built-in priority queue in JS
 
 
 
