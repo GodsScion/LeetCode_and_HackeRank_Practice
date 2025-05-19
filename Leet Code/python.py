@@ -267,6 +267,19 @@ class Solution:
                     need += 1
         
         return s[oStart: oEnd+1] if oEnd != len(s) + len(t) else ""
+    
+# 567. Permutation in String (https://leetcode.com/problems/permutation-in-string/description/) - Medium
+class Solution:
+    def checkInclusion(self, s1: str, s2: str) -> bool:
+        need = Counter(s1)
+        have = Counter(s2[:len(s1)-1])
+        i = 0
+        for c in s2[len(s1)-1:]:
+            have[c] = have.get(c, 0) + 1
+            if need == have: return True
+            have[s2[i]] -= 1
+            i += 1
+        return need == have
 
 
 ####### LINKED LIST #######
