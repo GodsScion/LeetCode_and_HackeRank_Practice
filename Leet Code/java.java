@@ -612,6 +612,97 @@ class Solution {
         return stack.isEmpty();
     }
 
+    // 155. Min Stack (https://leetcode.com/problems/min-stack/description/) - Medium
+    // // Competitive level optimized solution, kind of overkill for real world scenarios
+    /**
+     * Your MinStack object will be instantiated and called as such:
+     * MinStack obj = new MinStack();
+     * obj.push(val);
+     * obj.pop();
+     * int param_3 = obj.top();
+     * int param_4 = obj.getMin();
+     */
+    class MinStack {
+        ListNode list;
+        int min = Integer.MAX_VALUE;
+        public MinStack() {
+            list = null;
+        }
+        
+        public void push(int val) {
+            min = Math.min(val, min);
+            ListNode node = new ListNode(val, list);
+            list = node;
+        }
+        
+        public void pop() {
+            int val = list.val;
+            list = list.next;
+            if(val == min) {
+                min = Integer.MAX_VALUE;
+                ListNode dummy = list;
+                while(dummy != null) {
+                    min = Math.min(min, dummy.val);
+                    dummy = dummy.next;
+                }
+            }
+        }
+        
+        public int top() {
+            return list.val;
+        }
+        
+        public int getMin() {
+            return min;
+        }
+    }
+
+    // 155. Min Stack (https://leetcode.com/problems/min-stack/description/) - Medium
+    // Typical Solution
+    // // This solution can be considered as optimized for interview purposes, but for competitive coding level use ListNode solution. 
+    /**
+     * Your MinStack object will be instantiated and called as such:
+     * MinStack obj = new MinStack();
+     * obj.push(val);
+     * obj.pop();
+     * int param_3 = obj.top();
+     * int param_4 = obj.getMin();
+     */
+    class MinStack2 {
+        private Stack<Integer> stack;
+        private Stack<Integer> minStack;
+
+        public MinStack2() {
+            stack = new Stack<>();
+            minStack = new Stack<>();
+        }
+
+        public void push(int val) {
+            stack.push(val);
+            if (minStack.isEmpty()) {
+                minStack.push(val);
+            } else {
+                minStack.push(Math.min(val, minStack.peek()));
+            }
+        }
+
+        public void pop() {
+            stack.pop();
+            minStack.pop();
+        }
+
+        public int top() {
+            return stack.peek();
+        }
+
+        public int getMin() {
+            return minStack.peek();
+        }
+    }
+
+
+
+
     //#######  BINARY SEARCH  #######//
     // 153. Find Minimum in Rotated Sorted Array (https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/description/) - Medium
     public int findMin(int[] nums) {
