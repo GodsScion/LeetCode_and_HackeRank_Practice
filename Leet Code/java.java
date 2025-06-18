@@ -1076,6 +1076,46 @@ class Solution {
         return isSameTree(p.left, q.left) && isSameTree(p.right, q.right);
     }
 
+    // 572. Subtree of Another Tree (https://leetcode.com/problems/subtree-of-another-tree/description/) - Easy
+    /**
+     * Definition for a binary tree node.
+     * public class TreeNode {
+     *     int val;
+     *     TreeNode left;
+     *     TreeNode right;
+     *     TreeNode() {}
+     *     TreeNode(int val) { this.val = val; }
+     *     TreeNode(int val, TreeNode left, TreeNode right) {
+     *         this.val = val;
+     *         this.left = left;
+     *         this.right = right;
+     *     }
+     * }
+     */
+    public boolean isSubtree(TreeNode root, TreeNode subRoot) {
+        /*
+         * Time complexity: O(n*m)
+         * Space complexity: O(n) for the recursion stack.
+         * Where, `n` is the number of nodes in `root` and `m` is the number of nodes in `subRoot`.
+         */
+        if (isSametree(root, subRoot)) {
+            return true;
+        }
+        if (root == null) {
+            return false;
+        }
+        return isSubtree(root.left, subRoot) || isSubtree(root.right, subRoot);
+    }
+    public boolean isSametree(TreeNode root1, TreeNode root2) {
+        if (root1 == null && root2 == null) {
+            return true;
+        }
+        if (root1 == null || root2 == null || root1.val != root2.val) {
+            return false;
+        }
+        return isSametree(root1.left, root2.left) && isSametree(root1.right, root2.right);
+    }
+
     
     //#######  2-D DYNAMIC PROGRAMMING  #######//
     // 62. Unique Paths (https://leetcode.com/problems/unique-paths/description/) - Medium
