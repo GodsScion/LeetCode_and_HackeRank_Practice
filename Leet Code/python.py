@@ -387,6 +387,11 @@ class Solution:
 #         self.right = right
 class Solution:
     def isSubtree(self, root: Optional[TreeNode], subRoot: Optional[TreeNode]) -> bool:
+        '''
+        Time Complexity: O(n * m)
+        Space Complexity: O(n + m)
+        Where, `n` is the number of nodes in `root` and `m` is the number of nodes in `subRoot`.
+        '''
         if self.isSametree(root, subRoot):
             return True
         if root != None:
