@@ -420,6 +420,31 @@ class Solution:
         return f"({node.val},{self.serialize(node.left)},{self.serialize(node.right)})"
 
 
+# 235. Lowest Common Ancestor of a Binary Search Tree (https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/description/) - Medium
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+class Solution:
+    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+        '''
+        Time Complexity: O(h), where h is the height of the tree.
+        Space Complexity: O(1), since we are not using any extra space.
+        where, h is log(n) in a balanced tree, and n is the number of nodes in the tree.
+
+        This is a Binary Search Tree, so we can use the properties of BST to find the LCA.
+        In a BST, left child nodes are less than the parent node, and right child nodes are greater than the parent node.
+        Traditionally, nodes have unique values in a BST.
+        '''
+        if p.val < root.val and q.val < root.val:
+            return self.lowestCommonAncestor(root.left, p, q)
+        if p.val > root.val and q.val > root.val:
+            return self.lowestCommonAncestor(root.right, p, q)
+        return root
+
+            
 
 ###### TRIES ######
 # 212. Word Search II (https://leetcode.com/problems/word-search-ii/description/) - Hard
