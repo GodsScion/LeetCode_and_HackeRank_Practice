@@ -444,7 +444,49 @@ class Solution:
             return self.lowestCommonAncestor(root.right, p, q)
         return root
 
+
+# 236. Lowest Common Ancestor of a Binary Tree (https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/description/) - Medium
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+class Solution:
+    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+        '''
+        Time Complexity: O(n), where n is the number of nodes in the tree.
+        Space Complexity: O(n), where n is the number of nodes in the tree.
+        This is not a Binary Search Tree, just a regular binary tree, so in worst case, we have to traverse all the nodes to find the LCA.
+        '''
+        self.searchedLeft = set()
+        self.searchedRight = set()
+        targets = [p, q]
+        path = self.search(root, targets, [root])
+        targets = [q] if path[-1] == p else [p]
+        for node in reversed(path):
+            if self.search(node, targets, [node]) != None:
+                return node
+        return root
             
+    def search(self, node: 'TreeNode', targets: List['TreeNode'], path: List['TreeNode']) -> List['TreeNode']:
+        if node == None:
+            return None
+        path.append(node)
+        if node in targets:
+            return path
+        left = None
+        if node not in self.searchedLeft:
+            self.searchedLeft.add(node)
+            left = self.search(node.left, targets, path)
+        if left != None:
+            return left
+        if node in self.searchedRight:
+            return None
+        self.searchedRight.add(node)
+        return self.search(node.right, targets, path)
+            
+
 
 ###### TRIES ######
 # 212. Word Search II (https://leetcode.com/problems/word-search-ii/description/) - Hard
