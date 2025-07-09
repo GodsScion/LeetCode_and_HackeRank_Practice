@@ -1136,6 +1136,43 @@ class Solution {
         return root;
     }
 
+    
+    // 98. Validate Binary Search Tree (https://leetcode.com/problems/validate-binary-search-tree/description/) - Medium
+    /**
+     * Definition for a binary tree node.
+     * public class TreeNode {
+     *     int val;
+     *     TreeNode left;
+     *     TreeNode right;
+     *     TreeNode() {}
+     *     TreeNode(int val) { this.val = val; }
+     *     TreeNode(int val, TreeNode left, TreeNode right) {
+     *         this.val = val;
+     *         this.left = left;
+     *         this.right = right;
+     *     }
+     * }
+     */
+    public boolean isValidBST(TreeNode root) {
+        return isValidChild(root, null, null);
+    }
+    public boolean isValidChild(TreeNode node, Integer minLimit, Integer maxLimit) {
+        /*
+        * Do not fall into a pitfall by hardcoding Min and Max limits with Integer.MAX_VALUE.
+        * If you do that, and if one of the test cases have their root value as Integer.MAX_VALUE, it would return false, although the BST is valid.
+        * Example test case: [Integer.MAX_VALUE]
+        * A single node BST with max int value is valid!
+        */
+        if (node == null) {
+            return true;
+        }
+        if ((minLimit != null && node.val <= minLimit) || (maxLimit != null && node.val >= maxLimit)) {
+            return false;
+        }
+        return isValidChild(node.left, minLimit, node.val) && isValidChild(node.right, node.val, maxLimit);
+    }
+
+
 
     
     //#######  2-D DYNAMIC PROGRAMMING  #######//
