@@ -510,7 +510,28 @@ class Solution:
                 levels.append(level)
             queue = newQueue
         return levels
-            
+
+# 98. Validate Binary Search Tree (https://leetcode.com/problems/validate-binary-search-tree/description/) - Medium
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def isValidBST(self, root: Optional[TreeNode]) -> bool:
+        '''
+        Time Complexity: O(n), where n is the number of nodes in the tree.
+        We would check each node exactly once, so time complexity is O(n).
+        '''
+        return self.isValidChild(root, float('-inf'), float('inf'))
+    def isValidChild(self, root: Optional[TreeNode], minNeeded: int, maxAllowed: int) -> bool:
+        if root == None:
+            return True
+        if root.val <= minNeeded or root.val >= maxAllowed:
+            return False
+        return self.isValidChild(root.left, minNeeded, root.val) and self.isValidChild(root.right, root.val, maxAllowed)
+
 
 
 ###### TRIES ######
