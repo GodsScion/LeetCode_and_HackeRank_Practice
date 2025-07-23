@@ -511,6 +511,7 @@ class Solution:
             queue = newQueue
         return levels
 
+
 # 98. Validate Binary Search Tree (https://leetcode.com/problems/validate-binary-search-tree/description/) - Medium
 # Definition for a binary tree node.
 # class TreeNode:
@@ -531,6 +532,36 @@ class Solution:
         if root.val <= minNeeded or root.val >= maxAllowed:
             return False
         return self.isValidChild(root.left, minNeeded, root.val) and self.isValidChild(root.right, root.val, maxAllowed)
+
+
+# 230. Kth Smallest Element in a BST (https://leetcode.com/problems/kth-smallest-element-in-a-bst/description/) - Medium
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def kthSmallest(self, root: Optional[TreeNode], k: int) -> int:
+        '''
+        1. Keep moving left until you hit none when you hit none, the previous value in the stack is the value of smallest value
+        2. To find the next smallest value, go one branch to the right, and keep moving left. If the right node is none go back to parent using the stack, repeat
+        '''
+        node = root
+        stack = [] 
+        while k > 0:
+            while node.left != None:
+                stack.append(node)
+                node = node.left
+            k-=1
+            if k==0:
+                return node.val
+            if node.right:
+                node = node.right
+            else:
+                node = stack.pop(-1)
+                node.left = None
+        return node.val
 
 
 
