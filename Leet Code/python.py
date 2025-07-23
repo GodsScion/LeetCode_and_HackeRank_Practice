@@ -544,6 +544,9 @@ class Solution:
 class Solution:
     def kthSmallest(self, root: Optional[TreeNode], k: int) -> int:
         '''
+        Time Complexity: O(n)
+        Space Complexity: O(n)
+        More precise time complexity is O(h+k), where h is height of the BST and k is given k value. Worst case h = n and k = n => O(2n) => O(n)
         1. Keep moving left until you hit none when you hit none, the previous value in the stack is the value of smallest value
         2. To find the next smallest value, go one branch to the right, and keep moving left. If the right node is none go back to parent using the stack, repeat
         '''
