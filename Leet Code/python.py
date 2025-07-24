@@ -567,6 +567,29 @@ class Solution:
         return node.val
 
 
+# 105. Construct Binary Tree from Preorder and Inorder Traversal (https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/description/) - Medium
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def buildTree(self, preorder: List[int], inorder: List[int]) -> Optional[TreeNode]:
+        '''
+        Time Complexity: O(n^2)
+        Space Complexity: O(n^2)
+        where, n is number of nodes
+        '''
+        if not preorder:
+            return None
+        root = TreeNode(preorder[0])
+        leftLimit = inorder.index(root.val)+1
+        root.left = self.buildTree(preorder[1:leftLimit], inorder[:leftLimit-1])
+        root.right = self.buildTree(preorder[leftLimit:], inorder[leftLimit:])
+        return root
+
+
 
 ###### TRIES ######
 # 212. Word Search II (https://leetcode.com/problems/word-search-ii/description/) - Hard
