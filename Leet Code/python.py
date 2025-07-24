@@ -578,8 +578,8 @@ class Solution:
     def buildTree(self, preorder: List[int], inorder: List[int]) -> Optional[TreeNode]:
         '''
         Time Complexity: O(n^2)
-        Space Complexity: O(n^2)
-        where, n is number of nodes
+        Space Complexity: O(n^2). where, n is number of nodes
+        This is a sub par solution, but is easy to think of and implement. Better solution has a time complexity of O(n).
         '''
         if not preorder:
             return None
