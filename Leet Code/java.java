@@ -1172,6 +1172,42 @@ class Solution {
         return isValidChild(node.left, minLimit, node.val) && isValidChild(node.right, node.val, maxLimit);
     }
 
+    // 230. Kth Smallest Element in a BST (https://leetcode.com/problems/kth-smallest-element-in-a-bst/description/) - Medium
+    /**
+     * Definition for a binary tree node.
+     * public class TreeNode {
+     *     int val;
+     *     TreeNode left;
+     *     TreeNode right;
+     *     TreeNode() {}
+     *     TreeNode(int val) { this.val = val; }
+     *     TreeNode(int val, TreeNode left, TreeNode right) {
+     *         this.val = val;
+     *         this.left = left;
+     *         this.right = right;
+     *     }
+     * }
+     */
+    public int kthSmallest(TreeNode root, int k) {
+        List<TreeNode> stack = new LinkedList<>();
+        while (k > 0) {
+            while (root.left != null) {
+                stack.addLast(root);
+                root = root.left;
+            }
+            k -= 1;
+            if (k == 0) {
+                return root.val;
+            }
+            if (root.right != null) {
+                root = root.right;
+            } else {
+                root = stack.removeLast();
+                root.left = null;
+            }
+        }
+        return root.val;
+    }
 
 
     
