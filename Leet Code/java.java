@@ -1135,7 +1135,6 @@ class Solution {
         }
         return root;
     }
-
     
     // 98. Validate Binary Search Tree (https://leetcode.com/problems/validate-binary-search-tree/description/) - Medium
     /**
@@ -1208,6 +1207,46 @@ class Solution {
         }
         return root.val;
     }
+
+    // 105. Construct Binary Tree from Preorder and Inorder Traversal (https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/description/) - Medium
+    /**
+     * Definition for a binary tree node.
+     * public class TreeNode {
+     *     int val;
+     *     TreeNode left;
+     *     TreeNode right;
+     *     TreeNode() {}
+     *     TreeNode(int val) { this.val = val; }
+     *     TreeNode(int val, TreeNode left, TreeNode right) {
+     *         this.val = val;
+     *         this.left = left;
+     *         this.right = right;
+     *     }
+     * }
+     */
+    private int[] preorder;
+    private int[] inorder;
+    private HashMap<Integer, Integer> index;
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        this.preorder = preorder;
+        this.inorder = inorder;
+        this.index = new HashMap<>();
+        for (int i = 0; i < inorder.length; i++) {
+            this.index.put(inorder[i], i);
+        }
+        return tree(0, preorder.length, 0, inorder.length);
+    }
+    public TreeNode tree(int p1, int p2, int i1, int i2) {
+        if ( p1 == p2 ) {
+            return null;
+        }
+        TreeNode root = new TreeNode(preorder[p1]);
+        int len = index.get(root.val) - i1 + 1;
+        root.left = tree(p1 + 1, p1 + len, i1, i1 + len);
+        root.right = tree(p1 + len, p2, i1 + len, i2);
+        return root;
+    }
+
 
 
     
