@@ -1247,6 +1247,35 @@ class Solution {
         return root;
     }
 
+    // 124. Binary Tree Maximum Path Sum (https://leetcode.com/problems/binary-tree-maximum-path-sum/description/) - Hard
+    /**
+     * Definition for a binary tree node.
+     * public class TreeNode {
+     *     int val;
+     *     TreeNode left;
+     *     TreeNode right;
+     *     TreeNode() {}
+     *     TreeNode(int val) { this.val = val; }
+     *     TreeNode(int val, TreeNode left, TreeNode right) {
+     *         this.val = val;
+     *         this.left = left;
+     *         this.right = right;
+     *     }
+     * }
+     */
+    int max = -10000;
+    public int maxPathSum(TreeNode root) {
+        maxWithChild(root);
+        return max;
+    }
+    public int maxWithChild(TreeNode root) {
+        if (root == null) return -10000;
+        int left = maxWithChild(root.left);
+        int right = maxWithChild(root.right);
+        int withRootMax = Math.max(root.val, Math.max(root.val + left, root.val + right));
+        max = Math.max(max, Math.max(left, Math.max(right, Math.max(withRootMax, root.val + left + right))));
+        return withRootMax;
+    }
 
 
     
