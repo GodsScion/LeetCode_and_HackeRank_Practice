@@ -669,6 +669,28 @@ class Solution:
         return subTree(0, n, 0, n)
 
 
+# 124. Binary Tree Maximum Path Sum (https://leetcode.com/problems/binary-tree-maximum-path-sum/description/) - Hard
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def maxPathSum(self, root: Optional[TreeNode]) -> int:
+        self.maxVal = float('-inf')
+        self.nodeMax(root)
+        return self.maxVal
+    def nodeMax(self, node) -> int:
+        if node == None:
+            return float('-inf')
+        left = self.nodeMax(node.left)
+        right = self.nodeMax(node.right)
+        nodeMax = max(node.val + left, node.val + right, node.val)
+        self.maxVal = max(self.maxVal, nodeMax, node.val + left + right)
+        return nodeMax
+
+
 ###### TRIES ######
 # 212. Word Search II (https://leetcode.com/problems/word-search-ii/description/) - Hard
 class Trie:
