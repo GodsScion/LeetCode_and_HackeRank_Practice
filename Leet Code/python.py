@@ -581,6 +581,35 @@ class Solution:
         Space Complexity: O(n^2). where, n is number of nodes
         This is a sub par solution, but is easy to think of and implement. Better solution has a time complexity of O(n).
         '''
+        n = len(preorder)
+        index = {num: i for i, num in enumerate(inorder)}
+
+        def subTree(preStart: int, preEnd: int, inStart: int, inEnd: int) -> Optional[TreeNode]:
+            if preStart == preEnd:
+                return None
+            root = TreeNode(preorder[preStart])
+            treeLen = index[root.val] + 1 - inStart
+            root.left = subTree(preStart + 1, preStart + treeLen, inStart, inStart + treeLen - 1)
+            root.right = subTree(preStart + treeLen, preEnd, inStart + treeLen, inEnd)
+            return root
+        
+        return subTree(0, n, 0, n)
+
+
+# 105. Construct Binary Tree from Preorder and Inorder Traversal (https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/description/) - Medium
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def buildTree(self, preorder: List[int], inorder: List[int]) -> Optional[TreeNode]:
+        '''
+        Time Complexity: O(n^2)
+        Space Complexity: O(n^2). where, n is number of nodes, stack trace and list slicing are causes.
+        This is a sub par solution, but is easy to think of and implement. Better solution has a time and space complexities of O(n).
+        '''
         if not preorder:
             return None
         root = TreeNode(preorder[0])
@@ -588,7 +617,56 @@ class Solution:
         root.left = self.buildTree(preorder[1:leftLimit], inorder[:leftLimit-1])
         root.right = self.buildTree(preorder[leftLimit:], inorder[leftLimit:])
         return root
-
+# 105. Construct Binary Tree from Preorder and Inorder Traversal (https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/description/) - Medium
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def buildTree(self, preorder: List[int], inorder: List[int]) -> Optional[TreeNode]:
+        '''
+        Time Complexity: O(n^2)
+        Space Complexity: O(n). where, n is number of nodes, this is because of stacktrace, we eliminated list slicing in this approach.
+        This is a sub par solution, better than slicing lists though. Better solution has a time and space complexities of O(n).
+        '''
+        n = len(preorder)
+        def subTree(preStart: int, preEnd: int, inStart: int, inEnd: int) -> Optional[TreeNode]:
+            if preStart == preEnd:
+                return None
+            root = TreeNode(preorder[preStart])
+            treeLen = inorder.index(root.val, inStart, inEnd) + 1 - inStart
+            root.left = subTree(preStart + 1, preStart + treeLen, inStart, inStart + treeLen - 1)
+            root.right = subTree(preStart + treeLen, preEnd, inStart + treeLen, inEnd)
+            return root
+        return subTree(0, n, 0, n)
+# 105. Construct Binary Tree from Preorder and Inorder Traversal (https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/description/) - Medium
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def buildTree(self, preorder: List[int], inorder: List[int]) -> Optional[TreeNode]:
+        '''
+        Time Complexity: O(n)
+        Space Complexity: O(n). where, n is number of nodes, because of stacktrace.
+        This is an optimal solution, but there is even better optimized solution with same time and space complexities.
+        This is good for interview purposes. Refer https://neetcode.io/solutions/construct-binary-tree-from-preorder-and-inorder-traversal
+        '''
+        n = len(preorder)
+        index = {num: i for i, num in enumerate(inorder)}
+        def subTree(preStart: int, preEnd: int, inStart: int, inEnd: int) -> Optional[TreeNode]:
+            if preStart == preEnd:
+                return None
+            root = TreeNode(preorder[preStart])
+            treeLen = index[root.val] + 1 - inStart
+            root.left = subTree(preStart + 1, preStart + treeLen, inStart, inStart + treeLen - 1)
+            root.right = subTree(preStart + treeLen, preEnd, inStart + treeLen, inEnd)
+            return root
+        return subTree(0, n, 0, n)
 
 
 ###### TRIES ######
