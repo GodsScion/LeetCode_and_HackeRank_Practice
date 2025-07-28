@@ -1272,9 +1272,9 @@ class Solution {
         if (root == null) return -10000;
         int left = maxWithChild(root.left);
         int right = maxWithChild(root.right);
-        int withRootMax = Math.max(root.val, Math.max(root.val + left, root.val + right));
-        max = Math.max(max, Math.max(left, Math.max(right, Math.max(withRootMax, root.val + left + right))));
-        return withRootMax;
+        int nodeMax = Math.max(root.val, root.val + Math.max(left, right));
+        max = Math.max(max, Math.max(nodeMax, root.val + left + right));
+        return nodeMax;
     }
 
 
