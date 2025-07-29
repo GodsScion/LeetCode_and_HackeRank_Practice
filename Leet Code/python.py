@@ -691,6 +691,52 @@ class Solution:
         return nodeMax
 
 
+# 297. Serialize and Deserialize Binary Tree (https://leetcode.com/problems/serialize-and-deserialize-binary-tree/description/) - Hard
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+class Codec:
+    def serialize(self, root):
+        """Encodes a tree to a single string.
+        
+        :type root: TreeNode
+        :rtype: str
+        """
+        from json import dumps
+        return dumps(self.getPreorder(root))
+
+    def getPreorder(self, root):
+        if root == None:
+            return None
+        return [root.val,self.getPreorder(root.left),self.getPreorder(root.right)]
+
+    def createTree(self, array):
+        if array == None:
+            return None
+        root = TreeNode(array[0])
+        root.left = self.createTree(array[1])
+        root.right = self.createTree(array[2])
+        return root
+
+    def deserialize(self, data):
+        """Decodes your encoded data to tree.
+        
+        :type data: str
+        :rtype: TreeNode
+        """
+        from json import loads
+        return self.createTree(loads(data))
+
+# Your Codec object will be instantiated and called as such:
+# ser = Codec()
+# deser = Codec()
+# ans = deser.deserialize(ser.serialize(root))
+
+
+
 ###### TRIES ######
 # 212. Word Search II (https://leetcode.com/problems/word-search-ii/description/) - Hard
 class Trie:
