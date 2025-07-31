@@ -737,6 +737,39 @@ class Codec:
 
 
 
+###### HEAP / PRIORITY QUEUE   ######
+# 295. Find Median from Data Stream (https://leetcode.com/problems/find-median-from-data-stream/description/) - Hard
+import heapq
+class MedianFinder:
+
+    def __init__(self):
+        self.left = []
+        self.right = []
+
+    def addNum(self, num: int) -> None:
+        if self.left == [] or num <= -self.left[0]:
+            heapq.heappush(self.left, -num)
+        else:
+            heapq.heappush(self.right, num)
+
+        if len(self.left) > len(self.right) + 1:
+            heapq.heappush(self.right, -heapq.heappop(self.left))
+        if len(self.right) > len(self.left):
+            heapq.heappush(self.left, -heapq.heappop(self.right))
+
+    def findMedian(self) -> float:
+        if len(self.left) == len(self.right):
+            return (-self.left[0] + self.right[0]) / 2.0
+        return -self.left[0]
+
+# Example usage:
+# obj = MedianFinder()
+# obj.addNum(num)
+# param_2 = obj.findMedian()
+
+
+
+
 ###### TRIES ######
 # 212. Word Search II (https://leetcode.com/problems/word-search-ii/description/) - Hard
 class Trie:
