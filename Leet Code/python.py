@@ -839,6 +839,23 @@ class Solution:
 
 
 ###### BACKTRACKING ######
+# 39. Combination Sum (https://leetcode.com/problems/combination-sum/description/) - Medium
+class Solution:
+    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
+        candidates.sort()
+        self.candidates = candidates
+        self.target = target
+        return self.getCombination(0, 0, [])
+
+    def getCombination(self, limit, cur, combination):
+        if cur == self.target:
+            return [combination]
+        output = []
+        while limit < len(self.candidates) and self.candidates[limit] + cur <= self.target:
+            output += self.getCombination(limit, cur + self.candidates[limit], combination + [self.candidates[limit]])
+            limit += 1
+        return output
+
 # 78. Subsets (https://leetcode.com/problems/subsets/description/) - Medium
 # NOT THE  MOST EFFICIENT SOLUTION
 from copy import deepcopy
