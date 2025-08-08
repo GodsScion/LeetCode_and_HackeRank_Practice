@@ -844,16 +844,15 @@ class Solution:
     def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
         candidates.sort()
         self.candidates = candidates
-        self.target = target
-        return self.getCombination(0, 0, [])
+        return self.getCombination(0, target, [])
 
-    def getCombination(self, limit, cur, combination):
-        if cur == self.target:
-            return [combination]
+    def getCombination(self, i, need, stack):
+        if need == 0:
+            return [stack]
         output = []
-        while limit < len(self.candidates) and self.candidates[limit] + cur <= self.target:
-            output += self.getCombination(limit, cur + self.candidates[limit], combination + [self.candidates[limit]])
-            limit += 1
+        while i < len(self.candidates) and self.candidates[i] <= need:
+            output += self.getCombination(i, need - self.candidates[i], stack + [self.candidates[i]])
+            i += 1
         return output
 
 # 78. Subsets (https://leetcode.com/problems/subsets/description/) - Medium
