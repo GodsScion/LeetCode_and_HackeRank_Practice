@@ -855,6 +855,32 @@ class Solution:
             i += 1
         return output
 
+
+# 79. Word Search (https://leetcode.com/problems/word-search/description/) - Medium
+class Solution:
+    def exist(self, board: List[List[str]], word: str) -> bool:
+        self.board = board
+        self.word = word
+        self.visited = set()
+        for r in range(len(board)):
+            for c in range(len(board[0])):
+                if self.isWord(r, c, 0):
+                    return True
+        return False
+
+    def isWord(self, r: int, c: int, i: int) -> bool:
+        if i >= len(self.word):
+            return True
+        if (r < 0 or c < 0 or r >= len(self.board) or c >= len(self.board[0])
+            or (r,c) in self.visited or self.board[r][c] != self.word[i]):
+            return False
+        self.visited.add((r,c))
+        if (self.isWord(r+1,c,i+1) or self.isWord(r-1,c,i+1)
+            or self.isWord(r,c+1,i+1) or self.isWord(r,c-1,i+1)):
+            return True
+        self.visited.remove((r,c))
+
+
 # 78. Subsets (https://leetcode.com/problems/subsets/description/) - Medium
 # NOT THE  MOST EFFICIENT SOLUTION
 from copy import deepcopy
