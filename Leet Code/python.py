@@ -859,6 +859,55 @@ class Solution:
 # 79. Word Search (https://leetcode.com/problems/word-search/description/) - Medium
 class Solution:
     def exist(self, board: List[List[str]], word: str) -> bool:
+        '''
+        Time Complexity: O(R * C * 4^L)
+        Space Complexity: O(L), for stack of visited cells
+        Where, R is number of rows, C is number of columns in board, and L is number of characters in word.
+        '''
+        self.board = board
+        self.word = word
+        self.visited = set()
+        for r in range(len(board)):
+            for c in range(len(board[0])):
+                if self.isWord(r, c, 0):
+                    return True
+        return False
+
+    def isWord(self, r: int, c: int, i: int) -> bool:
+        if i >= len(self.word):
+            return True
+        if (r < 0 or c < 0 or r >= len(self.board) or c >= len(self.board[0])
+            or (r,c) in self.visited or self.board[r][c] != self.word[i]):
+            return False
+        self.visited.add((r,c))
+        if (self.isWord(r+1,c,i+1) or self.isWord(r-1,c,i+1)
+            or self.isWord(r,c+1,i+1) or self.isWord(r,c-1,i+1)):
+            return True
+        self.visited.remove((r,c))
+# 79. Word Search (https://leetcode.com/problems/word-search/description/) - Medium
+class Solution:
+    def exist(self, board: List[List[str]], word: str) -> bool:
+        '''
+        Although the time and space complexities are not changed, this is a quicker solution in real world becuase of inexpensive preliminary pruning.
+        Time Complexity: O(R * C * 4^L)
+        Space Complexity: O(L), for stack of visited cells
+        Where, R is number of rows, C is number of columns in board, and L is number of characters in word.
+        '''
+        # There won't be a solution if length of the word is bigger than number of characters in board
+        if len(word) > len(board) * len(board[0]):
+            return False
+
+        # There won't be a solution if frequency for any of the character in a word, is more than the frequency of that character on board
+        wordCount = Counter(word)
+        boardCount = sum((Counter(row) for row in board), Counter())
+        for ch in wordCount:
+            if boardCount[ch] < wordCount[ch]:
+                return False
+
+        # We can reduce the amount of branching by making the tip of the word that has least number of repeats
+        if wordCount[word[0]] > wordCount[word[-1]]:
+            word = word[::-1]
+
         self.board = board
         self.word = word
         self.visited = set()
