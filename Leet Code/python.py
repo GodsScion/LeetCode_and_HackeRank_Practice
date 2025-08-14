@@ -904,8 +904,8 @@ class Solution:
             if boardCount[ch] < wordCount[ch]:
                 return False
 
-        # We can reduce the amount of branching by making the tip of the word that has least number of repeats
-        if wordCount[word[0]] > wordCount[word[-1]]:
+        # We can reduce the amount of branching significantly by picking the tip of the word with least number of repeats on board
+        if boardCount[word[0]] > boardCount[word[-1]]:
             word = word[::-1]
 
         self.board = board
