@@ -595,7 +595,6 @@ class Solution:
         
         return subTree(0, n, 0, n)
 
-
 # 105. Construct Binary Tree from Preorder and Inorder Traversal (https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/description/) - Medium
 # Definition for a binary tree node.
 # class TreeNode:
@@ -617,6 +616,7 @@ class Solution:
         root.left = self.buildTree(preorder[1:leftLimit], inorder[:leftLimit-1])
         root.right = self.buildTree(preorder[leftLimit:], inorder[leftLimit:])
         return root
+
 # 105. Construct Binary Tree from Preorder and Inorder Traversal (https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/description/) - Medium
 # Definition for a binary tree node.
 # class TreeNode:
@@ -641,6 +641,7 @@ class Solution:
             root.right = subTree(preStart + treeLen, preEnd, inStart + treeLen, inEnd)
             return root
         return subTree(0, n, 0, n)
+
 # 105. Construct Binary Tree from Preorder and Inorder Traversal (https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/description/) - Medium
 # Definition for a binary tree node.
 # class TreeNode:
@@ -884,6 +885,7 @@ class Solution:
             or self.isWord(r,c+1,i+1) or self.isWord(r,c-1,i+1)):
             return True
         self.visited.remove((r,c))
+
 # 79. Word Search (https://leetcode.com/problems/word-search/description/) - Medium
 class Solution:
     def exist(self, board: List[List[str]], word: str) -> bool:
