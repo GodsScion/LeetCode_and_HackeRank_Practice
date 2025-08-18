@@ -839,7 +839,7 @@ class Solution:
 # 212. Word Search II (https://leetcode.com/problems/word-search-ii/description/) - Hard
 class PrefixTree:
     '''
-    Same thing not much difference, just added same pruning, didn't make much difference!
+    Same thing not much difference, just added same pruning, didn't make much difference, Over engineered!
     '''
     def __init__(self) -> None:
         self.children = {}
@@ -900,14 +900,18 @@ class Solution:
             else:
                 self.allWords[key] = [word]
 
-        self.board = board
         self.visited = set()
-        self.output = []
+        for r in range(len(board)):
+            self.visited.update([(r,-1), (r,len(board[0]))])
+        for c in range(len(board[0])):
+            self.visited.update([(-1,c), (len(board),c)])
         
         self.prefixTree = PrefixTree()
         for word in self.allWords:
             self.prefixTree.add(word)
 
+        self.board = board
+        self.output = []
         for r in range(len(board)):
             for c in range(len(board[0])):
                 self.search(r,c,self.prefixTree)
@@ -921,8 +925,7 @@ class Solution:
             self.output.extend(self.allWords.pop(node.isWord, []))
             self.prefixTree.remove(node.isWord)
         
-        if (r < 0 or c < 0 or r >= len(self.board) or c >= len(self.board[0])
-            or (r,c) in self.visited or self.board[r][c] not in node.children):
+        if (r,c) in self.visited or self.board[r][c] not in node.children:
             return
         
         node = node.children[self.board[r][c]]
