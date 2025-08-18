@@ -836,7 +836,103 @@ class Solution:
 
         return list(found)
 
+class PrefixTree:
+    def __init__(self) -> None:
+        self.children = {}
+        self.isWord = None
+    
+    def add(self, word: str) -> None:
+        root = self
+        for ch in word:
+            if ch not in root.children:
+                root.children[ch] = PrefixTree()
+            root = root.children[ch]
+        root.isWord = word
 
+    def remove(self, word: str) -> str:
+        if not word: # Not needed
+            return None
+        root = self
+        deleteLink = (root, word[0])
+        for ch in word:
+            if len(root.children) > 1 or root.isWord:
+                deleteLink = (root, ch)
+            if ch not in root.children:
+                return None
+            root = root.children[ch]
+        if not root.children:
+            deleteLink[0].children.pop(deleteLink[1])
+        root.isWord = None
+        return word
+    
+    def __str__(self) -> str:
+        return f'Node:(children={self.children.keys()}, isWord={self.isWord})'
+
+# 212. Word Search II (https://leetcode.com/problems/word-search-ii/description/) - Hard
+class Solution:
+    def findWords(self, board: List[List[str]], words: List[str]) -> List[str]:
+        '''
+        Same thing not much difference, just added same pruning, didn't make much difference!
+        '''
+        # Prune words
+        words = set(words)
+        boardCounter = sum((Counter(word) for word in words),Counter())
+        self.allWords = dict()
+        while words:
+            word = words.pop()
+            if len(word) > len(board)*len(board[0]):
+                continue
+            wordCounter = Counter(word)
+            for ch in wordCounter:
+                if wordCounter[ch] > boardCounter[ch]:
+                    continue
+
+            # Optimize branching (doesn't contribute much), ideal would be to see if there's any algo for word commanlity, reduce number of prefix branches..
+            reverseWord = word[::-1]
+            key = word
+            if boardCounter[word[0]] > boardCounter[word[-1]]:
+                key = reverseWord
+            
+            # Reduce Prefix tree branches by reducing number of words to search
+            if reverseWord in words:
+                words.remove(reverseWord)
+                self.allWords[key] = [word, reverseWord]
+            else:
+                self.allWords[key] = [word]
+
+        self.board = board
+        self.visited = set()
+        self.output = []
+        
+        self.prefixTree = PrefixTree()
+        for word in self.allWords:
+            self.prefixTree.add(word)
+
+        for r in range(len(board)):
+            for c in range(len(board[0])):
+                self.search(r,c,self.prefixTree)
+        return self.output
+
+    def search(self, r: int, c: int, node: PrefixTree) -> None:
+        if not node: # Not needed
+            return
+        
+        if node.isWord:
+            self.output.extend(self.allWords.pop(node.isWord, []))
+            self.prefixTree.remove(node.isWord)
+        
+        if (r < 0 or c < 0 or r >= len(self.board) or c >= len(self.board[0])
+            or (r,c) in self.visited or self.board[r][c] not in node.children):
+            return
+        
+        node = node.children[self.board[r][c]]
+        self.visited.add((r,c))
+        self.search(r-1, c, node)
+        self.search(r+1, c, node)
+        self.search(r, c-1, node)
+        self.search(r, c+1, node)
+        self.visited.remove((r,c))
+        return
 
 
 ###### BACKTRACKING ######
