@@ -836,7 +836,11 @@ class Solution:
 
         return list(found)
 
+# 212. Word Search II (https://leetcode.com/problems/word-search-ii/description/) - Hard
 class PrefixTree:
+    '''
+    Same thing not much difference, just added same pruning, didn't make much difference!
+    '''
     def __init__(self) -> None:
         self.children = {}
         self.isWord = None
@@ -868,15 +872,11 @@ class PrefixTree:
     def __str__(self) -> str:
         return f'Node:(children={self.children.keys()}, isWord={self.isWord})'
 
-# 212. Word Search II (https://leetcode.com/problems/word-search-ii/description/) - Hard
 class Solution:
     def findWords(self, board: List[List[str]], words: List[str]) -> List[str]:
-        '''
-        Same thing not much difference, just added same pruning, didn't make much difference!
-        '''
         # Prune words
         words = set(words)
-        boardCounter = sum((Counter(word) for word in words),Counter())
+        boardCounter = sum((Counter(row) for row in board),Counter())
         self.allWords = dict()
         while words:
             word = words.pop()
