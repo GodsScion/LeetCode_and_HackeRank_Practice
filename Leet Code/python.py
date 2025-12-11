@@ -344,6 +344,41 @@ class Solution:
         return False
 
 
+# 146. LRU Cache (https://leetcode.com/problems/lru-cache/) - Medium
+from collections import OrderedDict
+class LRUCache:
+    '''
+    Time Complexity: O(1) for both get and put operations.
+    Space Complexity: O(capacity), where capacity is the maximum number of items that can be stored in the cache.
+
+    We use an OrderedDict in this approach, but it can also be implemented using a combination of a doubly linked list and a hash map.
+    '''
+    def __init__(self, capacity: int):
+        self.capacity = capacity
+        self.orderedDict: OrderedDict[int, int] = OrderedDict()
+
+    def get(self, key: int) -> int:
+        if key not in self.orderedDict:
+            return -1
+        self.orderedDict.move_to_end(key)
+        return self.orderedDict[key]
+
+    def put(self, key: int, value: int) -> None:
+        if key in self.orderedDict:
+            self.orderedDict[key] = value
+            self.orderedDict.move_to_end(key)
+            return
+        if len(self.orderedDict) >= self.capacity:
+            self.orderedDict.popitem(last=False)
+        self.orderedDict[key] = value
+        return
+
+# Your LRUCache object will be instantiated and called as such:
+# obj = LRUCache(capacity)
+# param_1 = obj.get(key)
+# obj.put(key,value)
+
+
 
 ###### TREES ######
 class TreeNode:
