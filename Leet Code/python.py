@@ -1027,6 +1027,48 @@ class Solution:
         return list(pacific & atlantic)
 
 
+# 207. Course Schedule  (https://leetcode.com/problems/course-schedule/description/) - Medium
+class Solution:
+    '''
+    Time Complexity: O(V + E)
+    Space Complexity: O(V + E)
+    Where, V is number of courses, E is number of prerequisites. 
+    We're only doing dfs for each course once, and checking each prerequisite link once, because we're using memoization.
+    '''
+    def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
+        courseDependencies = dict()
+        possibleCourses = set()
+
+        for course, dependency in prerequisites:
+            courseDependencies.setdefault(course, set()).add(dependency)
+            courseDependencies.setdefault(dependency, set())
+        
+        visited = set()
+
+        def isCoursePossible(course):
+            if course in visited:
+                return False
+            if course in possibleCourses:
+                return True
+
+            visited.add(course)
+            
+            for dependency in courseDependencies[course]:
+                if not isCoursePossible(dependency):
+                    return False
+            
+            visited.discard(course)
+            possibleCourses.add(course)
+            return True
+
+        for course in courseDependencies:
+            if not isCoursePossible(course):
+                return False
+        
+        return True
+
+
+
 ###### BACKTRACKING ######
 # 39. Combination Sum (https://leetcode.com/problems/combination-sum/description/) - Medium
 class Solution:
