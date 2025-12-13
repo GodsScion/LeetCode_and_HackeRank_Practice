@@ -973,6 +973,60 @@ class Solution:
         return
 
 
+
+###### GRAPHS ######
+# 417. Pacific Atlantic Water Flow (https://leetcode.com/problems/pacific-atlantic-water-flow/description/) - Medium
+class Solution:
+    '''
+    Time Complexity: O(R * C)
+    Space Complexity: O(R * C)
+    Where, R is number of rows, C is number of columns in heights.
+
+    Note:
+    Optimal Solution:
+    The best approach is to do DFS of ocean border cells only, and find cells that can reach that ocean.
+    Basically solving in reverse, going from ocean to their respective reachable cells, and find cells common in both oceans.
+
+    My Mistakes:
+    Instead for some reason, when you're trying to code it, you're some how coding the brute force approach, 
+    where you're doing DFS for every cell, to see if it can reach both oceans with memoization.
+    This approach is way more complex to code, and has worse time and space complexities of O((R * C)^2).
+    REMEMBER TO PERFORM DFS FOR OCEAN BORDER CELLS ONLY!!! Not for every cell, 
+    and you don't need a visited set, you're already using pacific and atlantic sets 
+    that act as visited sets for respective oceans.
+    '''
+    def pacificAtlantic(self, heights: List[List[int]]) -> List[List[int]]:
+        R = len(heights)
+        C = len(heights[0])
+
+        pacific = set()
+        atlantic = set()
+
+        def dfs(r,c,ocean,prevH):
+            if not ( 0 <= r < R and 0 <= c < C ) or heights[r][c] < prevH:
+                return False
+            if (r,c) in ocean:
+                return True
+            
+            ocean.add((r,c)) # This prevents revisiting the same cell
+            dfs(r+1,c,ocean,heights[r][c]) 
+            dfs(r-1,c,ocean,heights[r][c]) 
+            dfs(r,c+1,ocean,heights[r][c]) 
+            dfs(r,c-1,ocean,heights[r][c])
+            return True
+    
+        # Only doing DFS for ocean border cells, NOT FOR EVERY CELL!!!
+        for c in range(C):
+            dfs(0,c,pacific,heights[0][c])
+            dfs(R-1,c,atlantic,heights[R-1][c])
+        
+        for r in range(R):
+            dfs(r,0,pacific,heights[r][0])
+            dfs(r,C-1,atlantic,heights[r][C-1])
+
+        return list(pacific & atlantic)
+
+
 ###### BACKTRACKING ######
 # 39. Combination Sum (https://leetcode.com/problems/combination-sum/description/) - Medium
 class Solution:
