@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 // public class T {
 //     public int val;
 
+//     // Constructors don't have return type and must have the same name as the class
 //     public T(int val) {
 //         this.val = val;
 //     }
@@ -141,8 +142,8 @@ class Solution {
         int[] arr = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
         List<Integer> list = new ArrayList<>(Arrays.stream(arr).boxed().collect(Collectors.toList()));
 
-        int total = list.stream().filter(x -> x % 2 != 0).map(x -> x * x).reduce(0, (x, y) -> x + y);
-        System.out.println(total);
+        int evenSquaresTotal = list.stream().filter(x -> x % 2 != 0).map(x -> x * x).reduce(0, (x, y) -> x + y);
+        System.out.println(evenSquaresTotal);
 
 
     }
