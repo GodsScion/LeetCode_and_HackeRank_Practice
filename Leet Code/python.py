@@ -1068,6 +1068,42 @@ class Solution:
         return True
 
 
+# 261. Graph Valid Tree (https://leetcode.com/problems/graph-valid-tree/description/) - Medium - Premium (https://neetcode.io/problems/valid-tree/question)
+class Solution:
+    '''
+    Time Complexity: O(V + E)
+    Space Complexity: O(V + E)
+    Where, V is number of nodes, E is number of edges. 
+    We're only doing dfs for each node once, and checking each edge once, because we're using visited set.
+    1. A valid tree should have exactly n-1 edges, if there are more edges, there must be a cycle.
+    2. A valid tree should be fully connected, meaning all nodes should be reachable from any node. We can check this by doing a DFS/BFS from any node and see if we can visit all nodes.
+    3. During DFS/BFS, if we encounter a visited node that is not the parent of the current node, then there is a cycle.
+    4. Finally, after DFS/BFS, if the number of visited nodes is not equal to n, then the graph is not fully connected.
+    '''
+    def validTree(self, n: int, edges: List[List[int]]) -> bool:
+        if len(edges) > (n - 1):
+            return False
+
+        hmap = dict()
+
+        for n1, n2 in edges:
+            hmap.setdefault(n1, set()).add(n2)
+            hmap.setdefault(n2, set()).add(n1)
+        
+        visited = set()
+
+        def dfs(n1, prev):
+            if n1 in visited:
+                return False
+            visited.add(n1)
+            for x in hmap.get(n1, set()): # Provide a default set is necessary cause if there is only 1 node, it won't have edges, it wouldn't have been saved in `hmap`
+                if x != prev and not dfs(x, n1):
+                    return False            
+            return True
+
+        return dfs(0,-1) and len(visited) == n
+
+
 
 ###### BACKTRACKING ######
 # 39. Combination Sum (https://leetcode.com/problems/combination-sum/description/) - Medium
@@ -1120,7 +1156,7 @@ class Solution:
 class Solution:
     def exist(self, board: List[List[str]], word: str) -> bool:
         '''
-        Although the time and space complexities are not changed, this is a quicker solution in real world becuase of inexpensive preliminary pruning.
+        Although the time and space complexities are not changed, this is a quicker solution in real world because of inexpensive preliminary pruning.
         Time Complexity: O(R * C * 4^L)
         Space Complexity: O(L), for stack of visited cells
         Where, R is number of rows, C is number of columns in board, and L is number of characters in word.
