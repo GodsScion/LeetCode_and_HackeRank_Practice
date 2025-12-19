@@ -1149,7 +1149,8 @@ class Solution:
     Where V is the number of unique characters, E is the number of edges, 
     and N is the total number of characters in all the words.
 
-    This is a hard problem, we used topological sort to solve this problem.
+    This is a hard problem, we used topological sort to solve this problem with DFS,
+    can also be solved with BFS using Kahn's algorithm (another Topological sort).
     We used a graph to represent the characters and their order, (we used an adjacency list for this),
     and we used topological sort to find the order of characters.
     1. We first create a graph where each character points to the characters that come after it.
