@@ -1139,6 +1139,77 @@ class Solution:
         
         return count
 
+
+# 269. Alien Dictionary (https://leetcode.com/problems/alien-dictionary/description/) - Hard - Premium (https://neetcode.io/problems/foreign-dictionary/question)
+class Solution:
+    '''
+    Time complexity: O(N+V+E)
+    Space complexity: O(V+E)
+
+    Where V is the number of unique characters, E is the number of edges, 
+    and N is the total number of characters in all the words.
+
+    This is a hard problem, we used topological sort to solve this problem.
+    We used a graph to represent the characters and their order, (we used an adjacency list for this),
+    and we used topological sort to find the order of characters.
+    1. We first create a graph where each character points to the characters that come after it.
+    2. We then do a topological sort on the graph, and if we encounter a cycle, 
+       we return an empty string. 
+       (Cycles mean, there is no valid order for characters, 
+       For Eg: We already have A < B, B < C, and if we get C < A which is not possible)
+    3. If we don't encounter a cycle, we return the order of characters.
+    4. When we are doing topological sort, we process the characters in reverse order, 
+       basically we process all the children, and when it's a leaf node (no children for this node) process it, 
+       and backtrack to the parent nodes, that's why the output we append ends up coming in reverse order, 
+       which we reverse in the end.
+    '''
+    def foreignDictionary(self, words: List[str]) -> str:
+        hmap = {}
+        
+        for w in words:
+            for c in w:
+                hmap[c] = set()
+        
+        for i in range(len(words)-1):
+            w1, w2 = words[i], words[i+1]
+            l = min(len(w1), len(w2))
+            if w1[:l] == w2[:l] and len(w1) > len(w2):
+                return ""
+            for j in range(l):
+                if w1[j] != w2[j]:
+                    hmap[w1[j]].add(w2[j])
+                    break # Breaking here is crucial, Eg: ABCZY < ABDE, here C < D and if you won't break here you'll end up adding Z < E which is not true!
+        
+        visiting = set()
+        processed = set()
+
+        output = []
+
+        def dfs(c):
+            if c in visiting:
+                return False
+            if c in processed:
+                return True
+            
+            visiting.add(c)
+
+            for k in hmap[c]:
+                if not dfs(k):
+                    return False
+
+            visiting.discard(c)
+            output.append(c)
+            processed.add(c)
+            return True
+
+        for c in hmap:
+            if not dfs(c):
+                return ""
+
+        return "".join(reversed(output))
+
+
+
 ###### BACKTRACKING ######
 # 39. Combination Sum (https://leetcode.com/problems/combination-sum/description/) - Medium
 class Solution:
