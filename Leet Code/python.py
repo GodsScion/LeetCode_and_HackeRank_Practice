@@ -1104,6 +1104,40 @@ class Solution:
         return dfs(0,-1) and len(visited) == n
 
 
+# 323. Number of Connected Components in an Undirected Graph (https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/description/) - Medium - Premium (https://neetcode.io/problems/count-connected-components/question)
+class Solution:
+    '''
+    Time Complexity: O(V + E)
+    Space Complexity: O(V + E)
+    Where, V is number of nodes, E is number of edges.
+    We're only doing dfs for each node once, and checking each edge once, because we're using visited set.
+
+    There is a more efficient solution using union-find, whose time complexity is also O(V + E),
+    but this solution is easier to understand and implement.
+    '''
+    def countComponents(self, n: int, edges: List[List[int]]) -> int:
+        hmap = dict()
+        visited = set()
+        count = 0
+
+        for n1, n2 in edges:
+            hmap.setdefault(n1, set()).add(n2)
+            hmap.setdefault(n2, set()).add(n1)
+
+        def dfs(x):
+            if x in visited:
+                return
+            visited.add(x)
+            for k in hmap.get(x, set()):
+                dfs(k)
+            return
+
+        for x in range(n):
+            if x not in visited:
+                dfs(x)
+                count+=1
+        
+        return count
 
 ###### BACKTRACKING ######
 # 39. Combination Sum (https://leetcode.com/problems/combination-sum/description/) - Medium
