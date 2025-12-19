@@ -1178,7 +1178,9 @@ class Solution:
             for j in range(l):
                 if w1[j] != w2[j]:
                     hmap[w1[j]].add(w2[j])
-                    break # Breaking here is crucial, Eg: ABCZY < ABDE, here C < D and if you won't break here you'll end up adding Z < E which is not true!
+                    break # Breaking here is crucial, 
+                          # Eg: ABCZY < ABDE, here C < D and if you won't break here, 
+                          # you'll end up adding Z < E which is not true!
         
         visiting = set()
         processed = set()
