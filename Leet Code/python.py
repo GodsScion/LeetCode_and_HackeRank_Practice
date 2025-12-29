@@ -1140,6 +1140,9 @@ class Solution:
         return count
 
 
+
+###### ADVANCED GRAPHS ######
+
 # 269. Alien Dictionary (https://leetcode.com/problems/alien-dictionary/description/) - Hard - Premium (https://neetcode.io/problems/foreign-dictionary/question)
 class Solution:
     '''
@@ -1211,6 +1214,34 @@ class Solution:
 
         return "".join(reversed(output))
 
+
+
+###### 1-D DYNAMIC PROGRAMMING ######
+
+# 70. Climbing Stairs (https://leetcode.com/problems/climbing-stairs/description/) - Easy
+class Solution:
+    def climbStairs(self, n: int) -> int:
+        '''
+        Time Complexity: O(n)
+        Space Complexity: O(n)
+        Where, n is number of stairs.
+        Constrains specified as 1 <= n <= 45.
+
+        You were going with `1 + dfs(n-1) + dfs(n-2)` to compensate for n=0 case, 
+        but that causes over-counting, if you look at constrains, n >= 1, 
+        so you can go with right logic `dfs(n-1) + dfs(n-2)` and `if n==0 return 1`, 
+        you don't need to do `+1`, and be sure you return 1 for `n == 0` cases.
+        '''
+        cache = {}
+        def dfs(n):
+            if n < 2:
+                return 1
+            if n in cache:
+                return cache[n]
+            res = dfs(n-1) + dfs(n-2)
+            cache[n] = res
+            return res
+        return dfs(n)
 
 
 ###### BACKTRACKING ######
