@@ -1244,6 +1244,96 @@ class Solution:
         return dfs(n)
 
 
+# 198. House Robber (https://leetcode.com/problems/house-robber/description/) - Medium
+class Solution:
+    '''
+    Time Complexity: O(n)
+    Space Complexity: O(n)
+    Where, n is number of houses.
+
+    Simple DFS with memoization problem. But the most optimal solution is below, 
+    has O(1) space complexity.
+    '''
+    def rob(self, nums: List[int]) -> int:
+        cache = {}
+
+        def dfs(i):
+            if i in cache:
+                return cache[i]
+            if i >= len(nums):
+                return 0
+            res = max(nums[i] + dfs(i+2), dfs(i+1))
+            cache[i] = res
+            return res
+        
+        return dfs(0)
+
+# 198. House Robber (https://leetcode.com/problems/house-robber/description/) - Medium
+class Solution:
+    '''
+    Time Complexity: O(n)
+    Space Complexity: O(1)
+    Where, n is number of houses.
+    This is the most optimal solution with O(1) space complexity.
+    '''
+    def rob(self, nums: List[int]) -> int:
+        rob1, rob2 = 0, 0
+
+        for house in nums:
+            temp = rob2
+            rob2 = max(house + rob1, rob2)
+            rob1 = temp
+
+        return rob2
+
+
+# 213. House Robber II (https://leetcode.com/problems/house-robber-ii/description/) - Medium
+class Solution:
+    '''
+    Time Complexity: O(n)
+    Space Complexity: O(n)
+    Where, n is number of houses.
+    Most optimal solution has space complexity of O(1), similar to House Robber I problem.
+    Since the houses are in a circle, we can't rob the first and last house together.
+    '''
+    def rob(self, nums: List[int]) -> int:
+        if len(nums) == 1:
+            return nums[0]
+        
+        cache = {}
+        def dfs(i, leaveLast):
+            if (i,leaveLast) in cache:
+                return cache[(i,leaveLast)]
+            if (leaveLast and i >= len(nums) - 1) or i >= len(nums):
+                return 0
+            res = max(nums[i] + dfs(i+2, leaveLast), dfs(i+1, leaveLast))
+            cache[(i,leaveLast)] = res
+            return res
+            
+        return max(dfs(0, True), dfs(1, False))
+
+# 213. House Robber II (https://leetcode.com/problems/house-robber-ii/description/) - Medium
+class Solution:
+    '''
+    Time Complexity: O(n)
+    Space Complexity: O(1)
+    Where, n is number of houses.
+    This is the most optimal solution, has space complexity of O(1), similar to House Robber I problem.
+    Since the houses are in a circle, we can't rob the first and last house together.
+    '''
+    def rob(self, nums: List[int]) -> int:
+        def helper(houses):
+            rob1, rob2 = 0, 0
+            for house in houses:
+                newRob = max(rob1 + house, rob2)
+                rob1 = rob2
+                rob2 = newRob
+            return rob2
+        return max(nums[0], helper(nums[1:]), helper(nums[:-1]))
+
+    
+
+
 ###### BACKTRACKING ######
 # 39. Combination Sum (https://leetcode.com/problems/combination-sum/description/) - Medium
 class Solution:
