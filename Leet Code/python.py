@@ -1331,7 +1331,35 @@ class Solution:
             return rob2
         return max(nums[0], helper(nums[1:]), helper(nums[:-1]))
 
-    
+
+# 5. Longest Palindromic Substring (https://leetcode.com/problems/longest-palindromic-substring/description/) - Medium
+class Solution:
+    def longestPalindrome(self, s: str) -> str:
+        left, right = 0, 0
+        maxLeft, maxRight = 0, 0
+
+        def updateMax():
+            nonlocal left, right, maxLeft, maxRight
+            while left >= 0 and right < len(s) and s[left] == s[right]:
+                left-=1
+                right+=1
+            left+=1
+            right-=1
+            if right-left > maxRight-maxLeft:
+                maxLeft = left
+                maxRight = right
+
+        for i in range(len(s)-1):
+            left = i
+            right = i
+            updateMax()    
+            left = i
+            right = i+1
+            updateMax()
+        
+        return s[maxLeft:maxRight+1]
+
+
 
 
 ###### BACKTRACKING ######
