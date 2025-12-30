@@ -1370,6 +1370,39 @@ class Solution:
         return s[maxLeft:maxRight+1]
 
 
+# 647. Palindromic Substrings (https://leetcode.com/problems/palindromic-substrings/description/) - Medium
+class Solution:
+    '''
+    Time Complexity: O(n^2)
+    Space Complexity: O(1)
+    Where, n is the length of the given string.
+    NOTE: This is not the most optimal solution, we used Two pointers approach which is good enough for interview purposes.
+    Can also be done with Dynamic Programming with O(n^2) time and space complexity.
+    Most optimal solution is Manacher's Algorithm with time complexity of O(n) and space complexity of O(n).
+    Refer https://neetcode.io/problems/palindromic-substrings/solution for most optimal solution.
+    '''
+    def countSubstrings(self, s: str) -> int:
+        left, right = 0, 0
+        count = 0
+
+        def countPalindromes():
+            nonlocal left, right, count
+            while left >= 0 and right < len(s) and s[left] == s[right]:
+                left -= 1
+                right += 1
+                count += 1
+
+        for i in range(len(s)-1):
+            left = i
+            right = i
+            countPalindromes()
+            left = i
+            right = i+1
+            countPalindromes()
+
+        return count+1
+
+
 
 
 ###### BACKTRACKING ######
