@@ -1335,6 +1335,16 @@ class Solution:
 # 5. Longest Palindromic Substring (https://leetcode.com/problems/longest-palindromic-substring/description/) - Medium
 class Solution:
     def longestPalindrome(self, s: str) -> str:
+        '''
+        Time Complexity: O(n^2)
+        Space Complexity: O(1)
+        Where, n is the length of the given string.
+        
+        NOTE: This is not the most optimal solution, we used Two pointers approach which is good enough for interview purposes.
+        Can also be done with Dynamic Programming with O(n^2) time and space complexity.
+        Most optimal solution is Manacher's Algorithm with time complexity of O(n) and space complexity of O(n).
+        Refer https://neetcode.io/problems/longest-palindromic-substring/solution for most optimal solution.
+        '''
         left, right = 0, 0
         maxLeft, maxRight = 0, 0
 
