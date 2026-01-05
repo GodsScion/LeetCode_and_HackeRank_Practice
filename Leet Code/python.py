@@ -1,7 +1,9 @@
+from calendar import c
 from types import List, Optional
 from collections import defaultdict, Counter
 import re
 import bisect
+from functools import cache
 
 #######  ARRAYS AND HASHING  #######
 # 217. Contains Duplicate (https://leetcode.com/problems/contains-duplicate/description/) - Easy
@@ -1401,6 +1403,34 @@ class Solution:
             countPalindromes()
 
         return count+1
+
+
+# 91. Decode Ways (https://leetcode.com/problems/decode-ways/description/) - Medium
+class Solution:
+    '''
+    Time Complexity: O(n)
+    Space Complexity: O(n)
+    Where, n is the length of the given string.
+    Simple DFS with memoization problem.
+    '''
+    def numDecodings(self, s: str) -> int:
+        # cache = {}
+
+        @cache # Using inbuilt cache decorator, code to import: `from functools import cache`
+        def dfs(i):
+            # if i in cache:
+            #     return cache[i]
+            if i >= len(s):
+                return 1
+            res = 0
+            if s[i] != '0':
+                res += dfs(i+1)
+            if i < len(s)-1 and (s[i] == '1' or (s[i] == '2' and s[i+1] in '0123456')):
+                res += dfs(i+2)
+            # cache[i] = res
+            return res    
+        
+        return dfs(0)
 
 
 # 322. Coin Change (https://leetcode.com/problems/coin-change/description/) - Medium
