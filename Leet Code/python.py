@@ -1575,6 +1575,61 @@ class Solution:
         return dfs(0)
 
 
+# 300. Longest Increasing Subsequence (https://leetcode.com/problems/longest-increasing-subsequence/description/) - Medium
+class Solution:
+    '''
+    Time Complexity: O(n^2)
+    Space Complexity: O(n)
+    Where, n is number of elements in the given array.
+    This is not the most optimal solution, but good enough for interview. Most optimal one has time complexity of O(n log n).
+    1. Keep a cache of longest increasing subsequence for each prev number.
+    2. For each number, we check list of all previous numbers, if the current number is greater than the previous number,
+       we can extend the increasing subsequence for it by 1.
+    3. We update the cache for the current number with the maximum length found.
+    4. Finally, we return the maximum length from the cache.
+    Eg: [10,2,5,3,7,18], when current number is 7, 
+       previous numbers in cache are {10:1, 2:1, 5:2, 3:2}, 
+       we can extend the sequence from either 2, 5 or 3, since they are all less than 7,
+       but the previous maximum subsequence length is 2 (from either 5 or 3), 
+       so we choose one of 5 or 3 and extend it to length 3, by considering 7 as the next number in the sequence.
+       We update the cache for 7 as 3, and also update the maximum length if needed.
+    '''
+    def lengthOfLIS(self, nums: List[int]) -> int:
+        cache = {}
+        maxLen = 1
+        for num in nums:
+            val = 1
+            for prev in cache:
+                if num > prev:
+                    val = max(val, 1 + cache[prev])
+            cache[num] = val
+            maxLen = max(maxLen, val)
+        return maxLen
+
+# 300. Longest Increasing Subsequence (https://leetcode.com/problems/longest-increasing-subsequence/description/) - Medium
+from bisect import bisect_left
+class Solution:
+    '''
+    Time Complexity: O(n log n)
+    Space Complexity: O(n)
+    Where, n is number of elements in the given array.
+    This is the most optimal solution using Binary Search. 
+    Watch this video for intuition: (https://youtu.be/on2hvxBXJH4)
+    NOTE: The dummyList is only for maintaining the length of the longest increasing subsequence found so far,
+    and not for storing the actual subsequence, in fact if you print the dummyList, it will not be the actual subsequence.
+    '''
+    def lengthOfLIS(self, nums: List[int]) -> int:
+        dummyList = []
+        for num in nums:
+            i = bisect_left(dummyList,num) # `from bisect import bisect_left`
+            if i == len(dummyList):
+                dummyList.append(num)
+            else:
+                dummyList[i] = num
+        return len(dummyList)
+
+
+
 ###### BACKTRACKING ######
 # 39. Combination Sum (https://leetcode.com/problems/combination-sum/description/) - Medium
 class Solution:
