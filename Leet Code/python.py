@@ -1646,6 +1646,45 @@ class Solution:
 ####################################
 
 
+#######  DAILY CHALLENGES  #######
+
+# 1161. Maximum Level Sum of a Binary Tree () - Medium - Jan 06, 2026
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    '''
+    Time Complexity: O(n)
+    Space Complexity: O(w)
+    Where, n is number of nodes in the tree, w is maximum width of the tree.
+    Simple BFS level order traversal problem.
+    '''
+    def maxLevelSum(self, root: Optional[TreeNode]) -> int:
+        maxValue = root.val
+        maxLevel = 1
+        level = 1
+        nodes = [root]
+
+        while nodes:
+            childNodes = []
+            value = 0
+            for node in nodes:
+                if node.left:
+                    childNodes.append(node.left)
+                if node.right:
+                    childNodes.append(node.right)
+                value += node.val
+            if value > maxValue:
+                maxLevel = level
+                maxValue = value
+            nodes = childNodes
+            level += 1
+        
+        return maxLevel
 
 
 
