@@ -1484,6 +1484,53 @@ class Solution:
         return dp[amount] if dp[amount] != amount + 1 else -1
 
 
+# 152. Maximum Product Subarray (https://leetcode.com/problems/maximum-product-subarray/description/) - Medium
+class Solution:
+    '''
+    Time Complexity: O(n)
+    Space Complexity: O(n)
+    Where, n is number of elements in the given array.
+    Simple DFS with memoization problem, the most optimal solution has O(1) space complexity.
+    We need to keep track of both maximum and minimum products at each step, because a negative number can turn a minimum product into a maximum product.
+    '''
+    def maxProduct(self, nums: List[int]) -> int:
+        maxV = nums[-1] # Since at least one number exists, initializing with last number, if we initialize with first number, you'll need to handle edge case where last number is the maximum product. Eg: [-4,-1]. Instead of just returning 
+        
+        @cache
+        def dfs(i):
+            if i == len(nums)-1:
+                return nums[i], nums[i]
+            nonlocal maxV
+            pos, neg = dfs(i+1)
+            resPos = max(nums[i], nums[i] * pos, nums[i] * neg)
+            resNeg = min(nums[i], nums[i] * pos, nums[i] * neg)
+            maxV = max(resPos, maxV)
+            return resPos, resNeg
+
+        dfs(0)
+        return maxV
+
+# 152. Maximum Product Subarray (https://leetcode.com/problems/maximum-product-subarray/description/) - Medium
+class Solution:
+    '''
+    Time Complexity: O(n)
+    Space Complexity: O(1)
+    Where, n is number of elements in the given array.
+    This is the most optimal solution with O(1) space complexity.
+    This is a Kadane's Algorithm variation.
+    Can also be done using Prefix and Suffix product approach.
+    Look in https://neetcode.io/problems/maximum-product-subarray/solution'''
+    def maxProduct(self, nums: List[int]) -> int:
+        res = nums[0]
+        curMin, curMax = 1, 1
+
+        for num in nums:
+            tmp = curMax * num
+            curMax = max(num * curMax, num * curMin, num)
+            curMin = min(tmp, num * curMin, num)
+            res = max(res, curMax)
+        return res
+
 
 ###### BACKTRACKING ######
 # 39. Combination Sum (https://leetcode.com/problems/combination-sum/description/) - Medium
