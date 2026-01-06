@@ -1532,6 +1532,49 @@ class Solution:
         return res
 
 
+# 139. Word Break (https://leetcode.com/problems/word-break/description/) - Medium
+class Solution:
+    '''
+    Time Complexity: O(n * m * k)
+    Space Complexity: O(n)
+    Where, n is length of the string, m is number of words in the dictionary, k is average length of the words in the dictionary.'''
+    def wordBreak(self, s: str, wordDict: List[str]) -> bool:
+        
+        @cache # Using inbuilt cache decorator, code to import: `from functools import cache`
+        def dfs(i):
+            if i >= len(s):
+                return True
+            for word in wordDict:
+                if s[i:i+len(word)] == word and dfs(i+len(word)):
+                    return True
+            return False
+
+        return dfs(0)
+
+# 139. Word Break (https://leetcode.com/problems/word-break/description/) - Medium
+class Solution:
+    '''
+    Time Complexity: O(n * m * k)
+    Space Complexity: O(n + m)
+    Where, n is length of the string, m is number of words in the dictionary, k is average length of the words in the dictionary.
+    Small optimization (kind of insignificant) for larger wordDicts, by precomputing lengths of words in the dictionary.
+    '''
+    def wordBreak(self, s: str, wordDict: List[str]) -> bool:
+        wordDict = set(wordDict)
+        lengths = set([len(word) for word in wordDict])
+
+        @cache # Using inbuilt cache decorator, code to import: `from functools import cache`
+        def dfs(i):
+            if i >= len(s):
+                return True
+            for length in lengths:
+                if s[i:i+length] in wordDict and dfs(i+length):
+                    return True
+            return False
+
+        return dfs(0)
+
+
 ###### BACKTRACKING ######
 # 39. Combination Sum (https://leetcode.com/problems/combination-sum/description/) - Medium
 class Solution:
