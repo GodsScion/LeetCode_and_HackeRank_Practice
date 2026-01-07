@@ -1794,7 +1794,6 @@ class Solution:
 #######  DAILY CHALLENGES  #######
 
 # 1161. Maximum Level Sum of a Binary Tree (https://leetcode.com/problems/maximum-level-sum-of-a-binary-tree/description/) - Medium - Jan 06, 2026
-
 # Definition for a binary tree node.
 # class TreeNode:
 #     def __init__(self, val=0, left=None, right=None):
@@ -1830,6 +1829,79 @@ class Solution:
             level += 1
         
         return maxLevel
+
+
+# 1339. Maximum Product of Splitted Binary Tree (https://leetcode.com/problems/maximum-product-of-splitted-binary-tree/description/) - Medium - Jan 07, 2026
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    '''
+    Time Complexity: O(n)
+    Space Complexity: O(n)
+    Where, n is number of nodes in the tree.
+    Although this is an optimal solution theoretically, in real world there is a more optimal solution where caching is not needed for getSum function.
+    When trees is too large, cache look ups might take O(n) time instead of O(1) due to hash collisions, hence in real world this is slower.
+    There is a more optimal solution where caching is not needed for getSum function, refer next solution.'''
+    def maxProduct(self, root: Optional[TreeNode]) -> int:
+        maxVal = 0
+        
+        @cache # from functools import cache
+        def getSum(node):
+            if not node:
+                return 0
+            return node.val + getSum(node.left) + getSum(node.right)
+            
+        totalSum = getSum(root)
+
+        def dfs(node):
+            if not node:
+                return
+            nonlocal maxVal
+            curSum = node.val + getSum(node.left) + getSum(node.right)
+            maxVal = max(maxVal, curSum * (totalSum - curSum))
+            dfs(node.left)
+            dfs(node.right)
+            return
+        
+        dfs(root)
+        return maxVal % (10**9 + 7)
+
+# 1339. Maximum Product of Splitted Binary Tree (https://leetcode.com/problems/maximum-product-of-splitted-binary-tree/description/) - Medium - Jan 07, 2026
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    '''
+    Time Complexity: O(n)
+    Space Complexity: O(n)
+    Where, n is number of nodes in the tree.
+    A cleaner solution than previous one.'''
+    def maxProduct(self, root: Optional[TreeNode]) -> int:
+        maxVal = 0
+        subtreeSums = list()
+
+        def getSum(node):
+            if node is None:
+                return 0
+            total = node.val + getSum(node.left) + getSum(node.right)
+            nonlocal subtreeSums
+            subtreeSums.append(total)
+            return total
+
+        totalSum = getSum(root)
+
+        for val in subtreeSums:
+            maxVal = max(maxVal, val * (totalSum - val))
+
+        return maxVal % (10**9 + 7)
+
 
 
 
