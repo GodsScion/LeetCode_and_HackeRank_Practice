@@ -1976,6 +1976,49 @@ class Solution:
         return dp(0,0)
 
 
+# 865. Smallest Subtree with all the Deepest Nodes (https://leetcode.com/problems/smallest-subtree-with-all-the-deepest-nodes/description/) - Medium - Jan 09, 2026
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    '''
+    Time Complexity: O(n)
+    Space Complexity: O(n)
+    Where, n is number of nodes in the tree.
+    This is good enough solution for interview purposes.
+    We used BFS to find the deepest nodes, then we backtrack using parent pointers 
+    to find the lowest common ancestor (LCA) of those deepest nodes. Total 2 passes are done on the tree.
+    The most optimal solution uses DFS in a single pass to find the LCA of deepest nodes.'''
+    def subtreeWithAllDeepest(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
+        # if not root:
+        #     return None
+        level = [root]
+        deepestNodes = level
+        parent = dict()
+        
+        while len(level) > 0:
+            newLevel = []
+            for node in level:
+                if node.left:
+                    newLevel.append(node.left)
+                    parent[node.left] = node
+                if node.right:
+                    newLevel.append(node.right)
+                    parent[node.right] = node
+            deepestNodes = level
+            level = newLevel
+        
+        lca = set(deepestNodes)
+        lca.discard(None)
+        
+        while len(lca) > 1:
+            lca = set([parent[node] for node in lca])
+
+        return lca.pop() # root if len(lca) == 0 else lca.pop()
+
 
 
 
