@@ -1724,9 +1724,11 @@ class Solution:
 
 
 # 78. Subsets (https://leetcode.com/problems/subsets/description/) - Medium
-# NOT THE  MOST EFFICIENT SOLUTION
 from copy import deepcopy
 class Solution:
+    '''
+    NOT THE  MOST EFFICIENT SOLUTION
+    '''
     def subsets(self, nums: List[int]) -> List[List[int]]:
         output = [[]]
         for n in nums:
@@ -1737,9 +1739,28 @@ class Solution:
         return output
 
 
+######  GREEDY  ######
+# 53. Maximum Subarray (https://leetcode.com/problems/maximum-subarray/description/) - Medium
+class Solution:
+    '''
+    Time Complexity: O(n)
+    Space Complexity: O(1)
+    Where, n is number of elements in the given array.
+    This is Kadane's Algorithm, this is the most efficient solution for this problem.
+    '''
+    def maxSubArray(self, nums: List[int]) -> int:
+        maxSum = -100000
+        curSum = 0
+        for n in nums:
+            curSum += n
+            maxSum = max(maxSum, curSum)
+            if curSum < 0:
+                curSum = 0
+        return maxSum
+
+
 
 #########  EXTRA PROBLEMS  #########
-
 
 # 3365. Rearrange K Substrings to Form Target String (https://leetcode.com/problems/rearrange-k-substrings-to-form-target-string/description/) - Medium
 class Solution:
@@ -1756,10 +1777,6 @@ class Solution:
             sCounter[part] -= 1
         return True
                 
-
-
-
-#######  DYNAMIC PROGRAMMING  #######
 
 # 3366. Minimum Array Sum (https://leetcode.com/problems/minimum-array-sum/description/) - Medium
 # NOT THE  MOST EFFICIENT SOLUTION
@@ -1788,7 +1805,7 @@ class Solution:
 
         return apply(0, op1, op2)
 
-####################################
+
 
 
 #######  DAILY CHALLENGES  #######
@@ -1870,7 +1887,7 @@ class Solution:
         dfs(root)
         return maxVal % (10**9 + 7)
 
-# 1339. Maximum Product of Splitted Binary Tree (https://leetcode.com/problems/maximum-product-of-splitted-binary-tree/description/) - Medium - Jan 07, 2026
+# 1339. Maximum Product of Splitted Binary Tree (https://leetcode.com/problems/maximum-product-of-splitted-binary-tree/description/) - Medium - Jan 07, 2026 - Duplicate
 # Definition for a binary tree node.
 # class TreeNode:
 #     def __init__(self, val=0, left=None, right=None):
