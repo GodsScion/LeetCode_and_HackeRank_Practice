@@ -1314,7 +1314,7 @@ class Solution:
             
         return max(dfs(0, True), dfs(1, False))
 
-# 213. House Robber II (https://leetcode.com/problems/house-robber-ii/description/) - Medium
+# 213. House Robber II (https://leetcode.com/problems/house-robber-ii/description/) - Medium - Duplicate
 class Solution:
     '''
     Time Complexity: O(n)
@@ -1466,7 +1466,7 @@ class Solution:
 
         return dfs(amount)
 
-# 322. Coin Change (https://leetcode.com/problems/coin-change/description/) - Medium
+# 322. Coin Change (https://leetcode.com/problems/coin-change/description/) - Medium - Duplicate
 class Solution:
     '''
     Time Complexity: O(n * m)
@@ -1510,7 +1510,7 @@ class Solution:
         dfs(0)
         return maxV
 
-# 152. Maximum Product Subarray (https://leetcode.com/problems/maximum-product-subarray/description/) - Medium
+# 152. Maximum Product Subarray (https://leetcode.com/problems/maximum-product-subarray/description/) - Medium - Duplicate
 class Solution:
     '''
     Time Complexity: O(n)
@@ -1551,7 +1551,7 @@ class Solution:
 
         return dfs(0)
 
-# 139. Word Break (https://leetcode.com/problems/word-break/description/) - Medium
+# 139. Word Break (https://leetcode.com/problems/word-break/description/) - Medium - Duplicate
 class Solution:
     '''
     Time Complexity: O(n * m * k)
@@ -1606,7 +1606,7 @@ class Solution:
             maxLen = max(maxLen, val)
         return maxLen
 
-# 300. Longest Increasing Subsequence (https://leetcode.com/problems/longest-increasing-subsequence/description/) - Medium
+# 300. Longest Increasing Subsequence (https://leetcode.com/problems/longest-increasing-subsequence/description/) - Medium - Duplicate
 from bisect import bisect_left
 class Solution:
     '''
@@ -1628,6 +1628,29 @@ class Solution:
                 dummyList[i] = num
         return len(dummyList)
 
+
+
+###### 2-D DYNAMIC PROGRAMMING ######
+
+# 1143. Longest Common Subsequence (https://leetcode.com/problems/longest-common-subsequence/description/) - Medium
+class Solution:
+    '''
+    Time Complexity: O(m * n)
+    Space Complexity: O(m * n)
+    Where, m is length of text1, n is length of text2.
+    There is also a space optimized solution with O(min(m, n)) space complexity, 
+    but this is good enough for interview.
+    '''
+    def longestCommonSubsequence(self, text1: str, text2: str) -> int:
+        @cache
+        def dp(i, j):
+            if i >= len(text1) or j >= len(text2):
+                return 0
+            if text1[i] == text2[j]:
+                return 1 + dp(i+1,j+1)
+            else:
+                return max(dp(i, j+1), dp(i+1, j))
+        return dp(0,0)
 
 
 ###### BACKTRACKING ######
