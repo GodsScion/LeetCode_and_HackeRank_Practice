@@ -1632,6 +1632,24 @@ class Solution:
 
 ###### 2-D DYNAMIC PROGRAMMING ######
 
+# 62. Unique Paths (https://leetcode.com/problems/unique-paths/description/) - Medium
+class Solution:
+    '''
+    Time Complexity: O(m * n)
+    Space Complexity: O(m * n)
+    Where, m is number of rows, n is number of columns in the grid.
+    '''
+    def uniquePaths(self, m: int, n: int) -> int:
+        @cache
+        def dp(i,j):
+            if i >= m or j >= n:
+                return 0
+            if i == m-1 or j == n-1:
+                return 1
+            return dp(i+1,j) + dp(i,j+1)
+        return dp(0,0)
+
+
 # 1143. Longest Common Subsequence (https://leetcode.com/problems/longest-common-subsequence/description/) - Medium
 class Solution:
     '''
