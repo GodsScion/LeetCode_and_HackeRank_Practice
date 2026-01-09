@@ -1991,7 +1991,8 @@ class Solution:
     This is good enough solution for interview purposes.
     We used BFS to find the deepest nodes, then we backtrack using parent pointers 
     to find the lowest common ancestor (LCA) of those deepest nodes. Total 2 passes are done on the tree.
-    The most optimal solution uses DFS in a single pass to find the LCA of deepest nodes.'''
+    The most optimal solution uses DFS in a single pass to find the LCA of deepest nodes.
+    Refer (https://youtu.be/bMXHK-ASQV0) for most optimal solution.'''
     def subtreeWithAllDeepest(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
         # if not root:
         #     return None
