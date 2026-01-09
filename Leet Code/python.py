@@ -1759,6 +1759,44 @@ class Solution:
         return maxSum
 
 
+# 55. Jump Game (https://leetcode.com/problems/jump-game/description/) - Medium
+class Solution:
+    '''
+    Time Complexity: O(n^2)
+    Space Complexity: O(1)
+    Where, n is number of elements in the given array.
+    This is not a the most efficient solution.
+    '''
+    def canJump(self, nums: List[int]) -> bool:
+        @cache
+        def dfs(i):
+            if i >= len(nums) - 1:
+                return True
+            for step in range(1, nums[i]+1):
+                if dfs(i+step):
+                    return True
+            return False
+        return dfs(0)
+    
+# 55. Jump Game (https://leetcode.com/problems/jump-game/description/) - Medium - Duplicate
+class Solution:
+    '''
+    Time Complexity: O(n)
+    Space Complexity: O(1)
+    Where, n is number of elements in the given array.
+    This is the most efficient solution.
+    '''
+    def canJump(self, nums: List[int]) -> bool:
+        i = len(nums) - 1
+        possible = i
+        while i >= 0:
+            if i + nums[i] >= possible:
+                possible = i
+            i -= 1
+        return possible == 0
+
+
+
 
 #########  EXTRA PROBLEMS  #########
 
