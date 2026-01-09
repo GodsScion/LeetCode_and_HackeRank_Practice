@@ -1958,6 +1958,23 @@ class Solution:
         return maxVal % (10**9 + 7)
 
 
+# 1458. Max Dot Product of Two Subsequences (https://leetcode.com/problems/max-dot-product-of-two-subsequences/description/) - Hard - Jan 08, 2026
+class Solution:
+    '''
+    Time Complexity: O(n * m)
+    Space Complexity: O(n * m)
+    Where, n is length of nums1, m is length of nums2.
+    Dynamic Programming with memoization problem.
+    '''
+    def maxDotProduct(self, nums1: List[int], nums2: List[int]) -> int:
+        @cache
+        def dp(i,j):
+            if i >= len(nums1) or j >= len(nums2):
+                return float('-inf')
+            prod = nums1[i]*nums2[j]
+            return max(prod, prod + dp(i+1,j+1), dp(i, j+1), dp(i+1, j))
+        return dp(0,0)
+
 
 
 
