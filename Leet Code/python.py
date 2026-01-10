@@ -1671,6 +1671,7 @@ class Solution:
         return dp(0,0)
 
 
+
 ###### BACKTRACKING ######
 # 39. Combination Sum (https://leetcode.com/problems/combination-sum/description/) - Medium
 class Solution:
@@ -2060,6 +2061,27 @@ class Solution:
             lca = set([parent[node] for node in lca])
 
         return lca.pop() # root if len(lca) == 0 else lca.pop()
+
+
+# 712. Minimum ASCII Delete Sum for Two Strings (https://leetcode.com/problems/minimum-ascii-delete-sum-for-two-strings/description/) - Medium - Jan 10, 2026
+class Solution:
+    '''
+    Time Complexity: O(m * n)
+    Space Complexity: O(m * n)
+    Where, m is length of s1, n is length of s2.
+    Dynamic Programming with memoization problem.
+    '''
+    def minimumDeleteSum(self, s1: str, s2: str) -> int:
+        @cache        
+        def dp(i,j):
+            if i >= len(s1):
+                return sum([ord(c) for c in s2[j:]])
+            if j >= len(s2):
+                return sum([ord(c) for c in s1[i:]])
+            if s1[i] == s2[j]:
+                return dp(i+1,j+1)
+            return min(ord(s1[i]) + dp(i+1,j), ord(s2[j]) + dp(i,j+1))
+        return dp(0,0)
 
 
 
