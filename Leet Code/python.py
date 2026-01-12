@@ -2084,6 +2084,20 @@ class Solution:
         return dp(0,0)
 
 
+# 1266. Minimum Time Visiting All Points (https://leetcode.com/problems/minimum-time-visiting-all-points/description/) - Easy - Jan 12, 2026
+class Solution:
+    def minTimeToVisitAllPoints(self, points: List[List[int]]) -> int:
+        time = 0
+        for i in range(1, len(points)):
+            hr = points[i][0] - points[i-1][0]
+            ve = points[i][1] - points[i-1][1]
+            if hr < 0:
+                hr *= -1
+            if ve < 0:
+                ve *= -1
+            time += max(hr, ve)
+        return time
+
 
 
 ############## TEST CASES ##############
