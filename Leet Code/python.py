@@ -2101,6 +2101,39 @@ class Solution:
         return time
 
 
+# 3453. Separate Squares I (https://leetcode.com/problems/separate-squares-i/description/) - Medium - Jan 12, 2026
+class Solution:
+    '''
+    Time Complexity: O(n log m)
+    Space Complexity: O(1)
+    Where, n is number of squares, m is the Y co-ordinates range of the squares.
+    '''
+    def separateSquares(self, squares: List[List[int]]) -> float:
+        target = sum(l*l for x,y,l in squares)/2.0
+        low = min(y for x,y,l in squares)
+        high = max(y+l for x,y,l in squares)
+        
+        def getLowArea(h):
+            area = 0
+            for x,y,l in squares:
+                if y+l <= h:
+                    area += l*l
+                elif y < h < y + l:
+                    area += l * (h-y)
+            return area
+
+        mid = low
+        while high - low > 1e-6:
+            mid = (low + high)/2.0
+            area = getLowArea(mid)
+            if area >= target:
+                high = mid
+            else:
+                low = mid
+        
+        return mid
+
+
 
 
 ############## TEST CASES ##############
