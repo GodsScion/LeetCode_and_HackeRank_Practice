@@ -234,6 +234,32 @@ class Solution:
         return output
 
 
+# 42. Trapping Rain Water (https://leetcode.com/problems/trapping-rain-water/description/) - Hard
+class Solution:
+    '''
+    Time Complexity: O(n)
+    Space Complexity: O(n)
+    Where, n is the length of `height`
+    Two pointers approach is more optimal solution has space complexity of O(1)
+    Refer: https://neetcode.io/problems/trapping-rain-water/solution
+    '''
+    def trap(self, height: List[int]) -> int:
+        water = 0
+        rightMaxH = [0]*len(height)
+        
+        curMax = 0
+        for i in range(len(height)-1,-1,-1):
+            curMax = max(height[i], curMax)
+            rightMaxH[i] = curMax
+        
+        curMax = 0
+        for i,h in enumerate(height):
+            water += max(0, min(curMax, rightMaxH[i]) - h)
+            curMax = max(h, curMax)
+
+        return water
+
+
 
 
 #######  SLIDING WINDOW  #######
