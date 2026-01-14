@@ -2101,12 +2101,13 @@ class Solution:
         return time
 
 
-# 3453. Separate Squares I (https://leetcode.com/problems/separate-squares-i/description/) - Medium - Jan 12, 2026
+# 3453. Separate Squares I (https://leetcode.com/problems/separate-squares-i/description/) - Medium - Jan 13, 2026
 class Solution:
     '''
     Time Complexity: O(n log m)
     Space Complexity: O(1)
     Where, n is number of squares, m is the Y co-ordinates range of the squares.
+    More optimal solution uses sweep-line / prefix-area approach, but this is good enough for interview.
     '''
     def separateSquares(self, squares: List[List[int]]) -> float:
         target = sum(l*l for x,y,l in squares)/2.0
@@ -2132,6 +2133,84 @@ class Solution:
                 low = mid
         
         return mid
+
+
+# 3454. Separate Squares II (https://leetcode.com/problems/separate-squares-ii/description/) - Hard - Jan 14, 2026
+class Solution:
+    '''
+    Time Complexity: O((n^2) * log n)
+    Space Complexity: O(n)
+    Where, n is number of squares.
+    Sweep-line / prefix-area approach problem.
+    '''
+    def separateSquares(self, squares: List[List[int]]) -> float:
+        # Step 1: build y-events
+        events = defaultdict(list)
+        for x, y, l in squares:
+            events[y].append((x, x + l, 1))      # add interval
+            events[y + l].append((x, x + l, -1)) # remove interval
+
+        ys = sorted(events.keys())
+
+        # Helper to compute union length of x-intervals
+        def union_length(intervals):
+            if not intervals:
+                return 0
+            intervals.sort()
+            total = 0
+            cur_l, cur_r = intervals[0]
+            for l, r in intervals[1:]:
+                if l > cur_r:
+                    total += cur_r - cur_l
+                    cur_l, cur_r = l, r
+                else:
+                    cur_r = max(cur_r, r)
+            total += cur_r - cur_l
+            return total
+
+        # Step 2: First sweep — compute total union area
+        active = []
+        total_area = 0.0
+
+        for i in range(len(ys) - 1):
+            y = ys[i]
+            y2 = ys[i + 1]
+
+            for x1, x2, typ in events[y]:
+                if typ == 1:
+                    active.append((x1, x2))
+                else:
+                    active.remove((x1, x2))
+
+            width = union_length(active)
+            total_area += width * (y2 - y)
+
+        target = total_area / 2.0
+
+        # Step 3: Second sweep — find minimum y
+        active.clear()
+        area = 0.0
+
+        for i in range(len(ys) - 1):
+            y = ys[i]
+            y2 = ys[i + 1]
+
+            for x1, x2, typ in events[y]:
+                if typ == 1:
+                    active.append((x1, x2))
+                else:
+                    active.remove((x1, x2))
+
+            width = union_length(active)
+            slab_area = width * (y2 - y)
+
+            if area + slab_area >= target:
+                # interpolate inside this slab
+                return y + (target - area) / width
+
+            area += slab_area
+
+        return ys[-1]  # fallback (should never hit)
 
 
 
