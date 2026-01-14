@@ -2110,6 +2110,50 @@ class Solution:
         return dp(0,0)
 
 
+# 85. Maximal Rectangle (https://leetcode.com/problems/maximal-rectangle/description/) - Medium - Jan 11, 2026
+class Solution:
+    '''
+    Time Complexity: O(m * n)
+    Space Complexity: O(n)
+    Where, m is number of rows, and n is number of columns of matrix
+    DID NOT GO THROUGH THE SOLUTION YET
+    '''
+    def maximalRectangle(self, matrix: List[List[str]]) -> int:
+        if not matrix or not matrix[0]:
+            return 0
+
+        R, C = len(matrix), len(matrix[0])
+        heights = [0] * C
+        maxA = 0
+
+        def largestRectangleArea(heights):
+            stack = []
+            res = 0
+            heights.append(0)  # sentinel
+
+            for i, h in enumerate(heights):
+                while stack and heights[stack[-1]] > h:
+                    height = heights[stack.pop()]
+                    width = i if not stack else i - stack[-1] - 1
+                    res = max(res, height * width)
+                stack.append(i)
+
+            heights.pop()
+            return res
+
+        for i in range(R):
+            for j in range(C):
+                if matrix[i][j] == "1":
+                    heights[j] += 1
+                else:
+                    heights[j] = 0
+
+            maxA = max(maxA, largestRectangleArea(heights))
+
+        return maxA
+
+
+
 # 1266. Minimum Time Visiting All Points (https://leetcode.com/problems/minimum-time-visiting-all-points/description/) - Easy - Jan 12, 2026
 class Solution:
     '''
@@ -2168,6 +2212,7 @@ class Solution:
     Space Complexity: O(n)
     Where, n is number of squares.
     Sweep-line / prefix-area approach problem.
+    DID NOT GO THROUGH THE SOLUTION YET!
     '''
     def separateSquares(self, squares: List[List[int]]) -> float:
         # Step 1: build y-events
