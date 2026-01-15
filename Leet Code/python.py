@@ -263,7 +263,45 @@ class Solution:
 
 
 #######  SLIDING WINDOW  #######
+
 # 76. Minimum Window Substring (https://leetcode.com/problems/minimum-window-substring/description/) - Hard
+class Solution:
+    '''
+    Time Complexity: O(|s| + |t|) where |s| and |t| are the lengths of strings s and t respectively.
+    Space Complexity: O(1) assuming, output array is not considered.
+    '''
+    def minWindow(self, s: str, t: str) -> str:
+        if len(t) > len(s):
+            return ""
+        need = Counter(t)
+        have = Counter(s)
+        for c in need:
+            if need[c] > have.get(c, 0):
+                return ""
+
+        have = dict()
+        needCount = len(t)
+        minL, minR = 0, len(s)
+        l = 0
+
+        for r, c in enumerate(s):
+            amount = have.get(c, 0)
+            have[c] = amount + 1
+            if c in need and amount < need[c]:
+                needCount -= 1
+            if needCount == 0:
+                while l < r:
+                    if s[l] in need and have[s[l]] <= need[s[l]]:
+                        break
+                    have[s[l]] = have[s[l]] - 1
+                    l += 1
+
+                if r+1 - l < minR - minL:
+                    minR = r+1
+                    minL = l
+        return s[minL:minR]
+
+# 76. Minimum Window Substring (https://leetcode.com/problems/minimum-window-substring/description/) - Hard - Duplicate
 class Solution:
     def minWindow(self, s: str, t: str) -> str:
         if len(t) > len(s):
@@ -296,6 +334,7 @@ class Solution:
         
         return s[oStart: oEnd+1] if oEnd != len(s) + len(t) else ""
     
+
 # 567. Permutation in String (https://leetcode.com/problems/permutation-in-string/description/) - Medium
 class Solution:
     def checkInclusion(self, s1: str, s2: str) -> bool:
