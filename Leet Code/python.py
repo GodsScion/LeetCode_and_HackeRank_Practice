@@ -1916,7 +1916,7 @@ class Solution:
 
 #######  DAILY CHALLENGES  #######
 
-# 1161. Maximum Level Sum of a Binary Tree (https://leetcode.com/problems/maximum-level-sum-of-a-binary-tree/description/) - Medium - Jan 06, 2026
+# 1161. Maximum Level Sum of a Binary Tree (https://leetcode.com/problems/maximum-level-sum-of-a-binary-tree/description/) - Medium - 2026-01-06
 # Definition for a binary tree node.
 # class TreeNode:
 #     def __init__(self, val=0, left=None, right=None):
@@ -1954,7 +1954,7 @@ class Solution:
         return maxLevel
 
 
-# 1339. Maximum Product of Splitted Binary Tree (https://leetcode.com/problems/maximum-product-of-splitted-binary-tree/description/) - Medium - Jan 07, 2026
+# 1339. Maximum Product of Splitted Binary Tree (https://leetcode.com/problems/maximum-product-of-splitted-binary-tree/description/) - Medium - 2026-01-07
 # Definition for a binary tree node.
 # class TreeNode:
 #     def __init__(self, val=0, left=None, right=None):
@@ -1993,7 +1993,7 @@ class Solution:
         dfs(root)
         return maxVal % (10**9 + 7)
 
-# 1339. Maximum Product of Splitted Binary Tree (https://leetcode.com/problems/maximum-product-of-splitted-binary-tree/description/) - Medium - Jan 07, 2026 - Duplicate
+# 1339. Maximum Product of Splitted Binary Tree (https://leetcode.com/problems/maximum-product-of-splitted-binary-tree/description/) - Medium - 2026-01-07 - Duplicate
 # Definition for a binary tree node.
 # class TreeNode:
 #     def __init__(self, val=0, left=None, right=None):
@@ -2026,7 +2026,7 @@ class Solution:
         return maxVal % (10**9 + 7)
 
 
-# 1458. Max Dot Product of Two Subsequences (https://leetcode.com/problems/max-dot-product-of-two-subsequences/description/) - Hard - Jan 08, 2026
+# 1458. Max Dot Product of Two Subsequences (https://leetcode.com/problems/max-dot-product-of-two-subsequences/description/) - Hard - 2026-01-08
 class Solution:
     '''
     Time Complexity: O(n * m)
@@ -2044,7 +2044,7 @@ class Solution:
         return dp(0,0)
 
 
-# 865. Smallest Subtree with all the Deepest Nodes (https://leetcode.com/problems/smallest-subtree-with-all-the-deepest-nodes/description/) - Medium - Jan 09, 2026
+# 865. Smallest Subtree with all the Deepest Nodes (https://leetcode.com/problems/smallest-subtree-with-all-the-deepest-nodes/description/) - Medium - 2026-01-09
 # Definition for a binary tree node.
 # class TreeNode:
 #     def __init__(self, val=0, left=None, right=None):
@@ -2089,7 +2089,7 @@ class Solution:
         return lca.pop() # root if len(lca) == 0 else lca.pop()
 
 
-# 712. Minimum ASCII Delete Sum for Two Strings (https://leetcode.com/problems/minimum-ascii-delete-sum-for-two-strings/description/) - Medium - Jan 10, 2026
+# 712. Minimum ASCII Delete Sum for Two Strings (https://leetcode.com/problems/minimum-ascii-delete-sum-for-two-strings/description/) - Medium - 2026-01-10
 class Solution:
     '''
     Time Complexity: O(m * n)
@@ -2110,7 +2110,7 @@ class Solution:
         return dp(0,0)
 
 
-# 85. Maximal Rectangle (https://leetcode.com/problems/maximal-rectangle/description/) - Medium - Jan 11, 2026
+# 85. Maximal Rectangle (https://leetcode.com/problems/maximal-rectangle/description/) - Medium - 2026-01-11
 class Solution:
     '''
     Time Complexity: O(m * n)
@@ -2154,7 +2154,7 @@ class Solution:
 
 
 
-# 1266. Minimum Time Visiting All Points (https://leetcode.com/problems/minimum-time-visiting-all-points/description/) - Easy - Jan 12, 2026
+# 1266. Minimum Time Visiting All Points (https://leetcode.com/problems/minimum-time-visiting-all-points/description/) - Easy - 2026-01-12
 class Solution:
     '''
     Time Complexity: O(n)
@@ -2171,7 +2171,7 @@ class Solution:
         return time
 
 
-# 3453. Separate Squares I (https://leetcode.com/problems/separate-squares-i/description/) - Medium - Jan 13, 2026
+# 3453. Separate Squares I (https://leetcode.com/problems/separate-squares-i/description/) - Medium - 2026-01-13
 class Solution:
     '''
     Time Complexity: O(n log m)
@@ -2205,7 +2205,7 @@ class Solution:
         return mid
 
 
-# 3454. Separate Squares II (https://leetcode.com/problems/separate-squares-ii/description/) - Hard - Jan 14, 2026
+# 3454. Separate Squares II (https://leetcode.com/problems/separate-squares-ii/description/) - Hard - 2026-01-14
 class Solution:
     '''
     Time Complexity: O((n^2) * log n)
@@ -2282,6 +2282,42 @@ class Solution:
             area += slab_area
 
         return ys[-1]  # fallback (should never hit)
+
+
+# 2943. Maximize Area of Square Hole in Grid (https://leetcode.com/problems/maximize-area-of-square-hole-in-grid/description/) - Medium - 2026-01-15
+class Solution:
+    '''
+    Time Complexity: O(m log m + n log n)
+    Space Complexity: O(1)
+    Where, m is number of horizontal bars, n is number of vertical bars.
+    The key insight is that we can only make a square hole of side S,
+    if there are at least S-1 consecutive horizontal bars and S-1 consecutive vertical bars.
+    So problem gets reduced to finding maximum consecutive streak in both horizontal and vertical bars.
+    Sort the bars and find maximum consecutive difference.
+    The side value is minimum of ( maximum consecutive horizontal and vertical gaps ) + 1.
+    Square the side value to get maximum area.
+    '''
+    def maximizeSquareHoleArea(self, n: int, m: int, hBars: List[int], vBars: List[int]) -> int:
+        def max_gap(bars):
+            bars.sort()
+            max_streak = 1
+            curr = 1
+            
+            for i in range(1, len(bars)):
+                if bars[i] == bars[i - 1] + 1:
+                    curr += 1
+                else:
+                    curr = 1
+                max_streak = max(max_streak, curr)
+            
+            # gap size = consecutive bars + 1
+            return max_streak + 1
+
+        max_h = max_gap(hBars)
+        max_v = max_gap(vBars)
+        
+        side = min(max_h, max_v)
+        return side * side
 
 
 
