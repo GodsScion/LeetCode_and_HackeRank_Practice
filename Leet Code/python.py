@@ -335,6 +335,40 @@ class Solution:
         return s[oStart: oEnd+1] if oEnd != len(s) + len(t) else ""
     
 
+# 239. Sliding Window Maximum (https://leetcode.com/problems/sliding-window-maximum/description/) - Hard
+from collections import deque
+class Solution:
+    '''
+    Time Complexity: O(n)
+    Space Complexity: O(k)
+    where, n is the size of nums and, k is the size of sliding window.
+    This is Monotonic Deque approach, the most optimal solution for this problem.
+    NOTE: Common pitfall is to use `>=` instead of `>` for condition `nums[i] > deck[-1]`,
+    To make sure this condition `deck[0] == nums[i-k]` doesn't cause trouble for duplicate instances, 
+    we should save duplicate instances too, so use `>` not `>=`.
+    Refer: https://neetcode.io/problems/sliding-window-maximum/solution
+    
+    
+    !!!  ####  NEEDS EXTRA ATTENTION  ####  !!!
+    '''
+    def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:
+        output = []
+        deck = deque()
+        for i in range(k):
+            while deck and nums[i] > deck[-1]:
+                deck.pop()
+            deck.append(nums[i])
+        output.append(deck[0])
+        for i in range(k, len(nums)):
+            if deck[0] == nums[i-k]:
+                deck.popleft()
+            while deck and nums[i] > deck[-1]:
+                deck.pop()
+            deck.append(nums[i])
+            output.append(deck[0])
+        return output
+
+
 # 567. Permutation in String (https://leetcode.com/problems/permutation-in-string/description/) - Medium
 class Solution:
     def checkInclusion(self, s1: str, s2: str) -> bool:
