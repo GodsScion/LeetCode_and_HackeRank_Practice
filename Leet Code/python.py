@@ -369,6 +369,36 @@ class Solution:
         return output
 
 
+# 150. Evaluate Reverse Polish Notation (https://leetcode.com/problems/evaluate-reverse-polish-notation/description/) - Medium
+from collections import deque
+class Solution:
+    '''
+    Time Complexity: O(n)
+    Space Complexity: O(n)
+    where, n is the length of tokens.
+    NOTE: Using `//` or `math.floor()` for division is a Pitfall,
+    for negative values like `-0.4` they will return `-1`. So use `int()` 
+    For recursive solution, refer: https://neetcode.io/problems/evaluate-reverse-polish-notation/solution
+    '''
+    def evalRPN(self, tokens: List[str]) -> int:
+        stack = deque()
+        for token in tokens:
+            if token == '+':
+                stack.append(stack.pop() + stack.pop())
+            elif token == '-':
+                prevVal = stack.pop()
+                stack.append(stack.pop() - prevVal)
+            elif token == '*':
+                stack.append(stack.pop() * stack.pop())
+            elif token == '/':
+                prevVal = stack.pop()
+                stack.append(int(stack.pop() / prevVal)) # Use `int()`, not `//` or `math.floor()`, cause we might have negative values
+            else:
+                stack.append(int(token))
+        return stack.pop()
+
+
+
 # 567. Permutation in String (https://leetcode.com/problems/permutation-in-string/description/) - Medium
 class Solution:
     def checkInclusion(self, s1: str, s2: str) -> bool:
