@@ -2423,6 +2423,45 @@ class Solution:
         return side * side
 
 
+# 2975. Maximum Square Area by Removing Fences From a Field (https://leetcode.com/problems/maximum-square-area-by-removing-fences-from-a-field/description/) - Medium - 2026-01-16
+class Solution:
+    '''
+    Time Complexity: O(h^2 + v^2)
+    Space Complexity: O(h^2 + v^2). Actual: O(min(m + n, h^2 + v^2))
+    Where, h is number of horizontal fences, v is number of vertical fences (including boundaries 1 and m/n).
+    The key insight is that we can only make a square of side S,
+    if there exists a horizontal fence at distance S from some other horizontal fence,
+    and similarly for vertical fences.
+    So we generate all possible horizontal distances and store in a set.
+    Then we generate all possible vertical distances and check if it exists in horizontal distances set.
+    Return the largest such distance.
+    '''
+    def maximizeSquareArea(self, m: int, n: int, hFences: List[int], vFences: List[int]) -> int:
+        # Include boundary fences
+        h = sorted([1] + hFences + [m])
+        v = sorted([1] + vFences + [n])
+
+        # All possible horizontal distances
+        h_dist = set()
+        for i in range(len(h)):
+            for j in range(i + 1, len(h)):
+                h_dist.add(h[j] - h[i])
+
+        # All possible vertical distances
+        v_dist = set()
+        for i in range(len(v)):
+            for j in range(i + 1, len(v)):
+                v_dist.add(v[j] - v[i])
+
+        # Find largest common distance
+        common = h_dist & v_dist
+        if not common:
+            return -1
+
+        max_side = max(common)
+        return (max_side * max_side) % (10**9 + 7)
+
+
 
 
 ############## TEST CASES ##############
@@ -2469,68 +2508,6 @@ class Solution:
 
 # for test in tests:
 #     print(Solution().search(test[0],test[1]), test[2])
-
-# Problem 76
-# class Solution:
-#     def minWindow(self, s: str, t: str) -> str:
-#         if len(t) == 0 or len(t) > len(s): return ""
-        
-#         minSub = s+s
-#         T = Counter(t)
-#         window = defaultdict(int)
-
-#         left, have, need = 0, 0, len(T)
-        
-#         for right,ch in enumerate(s):
-#             if ch in T:
-#                 window[ch]+=1
-#                 if window[ch] == T[ch]: have+=1
-#                 if have == need: 
-#                     while True:
-#                         while left<right and s[left] not in T: left+=1
-#                         if not window[s[left]] > T[s[left]]:   
-#                             if len(minSub) > right-left+1: minSub = s[left:right+1]
-#                             have-=1
-#                             window[s[left]]-=1
-#                             left+=1 
-#                             break
-#                         window[s[left]]-=1
-#                         left+=1    
-        
-#         return minSub if minSub != s+s else ""
-
-# testcases = [
-#     ["ADOBECODEBANC","ABC"],
-#     ["ABABUIBWEUIFBBIWE","BWE"],
-#     # ["ABAA",0],
-#     # ["AAAAA",0]
-# ]
-
-# for test in testcases: print(Solution().minWindow(test[0],test[1]))
-
-
-# Problem 424
-# def characterReplacement( s: str, k: int) -> int:
-#     maxLen = 0
-#     maxFreq = 0
-#     window = defaultdict(int)
-#     left = 0
-#     for right,ch in enumerate(s):
-#         window[ch] += 1
-#         maxFreq = max(maxFreq, window[ch])
-#         if right - left + 1 > maxFreq + k:
-#             window[s[left]] -= 1
-#             left += 1
-#         maxLen = max(maxLen, right-left)
-#     return maxLen
-
-# testCases = [
-#     ('ABAB',2),
-#     ('ABAAABBAAAA',2)
-# ]
-
-# for s,k in testCases: print(characterReplacement(s, k))
-
 
 
 
