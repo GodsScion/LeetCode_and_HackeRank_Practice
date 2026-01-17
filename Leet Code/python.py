@@ -2462,6 +2462,50 @@ class Solution:
         return (max_side * max_side) % (10**9 + 7)
 
 
+# 3047. Find the Largest Area of Square Inside Two Rectangles (https://leetcode.com/problems/find-the-largest-area-of-square-inside-two-rectangles/description/) - Medium - 2026-01-17
+class Solution:
+    '''
+    Time Complexity: O(n^2)
+    Space Complexity: O(1)
+    Where, n is number of rectangles.
+    Brute-force approach to check all pairs of rectangles.
+    For each pair, find the overlapping width and height.
+    NOTE: Just trying to calculate overlapping width and height directly solves to check if there is any overlap or not, 
+    you don't need to check that separately.
+    PIT FALLS:
+    You first mis-understood the question statement, thinking that if one rectangle had multiple overlaps with other rectangles, 
+    then all those overlaps should be considered.
+    But actually, only overlaps between any two given rectangles is to be considered. 
+    Once you start solving you try to find if there is any intersection between 2 rectangles, 
+    as it's process you first wrote down this condition `if (xbj < xti <= xtj and ybj < yti <= ytj) or (xbj <= xbi < xtj and ybj <= ybi < ytj):`.
+    But when you started writing code for finding overlapping width and height, 
+    you realized that you didn't need that condition at all, as the overlapping width and height calculations 
+    would automatically take care of non-overlapping rectangles by resulting in zero width or height.
+    So you removed that condition from the final code.
+    '''
+    def largestSquareArea(self, bottomLeft: List[List[int]], topRight: List[List[int]]) -> int:
+        area = 0
+        n = len(bottomLeft)
+        for i in range(n):
+            xbi, ybi = bottomLeft[i]
+            xti, yti = topRight[i]
+            for j in range(i+1, n):
+                xbj, ybj = bottomLeft[j]
+                xtj, ytj = topRight[j]
+
+                x1 = max(xbi, xbj)
+                x2 = min(xti, xtj)
+                x = max(x2-x1, 0)
+                y1 = max(ybi, ybj)
+                y2 = min(yti, ytj)
+                y = max(y2-y1, 0)
+                s = min(x,y)
+
+                area = max(area, s*s)                    
+        return area
+
+
+
 
 
 ############## TEST CASES ##############
