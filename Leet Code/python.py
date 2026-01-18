@@ -453,6 +453,7 @@ class Solution:
     Time Complexity: O(n)
     Space Complexity: O(n)
     where, n is the length of temperatures.
+    Monotonic Decreasing Stack approach.
     Note: For some reason, you previously implement a hashmap along with stack, 
     to keep track of indices, you were storing list of indices for duplicate temperatures, 
     which is over engineering.
