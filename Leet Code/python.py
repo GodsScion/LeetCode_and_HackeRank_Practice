@@ -447,6 +447,28 @@ class MinStack:
         return self.minStack[-1]
 
 
+# 739. Daily Temperatures (https://leetcode.com/problems/daily-temperatures/description/) - Medium
+class Solution:
+    '''
+    Time Complexity: O(n)
+    Space Complexity: O(n)
+    where, n is the length of temperatures.
+    Note: For some reason, you previously implement a hashmap along with stack, 
+    to keep track of indices, you were storing list of indices for duplicate temperatures, 
+    which is over engineering.
+    Later, you realized, you could just store tuple of (temperature, index) in stack to keep track of indices, which is simpler and preferred.
+    Remember, you can always store extra information in stack elements as tuple or objects.
+    '''
+    def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
+        stack = deque()
+        output = [0] * len(temperatures)
+        for i, temp in enumerate(temperatures):
+            while stack and temp > stack[-1][0]:
+                x = stack.pop()[1]
+                output[x] = i-x
+            stack.append((temp, i))
+        return output
+
 
 
 ####### LINKED LIST #######
