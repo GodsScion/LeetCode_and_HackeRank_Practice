@@ -1,3 +1,13 @@
+'''
+NOTES:
+
+1. If you have to store values from a list/array in a stack, and if values have duplicates, 
+you can just store their indices instead of the values, and reference the index when needed.
+
+'''
+
+
+
 from calendar import c
 from types import List, Optional
 from collections import defaultdict, Counter
@@ -454,7 +464,8 @@ class Solution:
     Space Complexity: O(n)
     where, n is the length of temperatures.
     Monotonic Decreasing Stack approach.
-    Note: For some reason, you previously implement a hashmap along with stack, 
+    NOTE: By the way, you can solve this by only storing indices of temperatures in stack.
+    For some reason, you previously implement a hashmap along with stack, 
     to keep track of indices, you were storing list of indices for duplicate temperatures, 
     which is over engineering.
     Later, you realized, you could just store tuple of (temperature, index) in stack to keep track of indices, which is simpler and preferred.
@@ -468,7 +479,19 @@ class Solution:
             while stack and temp > stack[-1][0]:
                 x = stack.pop()[1]
                 output[x] = i-x
-            stack.append((temp, i))
+            stack.append((temp, i)) # Can also be done, by just storing indices in stack
+        return output
+
+# 739. Daily Temperatures (https://leetcode.com/problems/daily-temperatures/description/) - Medium - Duplicate
+class Solution:
+    def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
+        stack = []
+        output = [0] * len(temperatures)
+        for i, temp in enumerate(temperatures):
+            while stack and temp > temperatures[stack[-1]]:
+                x = stack.pop()
+                output[x] = i-x
+            stack.append(i)
         return output
 
 
