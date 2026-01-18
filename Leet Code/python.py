@@ -570,6 +570,31 @@ class ListNode:
         self.val = x
         self.next = None
 
+# 206. Reverse Linked List (https://leetcode.com/problems/reverse-linked-list/) - Easy
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    '''
+    Time Complexity: O(n)
+    Space Complexity: O(1)
+    where, n is the number of nodes in the linked list.
+    Note: It's easier to code, once you draw the linked list and pointers to visualize the process.
+    LeetCode already has a good visualizer of the example, but in interviews, you can draw it on paper/whiteboard.
+    '''
+    def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        node = head
+        oldNode = None
+        while node:
+            temp = node.next
+            node.next = oldNode
+            oldNode = node
+            node = temp
+        return oldNode
+
+
 # 141. Linked List Cycle (https://leetcode.com/problems/linked-list-cycle/description/) - Easy
 # Definition for singly-linked list.
 # class ListNode:
@@ -588,6 +613,8 @@ class Solution:
             if runner == chaser:
                 return True
         return False
+
+
 
 
 # 146. LRU Cache (https://leetcode.com/problems/lru-cache/) - Medium
