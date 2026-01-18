@@ -397,6 +397,31 @@ class Solution:
 
 
 #######  STACK  #######
+
+# 20. Valid Parentheses (https://leetcode.com/problems/valid-parentheses/description/) - Easy
+class Solution:
+    '''
+    Time Complexity: O(n)
+    Space Complexity: O(n)
+    where, n is the length of s.
+    NOTE: Using hashmap like a switch, makes it quicker instead of multiple if-else conditions.
+    '''
+    def isValid(self, s: str) -> bool:
+        openedBras = []
+        bras =  {
+                ')':'(',
+                ']':'[',
+                '}':'{'
+                }
+        for bra in s:
+            if bra in bras:
+                if not openedBras or openedBras.pop() != bras[bra]:
+                    return False
+            else:
+                openedBras.append(bra)
+        return False if openedBras else True
+
+
 # 155. Min Stack (https://leetcode.com/problems/min-stack/description/) - Medium
 # Your MinStack object will be instantiated and called as such:
 # obj = MinStack()
