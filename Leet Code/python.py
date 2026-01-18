@@ -2505,6 +2505,63 @@ class Solution:
         return area
 
 
+# 1895. Largest Magic Square (https://leetcode.com/problems/largest-magic-square/description/) - Medium - 2026-01-18
+class Solution:
+    '''
+    Time Complexity: O(m * n * min(m, n)^2)
+    Space Complexity: O(m * n)
+    Where, m is number of rows, n is number of columns in the grid.
+    Prefix sums + Brute-force problem.
+    1. Calculate prefix sums for rows, columns and both diagonals.
+    2. Try larger sizes first, for each size, check all possible squares of that size.
+    3. For each square, check if all rows, columns and both diagonals sum to same target value.
+    4. Return the size of the first square found.
+    DID NOT GO THROUGH THE SOLUTION YET!
+    '''
+    def largestMagicSquare(self, grid: List[List[int]]) -> int:
+        m, n = len(grid), len(grid[0])
+
+        # Prefix sums
+        row = [[0] * (n + 1) for _ in range(m)]
+        col = [[0] * n for _ in range(m + 1)]
+        diag1 = [[0] * (n + 1) for _ in range(m + 1)]
+        diag2 = [[0] * (n + 1) for _ in range(m + 1)]
+
+        for i in range(m):
+            for j in range(n):
+                row[i][j + 1] = row[i][j] + grid[i][j]
+                col[i + 1][j] = col[i][j] + grid[i][j]
+                diag1[i + 1][j + 1] = diag1[i][j] + grid[i][j]
+                diag2[i + 1][j] = diag2[i][j + 1] + grid[i][j]
+
+        # Try larger sizes first
+        for k in range(min(m, n), 1, -1):
+            for r in range(m - k + 1):
+                for c in range(n - k + 1):
+                    target = row[r][c + k] - row[r][c]
+
+                    ok = True
+                    # rows
+                    for i in range(r, r + k):
+                        if row[i][c + k] - row[i][c] != target:
+                            ok = False
+                            break
+
+                    # columns
+                    for j in range(c, c + k):
+                        if col[r + k][j] - col[r][j] != target:
+                            ok = False
+                            break
+
+                    # diagonals
+                    d1 = diag1[r + k][c + k] - diag1[r][c]
+                    d2 = diag2[r + k][c] - diag2[r][c + k]
+
+                    if ok and d1 == target and d2 == target:
+                        return k
+
+        return 1
+
 
 
 
