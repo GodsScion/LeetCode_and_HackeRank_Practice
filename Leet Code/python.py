@@ -458,6 +458,7 @@ class Solution:
     which is over engineering.
     Later, you realized, you could just store tuple of (temperature, index) in stack to keep track of indices, which is simpler and preferred.
     Remember, you can always store extra information in stack elements as tuple or objects.
+    Solved it in 24 mins, all by yourself! Good job!
     '''
     def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
         stack = deque()
