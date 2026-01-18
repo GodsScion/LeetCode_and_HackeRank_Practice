@@ -496,6 +496,25 @@ class Solution:
         return output
 
 
+# 853. Car Fleet (https://leetcode.com/problems/car-fleet/) - Medium
+class Solution:
+    '''
+    Time Complexity: O(n log(n))
+    Space Complexity: O(n)
+    where, n is the number of cars.
+    '''
+    def carFleet(self, target: int, position: List[int], speed: List[int]) -> int:
+        cars = [(position[i], speed[i]) for i in range(len(position))]
+        cars.sort(key=lambda x: x[0])
+        time = [(target - distance)/velocity for distance, velocity in cars]
+        fleets = []
+        for t in time:
+            while fleets and t >= fleets[-1]:
+                fleets.pop()
+            fleets.append(t)
+        return len(fleets)
+
+
 
 ####### LINKED LIST #######
 class ListNode:
