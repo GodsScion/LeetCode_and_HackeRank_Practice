@@ -515,6 +515,29 @@ class Solution:
         return len(fleets)
 
 
+# 84. Largest Rectangle in Histogram (https://leetcode.com/problems/largest-rectangle-in-histogram/description/) - Hard
+class Solution:
+    '''
+    Time Complexity: O(n)
+    Space Complexity: O(n)
+    where, n is the length of heights.
+    NOTE: Since you're storing the possible start index instead of actual index of height in stack,
+    you'll have to add both height and index as tuple in stack, just the index wouldn't be sufficient.
+    Refer: https://neetcode.io/problems/largest-rectangle-in-histogram/solution for more details.
+    '''
+    def largestRectangleArea(self, heights: List[int]) -> int:
+        stack = []
+        area = 0
+        for i, height in enumerate(heights):
+            idx = i
+            while stack and stack[-1][0] > height:
+                prevHeight, idx = stack.pop()
+                area = max(area, prevHeight * (i-idx))
+            stack.append((height, idx))
+        for height, i in stack:
+            area = max(area, height * (len(heights)-i))
+        return area
+
 
 ####### LINKED LIST #######
 class ListNode:
