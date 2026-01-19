@@ -760,6 +760,93 @@ class Solution:
         return dummy.next
 
 
+class Node:
+    def __init__(self, x: int, next: 'Node' = None, random: 'Node' = None):
+        self.val = int(x)
+        self.next = next
+        self.random = random
+# 138. Copy List with Random Pointer (https://leetcode.com/problems/copy-list-with-random-pointer/description/) - Medium
+# Definition for a Node.
+# class Node:
+#     def __init__(self, x: int, next: 'Node' = None, random: 'Node' = None):
+#         self.val = int(x)
+#         self.next = next
+#         self.random = random
+class Solution:
+    '''
+    Time Complexity: O(n)
+    Space Complexity: O(n)
+    where, n is the number of nodes in the linked list.
+    NOTE: 
+    You had trouble with recursion, since you have to deal with cycles in the linked list,
+    the key is to cache the new node, without linking next and random pointers initially,
+    then link next and random pointers in subsequent recursive calls. Basically, break the links to avoid cycles, 
+    and use cache early unlike other problems where you normally cache in the end.
+    More optimal solution uses O(1) space
+    '''
+    def copyRandomList(self, head: 'Optional[Node]') -> 'Optional[Node]':
+        # return copy.deepcopy(head) # One liner for solution, but for interview, you need to implement the algorithm.
+        cache = {None: None}
+        
+        def deepCopy(node):
+            if node in cache:
+                return cache[node]
+            copy = Node(node.val)
+            cache[node] = copy
+            copy.next = deepCopy(node.next)
+            copy.random = deepCopy(node.random)
+            return copy
+        return deepCopy(head)
+
+# 138. Copy List with Random Pointer (https://leetcode.com/problems/copy-list-with-random-pointer/description/) - Medium - Duplicate
+# Definition for a Node.
+# class Node:
+#     def __init__(self, x: int, next: 'Node' = None, random: 'Node' = None):
+#         self.val = int(x)
+#         self.next = next
+#         self.random = random
+class Solution:
+    '''
+    Time Complexity: O(n)
+    Space Complexity: O(1)
+    where, n is the number of nodes in the linked list.
+    This is the most optimal solution using O(1) space
+    NOTE: Some interviewers care about original inputs being unchanged after function call, 
+    so if you plan on mutating the original list, mention that to interviewer, 
+    you can get the original list back by undoing the interweaving in last pass.
+    1. First pass: For each node in the original list, create a new node with the same value 
+    and insert it right after the original node. Looks like: A -> A' -> B -> B' -> C -> C' -> None after the first pass.
+    2. Second pass: Set the random pointers of the copied nodes.
+    3. Third pass: Separate the copied nodes to form the new list. Dummy -> A' -> B' -> C' -> None
+    4. Return the head of the copied list.
+    '''
+    def copyRandomList(self, head: 'Optional[Node]') -> 'Optional[Node]':
+        dummy = Node(0)
+        dummy.next = head
+        node = head
+        while node:
+            nextNode = node.next
+            copy = Node(node.val,nextNode)
+            node.next = copy
+            node = nextNode
+        node = head
+        while node:
+            random = node.random
+            copy = node.next
+            if random:
+                copy.random = random.next
+            node = copy.next
+        node = head
+        prev = dummy
+        while node:
+            copy = node.next
+            prev.next = copy
+            node.next = copy.next # Restore original list
+            node = copy.next
+            prev = copy
+        return dummy.next
+
+
 
 # 146. LRU Cache (https://leetcode.com/problems/lru-cache/) - Medium
 from collections import OrderedDict
