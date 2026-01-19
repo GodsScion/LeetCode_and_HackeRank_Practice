@@ -5,7 +5,10 @@ NOTES:
 you can just store their indices instead of the values, and reference the index when needed.
 2. It's ok to do multiple O(n) passes over iterables, if it makes the code simpler and easier to understand, 
 you don't always have to do everything in a single pass, look at 143 (Duplicate) for inspiration.
-
+3. For LinkedList problems, using a dummy node simplifies the edge cases, 
+such as when the head node needs to be removed, inspiration from 19.
+4. If you're in a Google style interview, where you dry run your code, 
+think of edge cases, like empty inputs, single element inputs, odd/even length inputs, etc.
 '''
 
 
@@ -680,7 +683,6 @@ class Solution:
             order[i].next = temp
             node = temp
         
-
 # 143. Reorder List (https://leetcode.com/problems/reorder-list/description/) - Medium - Duplicate
 # Definition for singly-linked list.
 # class ListNode:
@@ -723,8 +725,39 @@ class Solution:
             first.next = second
             second.next = tmp1
             first, second = tmp1, tmp2
-            
 
+
+# 19. Remove Nth Node From End of List (https://leetcode.com/problems/remove-nth-node-from-end-of-list/) - Medium
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    '''
+    Time Complexity: O(n)
+    Space Complexity: O(1)
+    where, n is the number of nodes in the linked list.
+    NOTE: Using a dummy node simplifies the edge cases, such as when the head node needs to be removed.
+    '''
+    def removeNthFromEnd(self, head: Optional[ListNode], n: int) -> Optional[ListNode]:
+        dummy = ListNode()
+        dummy.next = head
+        slow, fast = dummy, head
+        for _ in range(n):
+            fast = fast.next
+        
+        while fast:
+            fast = fast.next
+            slow = slow.next
+        
+        deletedNode = slow.next
+        slow.next = None
+        if deletedNode:
+            slow.next = deletedNode.next
+            deletedNode.next = None
+        
+        return dummy.next
 
 
 
