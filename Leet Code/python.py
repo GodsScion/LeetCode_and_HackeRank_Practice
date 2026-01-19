@@ -595,6 +595,38 @@ class Solution:
         return oldNode
 
 
+# 21. Merge Two Sorted Lists (https://leetcode.com/problems/merge-two-sorted-lists/description/) - Easy
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    '''
+    Time Complexity: O(n + m)
+    Space Complexity: O(1)
+    where, n and m are the number of nodes in list1 and list2 respectively.
+    '''
+    def mergeTwoLists(self, list1: Optional[ListNode], list2: Optional[ListNode]) -> Optional[ListNode]:
+        dummy = ListNode()
+        node = dummy
+        while list1 and list2:
+            if list1.val < list2.val:
+                temp = list1.next
+                list1.next = None
+                node.next = list1
+                node = list1
+                list1 = temp
+            else:
+                temp = list2.next
+                list2.next = None
+                node.next = list2
+                node = list2
+                list2 = temp
+        node.next = list1 if list1 else list2
+        return dummy.next
+
+
 # 141. Linked List Cycle (https://leetcode.com/problems/linked-list-cycle/description/) - Easy
 # Definition for singly-linked list.
 # class ListNode:
@@ -2703,6 +2735,57 @@ class Solution:
                         return k
 
         return 1
+
+
+# 1292. Maximum Side Length of a Square with Sum Less than or Equal to Threshold (https://leetcode.com/problems/maximum-side-length-of-a-square-with-sum-less-than-or-equal-to-threshold/description/) - Medium - 2026-01-19
+class Solution:
+    '''
+    Time Complexity: O(m * n * log(min(m, n)))
+    Space Complexity: O(m * n)
+    Where, m is number of rows, n is number of columns in the matrix.
+    Prefix sums + Binary Search problem.
+    DID NOT GO THROUGH THE SOLUTION YET!
+    '''
+    def maxSideLength(self, mat: List[List[int]], threshold: int) -> int:
+        m, n = len(mat), len(mat[0])
+
+        # Build prefix sum array
+        pre = [[0] * (n + 1) for _ in range(m + 1)]
+        for i in range(1, m + 1):
+            for j in range(1, n + 1):
+                pre[i][j] = (
+                    mat[i - 1][j - 1]
+                    + pre[i - 1][j]
+                    + pre[i][j - 1]
+                    - pre[i - 1][j - 1]
+                )
+
+        # Check if there exists a square of side k with sum <= threshold
+        def can(k):
+            for i in range(m - k + 1):
+                for j in range(n - k + 1):
+                    total = (
+                        pre[i + k][j + k]
+                        - pre[i][j + k]
+                        - pre[i + k][j]
+                        + pre[i][j]
+                    )
+                    if total <= threshold:
+                        return True
+            return False
+
+        # Binary search on side length
+        low, high = 0, min(m, n)
+        ans = 0
+        while low <= high:
+            mid = (low + high) // 2
+            if can(mid):
+                ans = mid
+                low = mid + 1
+            else:
+                high = mid - 1
+
+        return ans
 
 
 
