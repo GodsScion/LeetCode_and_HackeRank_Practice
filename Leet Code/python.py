@@ -3,6 +3,8 @@ NOTES:
 
 1. If you have to store values from a list/array in a stack, and if values have duplicates, 
 you can just store their indices instead of the values, and reference the index when needed.
+2. It's ok to do multiple O(n) passes over iterables, if it makes the code simpler and easier to understand, 
+you don't always have to do everything in a single pass, look at 143 (Duplicate) for inspiration.
 
 '''
 
@@ -15,7 +17,7 @@ import re
 import bisect
 from functools import cache
 
-#######  ARRAYS AND HASHING  #######
+####### ARRAYS AND HASHING #######
 # 217. Contains Duplicate (https://leetcode.com/problems/contains-duplicate/description/) - Easy
 class Solution:
     def containsDuplicate(self, nums: List[int]) -> bool:
@@ -272,7 +274,7 @@ class Solution:
 
 
 
-#######  SLIDING WINDOW  #######
+####### SLIDING WINDOW #######
 
 # 76. Minimum Window Substring (https://leetcode.com/problems/minimum-window-substring/description/) - Hard
 class Solution:
@@ -396,7 +398,7 @@ class Solution:
 
 
 
-#######  STACK  #######
+####### STACK #######
 
 # 20. Valid Parentheses (https://leetcode.com/problems/valid-parentheses/description/) - Easy
 class Solution:
@@ -645,6 +647,83 @@ class Solution:
             if runner == chaser:
                 return True
         return False
+
+
+# 143. Reorder List (https://leetcode.com/problems/reorder-list/description/) - Medium
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    '''
+    Time Complexity: O(n)
+    Space Complexity: O(n)
+    where, n is the number of nodes in the linked list.
+    This is the most easiest to implement solution intuitively, 
+    however the most optimal solution uses O(1) space, look for below approach.
+    '''
+    def reorderList(self, head: Optional[ListNode]) -> None:
+        """
+        Do not return anything, modify head in-place instead.
+        """
+        order = []
+        node = head
+        while node:
+            order.append(node)
+            node = node.next
+        node = head
+        for i in range(len(order)-1,len(order)//2,-1):
+            temp = node.next
+            node.next = order[i]
+            order[i-1].next = None
+            order[i].next = temp
+            node = temp
+        
+
+# 143. Reorder List (https://leetcode.com/problems/reorder-list/description/) - Medium - Duplicate
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    '''
+    Time Complexity: O(n)
+    Space Complexity: O(1)
+    where, n is the number of nodes in the linked list.
+    This is the most optimal solution using O(1) space.
+    You use 2 pointers, 1 fast and 1 slow to find the middle of the linked list,
+    then reverse the second half of the linked list,
+    finally merge the 2 halves by alternating nodes from each half.
+    '''
+    def reorderList(self, head: Optional[ListNode]) -> None:
+        """
+        Do not return anything, modify head in-place instead.
+        """
+        # find middle
+        slow, fast = head, head.next
+        while fast and fast.next:
+            slow = slow.next
+            fast = fast.next.next
+
+        # reverse second half
+        second = slow.next
+        prev = slow.next = None
+        while second:
+            tmp = second.next
+            second.next = prev
+            prev = second
+            second = tmp
+
+        # merge two halfs
+        first, second = head, prev
+        while second:
+            tmp1, tmp2 = first.next, second.next
+            first.next = second
+            second.next = tmp1
+            first, second = tmp1, tmp2
+            
 
 
 
