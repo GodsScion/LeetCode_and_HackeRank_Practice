@@ -890,6 +890,34 @@ class Solution:
         return dummy.next
 
 
+# 287. Find the Duplicate Number (https://leetcode.com/problems/find-the-duplicate-number/description/) - Medium
+class Solution:
+    '''
+    Time Complexity: O(n)
+    Space Complexity: O(1)
+    where, n is the length of nums.
+    NOTE: If you haven't seen this approach before, it might be hard to come up with it in an interview.
+    KEEP REVIEWING THIS UNTIL ITS STORED IN LONG TERM MEMORY.
+    Reference: https://neetcode.io/problems/find-duplicate-integer/solution
+    This is Floyd's Tortoise and Hare (Cycle Detection) algorithm.
+    The idea is to use two pointers, one moving twice as fast as the other, to detect a cycle in single linked list.
+    When they meet, we find the entrance to the cycle, by using another 2 pointers which is the duplicate number.
+    The 2 slow pointers will always meet at the start of intersection of the cycle, and it's always gonna be the result.
+    Look at the reference for detailed explanation and proof!
+    '''
+    def findDuplicate(self, nums: List[int]) -> int:
+        fast = nums[nums[0]]
+        slow = nums[0]
+        while slow != fast:
+            fast = nums[nums[fast]]
+            slow = nums[slow]
+        newS = 0
+        while newS != slow:
+            newS = nums[newS]
+            slow = nums[slow]
+        return slow
+
+
 # 146. LRU Cache (https://leetcode.com/problems/lru-cache/) - Medium
 from collections import OrderedDict
 class LRUCache:
