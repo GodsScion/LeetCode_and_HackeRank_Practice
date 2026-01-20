@@ -1017,6 +1017,7 @@ class LRUCache:
             del self.cache[lru.key]
 
 
+# 
 
 
 
@@ -1037,6 +1038,35 @@ class TreeNode:
 class Solution:
     def maxDepth(self, root: Optional[TreeNode]) -> int:
         return 1 + max(self.maxDepth(root.left), self.maxDepth(root.right)) if root else 0
+
+
+# 543. Diameter of Binary Tree (https://leetcode.com/problems/diameter-of-binary-tree/description/) - Easy
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    '''
+    Time Complexity: O(n)
+    Space Complexity: O(n)
+    where, n is the number of nodes
+    Solved in 8 min all by yourself! Good job!
+    '''
+    def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:
+        out = 0
+        def getMaxDepth(node):
+            nonlocal out
+            if not node:
+                return 0
+            left = getMaxDepth(node.left)
+            right = getMaxDepth(node.right)
+            out = max(out, left + right)
+            return 1 + max(left, right)
+        getMaxDepth(root)
+        return out
+
 
 # 100. Same Tree (https://leetcode.com/problems/same-tree/description/) - Easy
 # Definition for a binary tree node.
