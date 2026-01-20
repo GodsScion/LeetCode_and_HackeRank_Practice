@@ -787,7 +787,7 @@ class Solution:
     def copyRandomList(self, head: 'Optional[Node]') -> 'Optional[Node]':
         # return copy.deepcopy(head) # One liner for solution, but for interview, you need to implement the algorithm.
         cache = {None: None}
-        
+
         def deepCopy(node):
             if node in cache:
                 return cache[node]
@@ -2984,6 +2984,28 @@ class Solution:
             else:
                 high = mid - 1
 
+        return ans
+
+
+# 3314. Construct the Minimum Bitwise Array I (https://leetcode.com/problems/construct-the-minimum-bitwise-array-i/description/) - Easy - 2026-01-20
+class Solution:
+    '''
+    Time Complexity: O(n log m)
+    Space Complexity: O(1)
+    Where, n is number of elements in nums, m is maximum value in nums.
+    DID NOT GO THROUGH THE SOLUTION YET!'''
+    def minBitwiseArray(self, nums: List[int]) -> List[int]:
+        ans = []
+        for m in nums:
+            if m == 2:
+                ans.append(-1)
+            else:
+                t = 0
+                x = m
+                while x & 1:
+                    t += 1
+                    x >>= 1
+                ans.append(m - (1 << (t - 1)))
         return ans
 
 
