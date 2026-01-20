@@ -919,6 +919,10 @@ class Solution:
 
 
 # 146. LRU Cache (https://leetcode.com/problems/lru-cache/) - Medium
+# Your LRUCache object will be instantiated and called as such:
+# obj = LRUCache(capacity)
+# param_1 = obj.get(key)
+# obj.put(key,value)
 from collections import OrderedDict
 class LRUCache:
     '''
@@ -947,10 +951,72 @@ class LRUCache:
         self.orderedDict[key] = value
         return
 
+# 146. LRU Cache (https://leetcode.com/problems/lru-cache/) - Medium - Duplicate
 # Your LRUCache object will be instantiated and called as such:
 # obj = LRUCache(capacity)
 # param_1 = obj.get(key)
 # obj.put(key,value)
+class DoubleNode:
+    def __init__(self, key=None, value=None):
+        self.key = key
+        self.value = value
+        self.left = None
+        self.right = None
+
+class LRUCache:
+    '''
+    Time Complexity: O(1) for both get and put operations.
+    Space Complexity: O(capacity), where capacity is the maximum number of items that can be stored in the cache.
+    This is the more traditional approach using Doubly Linked List and Hash Map.
+    NOTE: This approach is not recommended, took you almost 1 hour to implement it correctly, stick to the OrderedDict approach.
+    '''
+
+    def __init__(self, capacity: int):
+        self.capacity = capacity
+        self.cache = {}
+
+        self.head = DoubleNode()
+        self.tail = DoubleNode()
+        self.head.right = self.tail
+        self.tail.left = self.head
+
+    def _remove(self, node):
+        node.left.right = node.right
+        node.right.left = node.left
+
+    def _add_to_head(self, node):
+        node.left = self.head
+        node.right = self.head.right
+        self.head.right.left = node
+        self.head.right = node
+
+    def get(self, key: int) -> int:
+        if key not in self.cache:
+            return -1
+
+        node = self.cache[key]
+        self._remove(node)
+        self._add_to_head(node)
+        return node.value
+
+    def put(self, key: int, value: int) -> None:
+        if key in self.cache:
+            node = self.cache[key]
+            node.value = value
+            self._remove(node)
+            self._add_to_head(node)
+            return
+
+        node = DoubleNode(key, value)
+        self.cache[key] = node
+        self._add_to_head(node)
+
+        if len(self.cache) > self.capacity:
+            lru = self.tail.left
+            self._remove(lru)
+            del self.cache[lru.key]
+
+
 
 
 
