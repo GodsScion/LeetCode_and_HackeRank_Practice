@@ -847,6 +847,48 @@ class Solution:
         return dummy.next
 
 
+# 2. Add Two Numbers (https://leetcode.com/problems/add-two-numbers/description/) - Medium
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    '''
+    Time Complexity: O(max(n, m))
+    Space Complexity: O(max(n, m))
+    where, n and m are the number of nodes in l1 and l2 respectively.
+    Solved in 20 mins, all by yourself! Good job!
+    '''
+    def addTwoNumbers(self, l1: Optional[ListNode], l2: Optional[ListNode]) -> Optional[ListNode]:
+        dummy = ListNode()
+        node = dummy
+        carry = 0
+        while l1 and l2:
+            val = carry + l1.val + l2.val
+            carry = 1 if val > 9 else 0
+            val = val % 10
+            node.next = ListNode(val)
+            node = node.next
+            l1 = l1.next
+            l2 = l2.next
+        
+        r = l1 if l1 else l2
+        
+        while carry > 0 and r:
+            val = r.val + carry
+            carry = 1 if val > 9 else 0
+            node.next = ListNode(val%10)
+            node = node.next
+            r = r.next
+        if r:
+            node.next = r            
+
+        if carry > 0:
+            node.next = ListNode(carry)            
+
+        return dummy.next
+
 
 # 146. LRU Cache (https://leetcode.com/problems/lru-cache/) - Medium
 from collections import OrderedDict
@@ -3007,6 +3049,8 @@ class Solution:
                     x >>= 1
                 ans.append(m - (1 << (t - 1)))
         return ans
+
+
 
 
 
