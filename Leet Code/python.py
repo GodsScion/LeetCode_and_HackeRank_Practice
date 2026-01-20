@@ -1,6 +1,7 @@
 '''
 NOTES:
 
+0. Ask clarifying questions, don't just assume, especially definitions.
 1. If you have to store values from a list/array in a stack, and if values have duplicates, 
 you can just store their indices instead of the values, and reference the index when needed.
 2. It's ok to do multiple O(n) passes over iterables, if it makes the code simpler and easier to understand, 
@@ -9,6 +10,9 @@ you don't always have to do everything in a single pass, look at 143 (Duplicate)
 such as when the head node needs to be removed, inspiration from 19.
 4. If you're in a Google style interview, where you dry run your code, 
 think of edge cases, like empty inputs, single element inputs, odd/even length inputs, etc.
+5. Definition of a balanced tree is, for all nodes, the difference between depth of left subtree and right subtree 
+is less than or equal to 1 level. It's NOT height of the tree is equal to least possible height for given number of nodes, 
+IT'S NOT the same, inspiration from 543!!
 '''
 
 
@@ -1066,6 +1070,35 @@ class Solution:
             return 1 + max(left, right)
         getMaxDepth(root)
         return out
+
+
+# 110. Balanced Binary Tree (https://leetcode.com/problems/balanced-binary-tree/description/) - Easy
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    '''
+    Time Complexity: O(n)
+    Space Complexity: O(n)
+    where, n is the number of nodes in given tree.
+    NOTE: You misunderstood the definition of a balanced tree as least possible height for a binary tree for given nodes, when it's actually,
+    for all nodes, the difference between depth of it's left subtree and right subtree is less than or equal to 1 level.
+    Eg: [1,2,3,4,5,6,null,8]
+    Took 8 min once, the definition was clarified, ask clarifying questions, don't assume!
+    '''
+    def isBalanced(self, root: Optional[TreeNode]) -> bool:
+        def check(node):
+            if not node:
+                return 0
+            left = check(node.left)
+            right = check(node.right)
+            if min(left, right) == -1 or abs(right-left) > 1:
+                return -1
+            return 1 + max(left, right)
+        return False if check(root) == -1 else True
 
 
 # 100. Same Tree (https://leetcode.com/problems/same-tree/description/) - Easy
