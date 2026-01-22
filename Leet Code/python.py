@@ -955,39 +955,6 @@ class Solution:
         return slow
 
 
-# 146. LRU Cache (https://leetcode.com/problems/lru-cache/) - Medium
-# Your LRUCache object will be instantiated and called as such:
-# obj = LRUCache(capacity)
-# param_1 = obj.get(key)
-# obj.put(key,value)
-from collections import OrderedDict
-class LRUCache:
-    '''
-    Time Complexity: O(1) for both get and put operations.
-    Space Complexity: O(capacity), where capacity is the maximum number of items that can be stored in the cache.
-
-    We use an OrderedDict in this approach, but it can also be implemented using a combination of a doubly linked list and a hash map.
-    '''
-    def __init__(self, capacity: int):
-        self.capacity = capacity
-        self.orderedDict: OrderedDict[int, int] = OrderedDict()
-
-    def get(self, key: int) -> int:
-        if key not in self.orderedDict:
-            return -1
-        self.orderedDict.move_to_end(key)
-        return self.orderedDict[key]
-
-    def put(self, key: int, value: int) -> None:
-        if key in self.orderedDict:
-            self.orderedDict[key] = value
-            self.orderedDict.move_to_end(key)
-            return
-        if len(self.orderedDict) >= self.capacity:
-            self.orderedDict.popitem(last=False)
-        self.orderedDict[key] = value
-        return
-
 # 146. LRU Cache (https://leetcode.com/problems/lru-cache/) - Medium - Duplicate
 # Your LRUCache object will be instantiated and called as such:
 # obj = LRUCache(capacity)
@@ -999,10 +966,8 @@ class LRUCache:
     Time Complexity: O(1)
     Space Complexity: O(n)
     where, n is the capacity of cache
-    Same approach as above, but more in style of competitive coding!
-    Solved in 10 mins, referred OrderedDict syntax!
+    Solved in 10 mins the second time, referred OrderedDict syntax!
     '''
-
     def __init__(self, capacity: int):
         self.q = OrderedDict()
         self.size = capacity
@@ -1013,7 +978,6 @@ class LRUCache:
         self.q.move_to_end(key, last=False)
         return self.q[key]
         
-
     def put(self, key: int, value: int) -> None:
         if len(self.q) >= self.size and key not in self.q:
             self.q.popitem(last=True)
