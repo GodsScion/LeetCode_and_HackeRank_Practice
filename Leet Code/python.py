@@ -3234,6 +3234,39 @@ class Solution:
         return ans
 
 
+# 3507. Minimum Pair Removal to Sort Array I (https://leetcode.com/problems/minimum-pair-removal-to-sort-array-i/description/) - Easy - 2026-01-22
+class Solution:
+    '''
+    Time Complexity: O(n^2)
+    Space Complexity: O(n)
+    where, n is the length of nums
+    NOTE: You did not understand what minimum sum was in the question for which, 
+    you can't be blamed cause there was nobody to ask when solo leet-coding, 
+    and you were trying to achieve better time complexity without fully understanding the problem,
+    which killed a lot of time!
+    '''
+    def minimumPairRemoval(self, nums: List[int]) -> int:
+        def is_non_decreasing(arr):
+            for i in range(1, len(arr)):
+                if arr[i] < arr[i - 1]:
+                    return False
+            return True
+        
+        operations = 0
+        while not is_non_decreasing(nums):
+            min_sum = float('inf')
+            idx = 0
+            for i in range(len(nums) - 1):
+                s = nums[i] + nums[i + 1]
+                if s < min_sum:
+                    min_sum = s
+                    idx = i
+            nums[idx] = nums[idx] + nums[idx + 1]
+            nums.pop(idx+1)
+            operations += 1
+        
+        return operations
+
 
 
 
