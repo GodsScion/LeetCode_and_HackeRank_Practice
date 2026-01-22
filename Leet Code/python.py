@@ -13,6 +13,14 @@ think of edge cases, like empty inputs, single element inputs, odd/even length i
 5. Definition of a balanced tree is, for all nodes, the difference between depth of left subtree and right subtree 
 is less than or equal to 1 level. It's NOT height of the tree is equal to least possible height for given number of nodes, 
 IT'S NOT the same, inspiration from 543!!
+6. When using heapq with custom classes/objects, use a tuple of the form to be stored (key, unique_id, object),
+    - heapq does not support a custom comparator or key function.
+    - It compares tuple elements in order.
+    - First, it compares `key`.
+    - If keys are equal, it compares `unique_id`.
+    - Without a unique_id, Python would attempt to compare the objects
+    themselves, which raises a TypeError since class instances cannot be compared by default.
+    - Inspiration from 23
 '''
 
 
@@ -1021,7 +1029,52 @@ class LRUCache:
             del self.cache[lru.key]
 
 
-# 
+# 23. Merge k Sorted Lists (https://leetcode.com/problems/merge-k-sorted-lists/description/) - Hard
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+from heapq import heappush, heappop
+class Solution:
+    '''
+    Time Complexity: O(n log k)
+    Space Complexity: O(k)
+
+    where, k is number of linked lists, and n is total number of nodes across all lists
+
+    NOTE:
+    When using heapq with custom classes/objects, use a tuple of the form to be stored:
+        (key, unique_id, object)
+
+    Reason:
+    - heapq does not support a custom comparator or key function.
+    - It compares tuple elements in order.
+    - First, it compares `key`.
+    - If keys are equal, it compares `unique_id`.
+    - Without a unique_id, Python would attempt to compare the objects
+    themselves, which raises a TypeError since class instances cannot be compared by default.
+    '''
+    def mergeKLists(self, lists: List[Optional[ListNode]]) -> Optional[ListNode]:
+        heap = []
+        dummy = ListNode(0)
+        node = dummy
+
+        lists = [head for head in lists if head]
+        counter = 0
+        for l in lists:
+            if l:
+                heappush(heap, (l.val, counter, l))
+                counter += 1
+
+        while heap:
+            val, _, node.next = heappop(heap)
+            node = node.next
+            if node.next:
+                heappush(heap, (node.next.val, counter, node.next))
+                counter += 1
+        
+        return dummy.next
 
 
 
@@ -3225,7 +3278,7 @@ class Solution:
                 continue
 
             t = 0
-            temp = n.   
+            temp = n
             while temp & 1:
                 t += 1
                 temp >>= 1
