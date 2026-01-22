@@ -2746,7 +2746,9 @@ class Solution:
         return output
 
 
-######  GREEDY  ######
+
+###### GREEDY ######
+
 # 53. Maximum Subarray (https://leetcode.com/problems/maximum-subarray/description/) - Medium
 class Solution:
     '''
@@ -2801,6 +2803,36 @@ class Solution:
                 possible = i
             i -= 1
         return possible == 0
+
+
+
+###### INTERVALS ######
+
+class Interval(object):
+    def __init__(self, start, end):
+        self.start = start
+        self.end = end
+# 251. Meeting Rooms (https://leetcode.com/problems/meeting-rooms/description/) - Easy - Premium (https://neetcode.io/problems/meeting-schedule/question)
+# Definition of Interval:
+# class Interval(object):
+#     def __init__(self, start, end):
+#         self.start = start
+#         self.end = end
+class Solution:
+    '''
+    Time Complexity: O(n log n)
+    Space Complexity: O(1)
+    where, n is the total number of intervals
+    Solved in 6 min, all by yourself! Good job!
+    '''
+    def canAttendMeetings(self, intervals: List[Interval]) -> bool:
+        intervals.sort(key=lambda x: x.start)
+        for i in range(len(intervals)-1):
+            if intervals[i].end > intervals[i+1].start:
+                return False
+        return True
+
+
 
 
 
