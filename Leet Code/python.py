@@ -43,6 +43,9 @@ NOTES:
 
     That said, if the pointer logic is simple or strictly required, it may be worth taking the risk.
     Inspiration from 25
+
+9.  Some problems are only possible to be solved using BFS, keep that in mind and don't always jump to DFS, 
+    analyze and visualize before you write code, don't take too much time though. Inspiration from 994
 '''
 
 
@@ -1832,6 +1835,48 @@ class Solution:
                 maxArea = max(maxArea, dfs(i,j)) # dfs(i,j)
         
         return maxArea
+
+
+# 994. Rotting Oranges (https://leetcode.com/problems/rotting-oranges/description/) - Medium
+class Solution:
+    '''
+    Time Complexity: O(m * n)
+    Space Complexity: O(m * n)
+    where, m is number of rows in grid, and n is number of columns in grid
+    Note: Only possible to solve this using BFS, since time needs to be calculated,
+    Took you 27 mins to write the code, you were fumbling because you didn't implement BFS a lot before, 
+    usually you always pick dfs, and you tried to do that here too, but this is only possible with BFS!
+    '''
+    def orangesRotting(self, grid: List[List[int]]) -> int:
+        time = -1
+        rotten = set()
+        newRotten = set()
+        oranges = 0
+        m, n = len(grid), len(grid[0])
+
+        for i in range(m):
+            for j in range(n):
+                if grid[i][j] == 1:
+                    oranges += 1
+                elif grid[i][j] == 2:
+                    rotten.add((i,j))
+        
+        def getNext(i,j):
+            if 0 <= i < m and 0 <= j < n and grid[i][j] == 1:
+                nonlocal newRotten, oranges
+                newRotten.add((i,j))
+                oranges -= 1
+                grid[i][j] = 2
+
+        while rotten:
+            newRotten = set()
+            for i,j in rotten:
+                for (a,b) in [(i+1,j),(i-1,j),(i,j+1),(i,j-1)]:
+                    getNext(a,b)
+            rotten = newRotten
+            time += 1
+
+        return -1 if oranges != 0 else max(0,time)
 
 
 # 417. Pacific Atlantic Water Flow (https://leetcode.com/problems/pacific-atlantic-water-flow/description/) - Medium
