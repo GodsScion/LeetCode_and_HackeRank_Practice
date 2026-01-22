@@ -3192,7 +3192,8 @@ class Solution:
     Time Complexity: O(n log m)
     Space Complexity: O(1)
     Where, n is number of elements in nums, m is maximum value in nums.
-    DID NOT GO THROUGH THE SOLUTION YET!'''
+    DID NOT GO THROUGH THE SOLUTION YET!
+    '''
     def minBitwiseArray(self, nums: List[int]) -> List[int]:
         ans = []
         for m in nums:
@@ -3205,6 +3206,31 @@ class Solution:
                     t += 1
                     x >>= 1
                 ans.append(m - (1 << (t - 1)))
+        return ans
+
+
+# 3315. Construct the Minimum Bitwise Array II (https://leetcode.com/problems/construct-the-minimum-bitwise-array-ii/description/) - Medium - 2026-01-21
+class Solution:
+    '''
+    Time Complexity: O(n)
+    Space Complexity: O(1)
+    where, n is length of nums
+    DID NOT GO THROUGH THE SOLUTION YET!
+    '''
+    def minBitwiseArray(self, nums: List[int]) -> List[int]:
+        ans = []
+        for n in nums:
+            if n % 2 == 0:
+                ans.append(-1)
+                continue
+
+            t = 0
+            temp = n.   
+            while temp & 1:
+                t += 1
+                temp >>= 1
+
+            ans.append(n - (1 << (t - 1)))
         return ans
 
 
