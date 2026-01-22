@@ -1415,6 +1415,34 @@ class Solution:
         return out
 
 
+# 1448. Count Good Nodes in Binary Tree (https://leetcode.com/problems/count-good-nodes-in-binary-tree/description/) - Medium
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    '''
+    Time complexity: O(n)
+    Space complexity: O(h)
+    where, n is the total number of nodes, and h is the height of the tree (can be n if it's a skewed tree in worst cases)
+    Solved in 6 mins, all by yourself! Good job! Incredible actually!
+    '''
+    def goodNodes(self, root: TreeNode) -> int:
+
+        def dfs(node, pathMax):
+            if not node:
+                return 0
+            val = 0
+            if node.val >= pathMax:
+                pathMax = node.val
+                val += 1
+            return val + dfs(node.left, pathMax) + dfs(node.right, pathMax)
+        
+        return dfs(root, root.val)
+
+
 # 98. Validate Binary Search Tree (https://leetcode.com/problems/validate-binary-search-tree/description/) - Medium
 # Definition for a binary tree node.
 # class TreeNode:
