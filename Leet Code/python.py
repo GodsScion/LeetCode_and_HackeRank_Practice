@@ -535,7 +535,7 @@ class Solution:
     which is over engineering.
     Later, you realized, you could just store tuple of (temperature, index) in stack to keep track of indices, which is simpler and preferred.
     Remember, you can always store extra information in stack elements as tuple or objects.
-    Solved it in 24 mins, all by yourself! Good job!
+    Solved in 24 mins, all by yourself! Good job!
     '''
     def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
         stack = deque()
@@ -1183,7 +1183,7 @@ class Solution:
     Time Complexity: O(n)
     Space Complexity: O(n)
     where, n is the number of nodes
-    Solved in 8 min all by yourself! Good job!
+    Solved in 8 mins, all by yourself! Good job!
     '''
     def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:
         out = 0
@@ -1805,6 +1805,35 @@ class Solution:
 
 
 ###### GRAPHS ######
+
+# 695. Max Area of Island (https://leetcode.com/problems/max-area-of-island/description/) - Medium
+class Solution:
+    '''
+    Time Complexity: O(m * n)
+    Space Complexity: O(m * n)
+    where, m is number of rows, and n is number of columns
+    Solved in 10 mins, all by yourself! Good job!
+    '''
+    def maxAreaOfIsland(self, grid: List[List[int]]) -> int:
+        maxArea = 0
+        def dfs(i,j):
+            if i < 0 or i >= len(grid) or j < 0 or j >= len(grid[0]) or grid[i][j] == 0:
+                return 0
+            
+            grid[i][j] = 0
+
+            # val = 1 + dfs(i+1,j) + dfs(i-1,j) + dfs(i,j+1) + dfs(i,j-1) # What you wrote originally, vs negligible optimization
+            # nonlocal maxArea
+            # maxArea = max(maxArea, val)
+            return 1 + dfs(i+1,j) + dfs(i-1,j) + dfs(i,j+1) + dfs(i,j-1) # return val
+        
+        for i in range(len(grid)):
+            for j in range(len(grid[0])):
+                maxArea = max(maxArea, dfs(i,j)) # dfs(i,j)
+        
+        return maxArea
+
+
 # 417. Pacific Atlantic Water Flow (https://leetcode.com/problems/pacific-atlantic-water-flow/description/) - Medium
 class Solution:
     '''
