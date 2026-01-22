@@ -1380,6 +1380,41 @@ class Solution:
         return levels
 
 
+# 199. Binary Tree Right Side View (https://leetcode.com/problems/binary-tree-right-side-view/description/) - Medium
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    '''
+    Time Complexity: O(n)
+    Space Complexity: O(n)
+    where, n is the total number of nodes in Tree
+    Used BFS to do level order traversal
+    Solved in 9 mins, all by yourself! Good job! Amazing actually!
+    You first visualized the problem, thought of the algo and then coded it!
+    '''
+    def rightSideView(self, root: Optional[TreeNode]) -> List[int]:
+        q = deque()
+        if root:
+            q.append(root)
+        out = []
+        while q:
+            newq = deque()
+            last = None
+            while q:
+                last = q.popleft()
+                if last.left:
+                    newq.append(last.left)
+                if last.right:
+                    newq.append(last.right)
+            out.append(last.val)
+            q = newq
+        return out
+
+
 # 98. Validate Binary Search Tree (https://leetcode.com/problems/validate-binary-search-tree/description/) - Medium
 # Definition for a binary tree node.
 # class TreeNode:
