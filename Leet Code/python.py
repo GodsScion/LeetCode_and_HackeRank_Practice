@@ -609,6 +609,30 @@ class Solution:
 
 
 
+####### BINARY SEARCH #######
+
+# 704. Binary Search (https://leetcode.com/problems/binary-search/) - Easy
+class Solution:
+    '''
+    Time Complexity: O(log n)
+    Space Complexity: O(1)
+    where, n is the length of nums
+    Solved in 4 mins 36 secs, all by yourself! Good job!
+    '''
+    def search(self, nums: List[int], target: int) -> int:
+        l, r = 0, len(nums) - 1
+        while l <= r:
+            m = (l+r)//2
+            if nums[m] == target:
+                return m
+            elif nums[m] < target:
+                l = m+1
+            else:
+                r = m-1
+        return -1
+
+
+
 ####### LINKED LIST #######
 
 class ListNode:
