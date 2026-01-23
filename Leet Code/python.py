@@ -632,6 +632,30 @@ class Solution:
         return -1
 
 
+# 74. Search a 2D Matrix (https://leetcode.com/problems/search-a-2d-matrix/description/) - Medium
+class Solution:
+    '''
+    Time Complexity: O(log(m * n))
+    Space Complexity: O(1)
+    where, m is number of rows, and n is number of columns of the matrix
+    Solved in 9 min, all by yourself, Good job!
+    '''
+    def searchMatrix(self, matrix: List[List[int]], target: int) -> bool:
+        m, n = len(matrix), len(matrix[0])
+        l, r = 0, m*n - 1
+        
+        while l <= r:
+            m = (l+r)//2
+            i, j = m//n, m%n
+            if matrix[i][j] == target:
+                return True
+            elif target < matrix[i][j]:
+                r = m-1
+            else:
+                l = m+1
+        return False
+
+
 
 ####### LINKED LIST #######
 
