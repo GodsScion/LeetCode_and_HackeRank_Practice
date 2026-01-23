@@ -195,14 +195,18 @@ class Solution:
         s = s.lower()
         left = 0
         right = len(s)-1
-        while left < len(s)-1 and not s[left].isalnum(): left += 1
-        while right > 0 and not s[right].isalnum(): right -= 1
+        while left < len(s)-1 and not s[left].isalnum():
+            left += 1
+        while right > 0 and not s[right].isalnum():
+            right -= 1
         while left < right:
             if s[left] != s[right]: return False
             left += 1
             right -= 1
-            while left < len(s)-1 and not s[left].isalnum(): left += 1
-            while right > 0 and not s[right].isalnum(): right -= 1
+            while left < len(s)-1 and not s[left].isalnum():
+                left += 1
+            while right > 0 and not s[right].isalnum():
+                right -= 1
         return True
 # 125. Valid Palindrome (https://leetcode.com/problems/valid-palindrome/description/) - Easy
 class Solution:
@@ -316,6 +320,20 @@ class Solution:
 
 ####### SLIDING WINDOW #######
 
+# 567. Permutation in String (https://leetcode.com/problems/permutation-in-string/description/) - Medium
+class Solution:
+    def checkInclusion(self, s1: str, s2: str) -> bool:
+        need = Counter(s1)
+        have = Counter(s2[:len(s1)-1])
+        i = 0
+        for c in s2[len(s1)-1:]:
+            have[c] = have.get(c, 0) + 1
+            if need == have: return True
+            have[s2[i]] -= 1
+            i += 1
+        return need == have
+
+
 # 76. Minimum Window Substring (https://leetcode.com/problems/minimum-window-substring/description/) - Hard
 class Solution:
     '''
@@ -419,22 +437,6 @@ class Solution:
             deck.append(nums[i])
             output.append(deck[0])
         return output
-
-
-
-
-# 567. Permutation in String (https://leetcode.com/problems/permutation-in-string/description/) - Medium
-class Solution:
-    def checkInclusion(self, s1: str, s2: str) -> bool:
-        need = Counter(s1)
-        have = Counter(s2[:len(s1)-1])
-        i = 0
-        for c in s2[len(s1)-1:]:
-            have[c] = have.get(c, 0) + 1
-            if need == have: return True
-            have[s2[i]] -= 1
-            i += 1
-        return need == have
 
 
 
@@ -606,7 +608,9 @@ class Solution:
         return area
 
 
+
 ####### LINKED LIST #######
+
 class ListNode:
     def __init__(self, x):
         self.val = x
@@ -1268,7 +1272,7 @@ class Solution:
         if root1 == None or root2 == None or root1.val != root2.val:
             return False
         return self.isSametree(root1.left, root2.left) and self.isSametree(root1.right, root2.right)
-# 572. Subtree of Another Tree (https://leetcode.com/problems/subtree-of-another-tree/description/) - Easy
+# 572. Subtree of Another Tree (https://leetcode.com/problems/subtree-of-another-tree/description/) - Easy - Duplicate
 # Definition for a binary tree node.
 # class TreeNode:
 #     def __init__(self, val=0, left=None, right=None):
@@ -1666,6 +1670,30 @@ class Codec:
 
 
 ###### HEAP / PRIORITY QUEUE   ######
+
+# 703. Kth Largest Element in a Stream (https://leetcode.com/problems/kth-largest-element-in-a-stream/description/) - Easy
+from heapq import heapify, heappush, heappop, heappushpop
+class KthLargest:
+
+    def __init__(self, k: int, nums: List[int]):
+        heapify(nums)
+        while len(nums) > k:
+            heappop(nums)
+        self.h = nums
+        self.k = k
+
+    def add(self, val: int) -> int:
+        if len(self.h) < self.k:
+            heappush(self.h, val)
+            return self.h[0]
+        heappushpop(self.h, val)    
+        return self.h[0]
+
+# Your KthLargest object will be instantiated and called as such:
+# obj = KthLargest(k, nums)
+# param_1 = obj.add(val)
+
+
 # 295. Find Median from Data Stream (https://leetcode.com/problems/find-median-from-data-stream/description/) - Hard
 import heapq
 class MedianFinder:
@@ -1699,6 +1727,7 @@ class MedianFinder:
 
 
 ###### TRIES ######
+
 # 212. Word Search II (https://leetcode.com/problems/word-search-ii/description/) - Hard
 class Trie:
     def __init__(self):
