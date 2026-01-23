@@ -3589,6 +3589,84 @@ class Solution:
         return operations
 
 
+# 3510. Minimum Pair Removal to Sort Array II (https://leetcode.com/problems/minimum-pair-removal-to-sort-array-ii/description/) - Hard - 2026-01-23
+from heapq import heappush, heappop
+class Solution:
+    '''
+    Time Complexity: O(n log n)
+    Space Complexity: O(n)
+    where, n is the length of nums
+    DID NOT GO THROUGH THE SOLUTION YET!
+    '''
+    def minimumPairRemoval(self, nums: List[int]) -> int:
+        n = len(nums)
+        if n <= 1:
+            return 0
+
+        left = [-1] + list(range(n - 1))
+        right = list(range(1, n)) + [-1]
+        alive = [True] * n
+
+        bad = 0
+        for i in range(n - 1):
+            if nums[i] > nums[i + 1]:
+                bad += 1
+
+        if bad == 0:
+            return 0
+
+        heap = []
+        for i in range(n - 1):
+            heappush(heap, (nums[i] + nums[i + 1], i))
+
+        ops = 0
+
+        while bad > 0:
+            s, i = heappop(heap)
+
+            if not alive[i]:
+                continue
+
+            j = right[i]
+            if j == -1 or not alive[j]:
+                continue
+
+            if nums[i] + nums[j] != s:
+                continue
+
+            li = left[i]
+            rj = right[j]
+
+            if li != -1 and nums[li] > nums[i]:
+                bad -= 1
+            if nums[i] > nums[j]:
+                bad -= 1
+            if rj != -1 and nums[j] > nums[rj]:
+                bad -= 1
+
+            nums[i] += nums[j]
+            alive[j] = False
+
+            right[i] = rj
+            if rj != -1:
+                left[rj] = i
+
+            if li != -1 and nums[li] > nums[i]:
+                bad += 1
+            if rj != -1 and nums[i] > nums[rj]:
+                bad += 1
+
+            if li != -1:
+                heappush(heap, (nums[li] + nums[i], li))
+            if rj != -1:
+                heappush(heap, (nums[i] + nums[rj], i))
+
+            ops += 1
+
+        return ops
+
+
+
 
 
 
