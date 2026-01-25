@@ -3714,13 +3714,32 @@ class Solution:
         return ops
 
 
+# 1877. Minimize Maximum Pair Sum in Array (https://leetcode.com/problems/minimize-maximum-pair-sum-in-array/description/) - Medium - 2026-01-24
+class Solution:
+    '''
+    Time Complexity: O(n log n)
+    Space Complexity: O(1) (Assuming, sorted nums is not considered)
+    where, n is the length of nums
+    Solved in 4 mins 36 secs, all by yourself! Good job!
+    '''
+    def minPairSum(self, nums: List[int]) -> int:
+        nums.sort()
+        res = 0
+        l, r = 0, len(nums)-1
+        while l < r:
+            res = max(res,nums[l]+nums[r])
+            l += 1
+            r -= 1
+        return res
+
+
 # 1984. Minimum Difference Between Highest and Lowest of K Scores (https://leetcode.com/problems/minimum-difference-between-highest-and-lowest-of-k-scores/description/) - Easy - 2026-01-25
 class Solution:
     '''
     Time Complexity: O(n log n)
     Space Complexity: O(1) (Assuming, sorted nums is not considered)
     where, n is the length of nums
-    Solved in 4 mins 38 secs, all by yourself, Good job!
+    Solved in 4 mins 38 secs, all by yourself! Good job!
     '''
     def minimumDifference(self, nums: List[int], k: int) -> int:
         nums.sort()
