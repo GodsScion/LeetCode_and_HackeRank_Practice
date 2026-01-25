@@ -645,14 +645,14 @@ class Solution:
         l, r = 0, m*n - 1
         
         while l <= r:
-            m = (l+r)//2
-            i, j = m//n, m%n
+            mid = (l+r)//2
+            i, j = mid//n, mid%n
             if matrix[i][j] == target:
                 return True
             elif target < matrix[i][j]:
-                r = m-1
+                r = mid-1
             else:
-                l = m+1
+                l = mid+1
         return False
 
 
@@ -3713,6 +3713,22 @@ class Solution:
 
         return ops
 
+
+# 1984. Minimum Difference Between Highest and Lowest of K Scores (https://leetcode.com/problems/minimum-difference-between-highest-and-lowest-of-k-scores/description/) - Easy - 2026-01-25
+class Solution:
+    '''
+    Time Complexity: O(n log n)
+    Space Complexity: O(1) (Assuming, sorted nums is not considered)
+    where, n is the length of nums
+    Solved in 4 mins 38 secs, all by yourself, Good job!
+    '''
+    def minimumDifference(self, nums: List[int], k: int) -> int:
+        nums.sort()
+        output = nums[-1]-nums[0]
+        k-=1
+        for i in range(len(nums)-k):
+            output = min(output, nums[i+k]-nums[i])
+        return output
 
 
 
