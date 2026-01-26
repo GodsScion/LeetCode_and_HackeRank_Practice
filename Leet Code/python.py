@@ -2956,6 +2956,127 @@ class Solution:
         return apply(0, op1, op2)
 
 
+# 460. LFU Cache (https://leetcode.com/problems/lfu-cache/description/) - Hard
+from collections import OrderedDict
+from heapq import heappush, heappop
+class LFUCache:
+    '''
+    You used heap in this, heap is used for evict priority ticket based cache, not in simple LFU
+    '''
+
+    def __init__(self, capacity: int):
+        self.size = capacity
+        self.cache = dict()
+        self.freq = dict()
+        self.lfu = []
+
+    def get(self, key: int) -> int:
+        if key not in self.cache:
+            return -1
+        return self.updateFreq(key)
+
+    def put(self, key: int, value: int) -> None:
+        if key not in self.cache and len(self.cache) >= self.size:
+            self.popLast()
+
+        if key in self.cache:
+            _, fre = self.cache[key]
+            self.cache[key] = (value, fre)
+            self.updateFreq(key)
+        else:
+            self.cache[key] = (value, 1)
+            if 1 in self.freq:
+                self.freq[1][key] = value
+                self.freq[1].move_to_end(key, last=False)
+            else:
+                self.freq[1] = OrderedDict()
+                self.freq[1][key] = value
+                heappush(self.lfu, 1)
+
+    def popLast(self) -> None:
+        lf = self.lfu[0]
+        lru = self.freq[lf]
+        while len(lru) == 0:
+            heappop(self.lfu)
+            self.freq.pop(lf)
+            lf = self.lfu[0]
+            lru = self.freq[lf]
+        lastKey, _ = lru.popitem(last=True)
+        self.freq[lf] = lru
+        self.cache.pop(lastKey)
+    
+    def updateFreq(self, key) -> int:
+        val, fre = self.cache[key]
+
+        self.freq[fre].pop(key)
+        fre += 1
+        self.cache[key] = (val, fre)
+        
+        if fre in self.freq:
+            self.freq[fre][key] = val
+            self.freq[fre].move_to_end(key, last=False)
+        else:
+            self.freq[fre] = OrderedDict()
+            self.freq[fre][key] = val
+            heappush(self.lfu, fre)
+        return val
+
+
+# Your LFUCache object will be instantiated and called as such:
+# obj = LFUCache(capacity)
+# param_1 = obj.get(key)
+# obj.put(key,value)
+
+
+# 460. LFU Cache (https://leetcode.com/problems/lfu-cache/description/) - Hard - Duplicate
+from collections import defaultdict, OrderedDict
+
+class LFUCache:
+    '''
+    True LFU
+    '''
+
+    def __init__(self, capacity: int):
+        self.capacity = capacity
+        self.key_to_val_freq = {}
+        self.freq_to_keys = defaultdict(OrderedDict)
+        self.min_freq = 0
+
+    def get(self, key: int) -> int:
+        if key not in self.key_to_val_freq:
+            return -1
+        self._increase_freq(key)
+        return self.key_to_val_freq[key][0]
+
+    def put(self, key: int, value: int) -> None:
+        if key in self.key_to_val_freq:
+            self.key_to_val_freq[key] = (value, self.key_to_val_freq[key][1])
+            self._increase_freq(key)
+            return
+
+        if len(self.key_to_val_freq) == self.capacity:
+            self._evict()
+
+        self.key_to_val_freq[key] = (value, 1)
+        self.freq_to_keys[1][key] = None
+        self.min_freq = 1
+
+    def _increase_freq(self, key: int):
+        value, freq = self.key_to_val_freq[key]
+
+        self.freq_to_keys[freq].pop(key)
+
+        if freq == self.min_freq and not self.freq_to_keys[freq]:
+            self.min_freq += 1
+
+        self.key_to_val_freq[key] = (value, freq + 1)
+        self.freq_to_keys[freq + 1][key] = None
+
+    def _evict(self):
+        key, _ = self.freq_to_keys[self.min_freq].popitem(last=False)
+        del self.key_to_val_freq[key]
+
+
 
 
 #######  DAILY CHALLENGES  #######
