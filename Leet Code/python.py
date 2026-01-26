@@ -3750,6 +3750,27 @@ class Solution:
         return output
 
 
+# 1200. Minimum Absolute Difference (https://leetcode.com/problems/minimum-absolute-difference/description/) - Easy - 2026-01-26
+class Solution:
+    '''
+    Time Complexity: O(n log n)
+    Space Complexity: O(1) (Assuming, sorted nums is not considered)
+    where, n is the length of nums
+    Solved in 6 mins 40 secs, all by yourself! Good job!
+    '''
+    def minimumAbsDifference(self, arr: List[int]) -> List[List[int]]:
+        arr.sort()
+        val = arr[-1] - arr[0]
+        out = []
+        for i in range(len(arr)-1):
+            diff = arr[i+1]-arr[i]
+            if diff < val:
+                val = diff
+                out = [[arr[i], arr[i+1]]]
+            elif diff == val:
+                out.append([arr[i], arr[i+1]])
+        return out
+
 
 
 
