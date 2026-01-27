@@ -3033,6 +3033,9 @@ from collections import defaultdict, OrderedDict
 
 class LFUCache:
     '''
+    Time Complexity: O(1)
+    Space Complexity: O(c)
+    where, c is the capacity
     True LFU
     '''
 
