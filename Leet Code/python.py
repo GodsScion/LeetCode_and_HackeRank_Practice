@@ -3896,6 +3896,79 @@ class Solution:
         return out
 
 
+# 3651. Minimum Cost Path with Teleportations (https://leetcode.com/problems/minimum-cost-path-with-teleportations/description/) - Hard - 2026-01-28
+class Solution:
+    '''
+    Absolute waste of 2hrs 30 min
+    Did not go through the solution yet!
+    '''
+    def minCost(self, grid: List[List[int]], k: int) -> int:
+        m, n = len(grid), len(grid[0])
+        inf = float('inf')
+        
+        # dp[r][c] stores the minimum cost to reach (r, c)
+        dp = [[inf] * n for _ in range(m)]
+        dp[0][0] = 0
+        
+        # Helper to propagate costs using only Right and Down moves
+        def propagate(curr_dp):
+            for r in range(m):
+                for c in range(n):
+                    if r > 0:
+                        if curr_dp[r-1][c] + grid[r][c] < curr_dp[r][c]:
+                            curr_dp[r][c] = curr_dp[r-1][c] + grid[r][c]
+                    if c > 0:
+                        if curr_dp[r][c-1] + grid[r][c] < curr_dp[r][c]:
+                            curr_dp[r][c] = curr_dp[r][c-1] + grid[r][c]
+        
+        # Initial pass for 0 teleports
+        propagate(dp)
+        
+        # Determine the range of grid values for the suffix-min array
+        max_v = 0
+        for row in grid:
+            for val in row:
+                if val > max_v:
+                    max_v = val
+        
+        # Iterate through the number of teleports available
+        for _ in range(k):
+            # val_min[v] = min cost to reach any cell with value == v
+            val_min = [inf] * (max_v + 1)
+            for r in range(m):
+                for c in range(n):
+                    v = grid[r][c]
+                    if dp[r][c] < val_min[v]:
+                        val_min[v] = dp[r][c]
+            
+            # suffix_min[v] = min cost to reach any cell with value >= v
+            suffix_min = [inf] * (max_v + 2)
+            for v in range(max_v, -1, -1):
+                suffix_min[v] = min(val_min[v], suffix_min[v+1])
+            
+            # next_dp starts with the best costs from the previous teleport level
+            next_dp = [row[:] for row in dp]
+            improved = False
+            
+            for r in range(m):
+                for c in range(n):
+                    # We can teleport to (r, c) from any cell with grid value >= grid[r][c]
+                    # The cost is the cost to reach that source cell (suffix_min[grid[r][c]])
+                    t_cost = suffix_min[grid[r][c]]
+                    if t_cost < next_dp[r][c]:
+                        next_dp[r][c] = t_cost
+                        improved = True
+            
+            # If no teleportations improved the costs, we can stop early
+            if not improved:
+                break
+            
+            # After teleporting, we can perform further normal moves (Right/Down)
+            propagate(next_dp)
+            dp = next_dp
+            
+        return dp[m-1][n-1]
+
 
 
 ############## TEST CASES ##############
