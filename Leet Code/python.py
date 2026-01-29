@@ -656,6 +656,62 @@ class Solution:
         return False
 
 
+import math
+# 875. Koko Eating Bananas (https://leetcode.com/problems/koko-eating-bananas/description/) - Medium
+class Solution:
+    '''
+    Time Complexity: O(n log m)
+    Space Complexity: O(1)
+    where, n is the length of piles, and m is the max of piles
+    Solved in 32 min all by yourself! Good job! But you over-engineered, look at duplicate solution for clean version of same code
+    '''
+    def minEatingSpeed(self, piles: List[int], h: int) -> int:
+        # if h < len(piles): # Good job for considering to write this but not needed, since problem constraints mention that h >= len(piles)
+        #     return -1
+        total = sum(piles)
+        piles.sort() # There's no point of sorting, just addition of (n log n) time
+        l = math.ceil(total/h)
+        r = piles[-1]
+
+        def isPossible(n):
+            time = 0
+            for i in range(len(piles)-1,-1,-1): # You thought since piles is sorted, adding time from big numbers will hit false condition quicker
+                time += math.ceil(piles[i]/n)
+                if time > h:
+                    return False
+            return True
+        
+        while l <= r:
+            k = (l + r)//2
+            if l == r:
+                return k if isPossible(k) else k+1 # how you solved edge cases you introduced
+            elif isPossible(k):
+                r = k-1
+            else:
+                l = k+1
+
+        return l if isPossible(l) else l+1 # you don't need this, just return l
+
+# 875. Koko Eating Bananas (https://leetcode.com/problems/koko-eating-bananas/description/) - Medium - Duplicate
+class Solution:
+    '''
+    Time Complexity: O(n log m)
+    Space Complexity: O(1)
+    where, n is the length of piles, and m is the max of piles
+    Same approach as before, but cleaner code
+    '''
+    def minEatingSpeed(self, piles: List[int], h: int) -> int:
+        l = math.ceil(sum(piles)/h)
+        r = max(piles)
+        
+        while l < r:
+            k = (l + r)//2
+            if sum(math.ceil(pile/k) for pile in piles) <= h:
+                r = k
+            else:
+                l = k+1
+        return l
+
 
 ####### LINKED LIST #######
 
