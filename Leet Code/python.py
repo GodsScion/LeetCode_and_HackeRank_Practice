@@ -4004,6 +4004,59 @@ class Solution:
         return dp[m-1][n-1]
 
 
+# 2976. Minimum Cost to Convert String I (https://leetcode.com/problems/minimum-cost-to-convert-string-i/description/) - Medium - 2026-01-29
+class Solution:
+    '''
+    This one use Floyd-Warshall algorithm
+    Can also be solved using Dijkstra's algorithm
+    Did not go through the solution yet!
+    '''
+    def minimumCost(self, source: str, target: str, original: List[str], changed: List[str], cost: List[int]) -> int:
+        
+        INF = 10**15
+        
+        # Step 1: distance matrix
+        dist = [[INF]*26 for _ in range(26)]
+        
+        for i in range(26):
+            dist[i][i] = 0
+        
+        # Step 2: direct edges
+        for o, c, w in zip(original, changed, cost):
+            u = ord(o) - ord('a')
+            v = ord(c) - ord('a')
+            dist[u][v] = min(dist[u][v], w)
+        
+        # Step 3: Floyd-Warshall
+        for k in range(26):
+            for i in range(26):
+                if dist[i][k] == INF:
+                    continue
+                for j in range(26):
+                    if dist[k][j] == INF:
+                        continue
+                    new_cost = dist[i][k] + dist[k][j]
+                    if new_cost < dist[i][j]:
+                        dist[i][j] = new_cost
+        
+        # Step 4: compute total cost
+        total = 0
+        
+        for s, t in zip(source, target):
+            if s == t:
+                continue
+            
+            u = ord(s) - ord('a')
+            v = ord(t) - ord('a')
+            
+            if dist[u][v] == INF:
+                return -1
+            
+            total += dist[u][v]
+        
+        return total
+
+
 
 ############## TEST CASES ##############
 
