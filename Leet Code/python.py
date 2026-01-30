@@ -713,6 +713,40 @@ class Solution:
         return l
 
 
+# 981. Time Based Key-Value Store (https://leetcode.com/problems/time-based-key-value-store/description/) - Medium
+from bisect import bisect, insort
+class TimeMap:
+    '''
+    Time Complexity: O(log n) per "get" call, O(1) per "set" call, O(m log n) for overall system
+    Space Complexity: O(1) for both "get" and "set", O(n) for overall system
+    where, n is the number of values, m is the number of calls
+    '''
+
+    def __init__(self):
+        self.cache = {}
+
+    def set(self, key: str, value: str, timestamp: int) -> None:
+        # values = self.cache.get(key, [])
+        # insort(values, (timestamp, value), key=lambda x: x[0])
+        # self.cache[key] = values
+        self.cache.setdefault(key, []).append((timestamp, value)) # Constraints specify that timestamps strictly increase, so no need to sort, read the constrains bro!
+
+    def get(self, key: str, timestamp: int) -> str:
+        if key not in self.cache or len(self.cache) == 0:
+            return ""
+        values = self.cache[key]
+        i = bisect(values, timestamp, key=lambda x: x[0])
+        if values[i-1][0] <= timestamp:
+            return values[i-1][1]
+        return ""
+
+# Your TimeMap object will be instantiated and called as such:
+# obj = TimeMap()
+# obj.set(key,value,timestamp)
+# param_2 = obj.get(key,timestamp)
+
+
+
 ####### LINKED LIST #######
 
 class ListNode:
