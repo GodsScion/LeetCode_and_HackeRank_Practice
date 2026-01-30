@@ -4148,6 +4148,104 @@ class Solution:
         return total
 
 
+# 2977. Minimum Cost to Convert String II (https://leetcode.com/problems/minimum-cost-to-convert-string-ii/description/) - Hard - 2026-01-30
+import math
+class TrieNode:
+    __slots__ = ("children", "id")
+    def __init__(self):
+        self.children = {}
+        self.id = -1   # string id if this node is terminal
+
+class Trie:
+    def __init__(self):
+        self.root = TrieNode()
+    
+    def insert(self, s: str, sid: int):
+        node = self.root
+        for ch in s:
+            if ch not in node.children:
+                node.children[ch] = TrieNode()
+            node = node.children[ch]
+        node.id = sid
+
+class Solution:
+    '''
+    Did not go through the solution yet!
+    '''
+    def minimumCost(self, source: str, target: str,
+                    original: List[str], changed: List[str], cost: List[int]) -> int:
+        n = len(source)
+        INF = 10**18
+
+        # ---------- Step 1: assign ids ----------
+        strings = {}
+        sid = 0
+        for s in original + changed:
+            if s not in strings:
+                strings[s] = sid
+                sid += 1
+        
+        m = sid
+
+        # ---------- Step 2: Floyd–Warshall ----------
+        dist = [[INF] * m for _ in range(m)]
+        for i in range(m):
+            dist[i][i] = 0
+        
+        for o, c, w in zip(original, changed, cost):
+            u, v = strings[o], strings[c]
+            dist[u][v] = min(dist[u][v], w)
+        
+        for k in range(m):
+            for i in range(m):
+                if dist[i][k] == INF:
+                    continue
+                for j in range(m):
+                    nd = dist[i][k] + dist[k][j]
+                    if nd < dist[i][j]:
+                        dist[i][j] = nd
+
+        # ---------- Step 3: build tries ----------
+        trieS = Trie()
+        trieT = Trie()
+        for s, i in strings.items():
+            trieS.insert(s, i)
+            trieT.insert(s, i)
+
+        # ---------- Step 4: DP ----------
+        dp = [INF] * (n + 1)
+        dp[0] = 0
+
+        for i in range(n):
+            if dp[i] == INF:
+                continue
+
+            # Single character match
+            if source[i] == target[i]:
+                dp[i + 1] = min(dp[i + 1], dp[i])
+
+            # Substring match via trie
+            nodeS = trieS.root
+            nodeT = trieT.root
+
+            j = i
+            while j < n:
+                cs, ct = source[j], target[j]
+                if cs not in nodeS.children or ct not in nodeT.children:
+                    break
+                nodeS = nodeS.children[cs]
+                nodeT = nodeT.children[ct]
+
+                if nodeS.id != -1 and nodeT.id != -1:
+                    c = dist[nodeS.id][nodeT.id]
+                    if c < INF:
+                        dp[j + 1] = min(dp[j + 1], dp[i] + c)
+                j += 1
+
+        return -1 if dp[n] == INF else dp[n]
+
+
+
 
 ############## TEST CASES ##############
 
