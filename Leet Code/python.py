@@ -720,6 +720,7 @@ class TimeMap:
     Time Complexity: O(log n) per "get" call, O(1) per "set" call, O(m log n) for overall system
     Space Complexity: O(1) for both "get" and "set", O(n) for overall system
     where, n is the number of values, m is the number of calls
+    Solved in 18 min, by yourself, did lookup syntax for bisect!
     '''
 
     def __init__(self):
