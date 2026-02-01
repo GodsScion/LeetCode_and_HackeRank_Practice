@@ -4245,6 +4245,28 @@ class Solution:
         return -1 if dp[n] == INF else dp[n]
 
 
+# 744. Find Smallest Letter Greater Than Target (https://leetcode.com/problems/find-smallest-letter-greater-than-target/description/) - Easy - 2026-01-31
+class Solution:
+    '''
+    Time Complexity: O(log n)
+    Space Complexity: O(1)
+    where, n is the length of letters
+    Solved in 13 min 24 secs, all by yourself! Good Job!
+    '''
+    def nextGreatestLetter(self, letters: List[str], target: str) -> str:
+        l, r = 0, len(letters)-1
+        while l < r:
+            m = (l+r)//2
+            if letters[m] <= target:
+                l = m+1
+            else:
+                r = m
+        if letters[l] <= target and l == len(letters)-1:
+            return letters[0]
+        return letters[l]
+
+
+
 
 
 ############## TEST CASES ##############
