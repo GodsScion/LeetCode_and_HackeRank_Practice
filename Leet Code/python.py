@@ -4265,6 +4265,22 @@ class Solution:
             return letters[0]
         return letters[l]
 
+# 744. Find Smallest Letter Greater Than Target (https://leetcode.com/problems/find-smallest-letter-greater-than-target/description/) - Easy - 2026-01-31 - Duplicate
+from bisect import bisect
+class Solution:
+    '''
+    Time Complexity: O(log n)
+    Space Complexity: O(1)
+    where, n is the length of letters
+    Cleaner code!
+    '''
+    def nextGreatestLetter(self, letters: List[str], target: str) -> str:
+        i = bisect(letters, target)
+        if i == len(letters):
+            return letters[0]
+        return letters[i]
+
+
 
 
 
