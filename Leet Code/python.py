@@ -3175,6 +3175,31 @@ class LFUCache:
 
 #######  DAILY CHALLENGES  #######
 
+# 1975. Maximum Matrix Sum (https://leetcode.com/problems/maximum-matrix-sum/description/) - Medium - 2026-01-05
+class Solution:
+    '''
+    Did not go through the solution yet!
+    '''
+    def maxMatrixSum(self, matrix: List[List[int]]) -> int:
+        total_sum = 0
+        min_abs = float('inf')
+        negative_count = 0
+        
+        for row in matrix:
+            for val in row:
+                if val < 0:
+                    negative_count += 1
+                abs_val = abs(val)
+                total_sum += abs_val
+                min_abs = min(min_abs, abs_val)
+        
+        # If number of negatives is odd, one smallest absolute value must stay negative
+        if negative_count % 2 == 1:
+            total_sum -= 2 * min_abs
+        
+        return total_sum
+
+
 # 1161. Maximum Level Sum of a Binary Tree (https://leetcode.com/problems/maximum-level-sum-of-a-binary-tree/description/) - Medium - 2026-01-06
 # Definition for a binary tree node.
 # class TreeNode:
