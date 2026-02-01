@@ -4281,6 +4281,27 @@ class Solution:
         return letters[i]
 
 
+# 3010. Divide an Array Into Subarrays With Minimum Cost I (https://leetcode.com/problems/divide-an-array-into-subarrays-with-minimum-cost-i/description/) - Easy - 2026-02-01
+class Solution:
+    '''
+    Time Complexity: O(n)
+    Space Complexity: O(1)
+    where, n is the length of nums
+    '''
+    def minimumCost(self, nums: List[int]) -> int:
+        a = 1 
+        for i in range(2, len(nums)):
+            if nums[i] < nums[a]:
+                a = i
+        b = 2 if a == 1 else 1
+        for i in range(2, len(nums)):
+            if nums[i] < nums[b] and i != a:
+                b = i
+        return nums[0] + nums[a] + nums[b]
+
+
+
+
 
 
 
