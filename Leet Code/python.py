@@ -3171,6 +3171,34 @@ class LFUCache:
         del self.key_to_val_freq[key]
 
 
+# 1604. Alert Using Same Key-Card Three or More Times in a One Hour Period (https://leetcode.com/problems/alert-using-same-key-card-three-or-more-times-in-a-one-hour-period/description/) - Medium
+class Solution:
+    '''
+    Time Complexity: O(n log n)
+    Space Complexity: O(n)
+    where, n is the length of keyTime
+    '''
+    def alertNames(self, keyName: List[str], keyTime: List[str]) -> List[str]:
+        times = {}
+        out = []
+
+        for i, key in enumerate(keyName):
+            times.setdefault(key, []).append(keyTime[i])
+        
+        for key in times:
+            slots = times[key]
+            slots.sort()
+            for i in range(len(slots)-2):
+                startHr, startMin = slots[i].split(":")
+                start = int(startHr)*60 + int(startMin)
+                endHr, endMin = slots[i+2].split(":")
+                end = int(endHr)*60 + int(endMin)
+                if end <= start + 60:
+                    out.append(key)
+                    break
+        return sorted(out)
+
+
 
 
 #######  DAILY CHALLENGES  #######
