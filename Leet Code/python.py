@@ -51,6 +51,7 @@ NOTES:
 
 
 from calendar import c
+from termios import TOSTOP
 from types import List, Optional
 from collections import defaultdict, Counter
 import re
@@ -4407,6 +4408,30 @@ class Solution:
 
         return min_cost 
 
+
+# 3637. Trionic Array I (https://leetcode.com/problems/trionic-array-i/description/) - Easy - 2026-02-03
+class Solution:
+    '''
+    Time Complexity: O(n)
+    Space Complexity: O(n)
+    where, n is the length of nums
+    Solved in 15 mins, all by yourself! Okay job!
+    You were first trying to implement with only one for loop and using flags, 
+    but it was too complex, so around 8 mins got wasted!
+    Later you realized you could just use while loops
+    '''
+    def isTrionic(self, nums: List[int]) -> bool:
+        p = 0
+        while p < len(nums)-1 and nums[p] < nums[p+1]:
+            p += 1
+        q = p
+        while q < len(nums)-1 and nums[q] > nums[q+1]:
+            q += 1
+        n = q
+        while n < len(nums)-1 and nums[n] < nums[n+1]:
+            n += 1
+        return 0 < p < q < n and n == len(nums)-1
+    
 
 
 
