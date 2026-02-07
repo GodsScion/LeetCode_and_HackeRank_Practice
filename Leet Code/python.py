@@ -4431,7 +4431,26 @@ class Solution:
         while n < len(nums)-1 and nums[n] < nums[n+1]:
             n += 1
         return 0 < p < q < n and n == len(nums)-1
-    
+
+
+# 3379. Transformed Array (https://leetcode.com/problems/transformed-array/description/) - Easy - 2026-02-05
+class Solution:
+    '''
+    Time Complexity: O(n)
+    Space Complexity: O(n)
+    where, n is the length of nums
+    Solved in 14 mins, all by yourself! Good job!
+    '''
+    def constructTransformedArray(self, nums: List[int]) -> List[int]:
+        n = len(nums)
+        result = [0]*n
+
+        for i, num in enumerate(nums):
+            p = i + num
+            p = p % n
+            result[i] = nums[p]
+        return result
+
 
 
 
