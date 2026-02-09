@@ -4452,6 +4452,41 @@ class Solution:
         return result
 
 
+# 110. Balanced Binary Tree (https://leetcode.com/problems/balanced-binary-tree/description/) - Easy - 2026-02-08
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    '''
+    Time Complexity: O(n)
+    Space Complexity: O(n)
+    where, n is the number of nodes
+    Solved in 9 mins, all by yourself! Good job! Solved before!
+    NOTE: You used exception handling to break out of recursion early when you find an unbalanced subtree, 
+    which logically is a neat trick to avoid unnecessary calculations, 
+    however this approach is not very efficient in terms of performance in real world, 
+    also considered un-pythonic approach, simply returning values is much more efficient and pythonic,
+    refer your previous solution.
+    '''
+    def isBalanced(self, root: Optional[TreeNode]) -> bool:
+        def height(node):
+            if not node:
+                return 0
+            left = height(node.left)
+            right = height(node.right)
+            if not -2 < left - right < 2:
+                raise Exception("Not a balanced tree!")
+            return 1 + max(left, right)
+        
+        try:
+            height(root)
+        except:
+            return False
+        return True
+
 
 
 
