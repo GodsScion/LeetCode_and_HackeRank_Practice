@@ -4488,6 +4488,57 @@ class Solution:
         return True
 
 
+# 1382. Balance a Binary Search Tree (https://leetcode.com/problems/balance-a-binary-search-tree/description/) - Medium - 2026-02-09
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    '''
+    Time Complexity: O(n)
+    Space Complexity: O(n)
+    where, n is the number of nodes
+    Solved in 30 mins, with some debugging help! Ok job!
+    NOTE: Within the first 1.5 mins you figured out the strategy, which is to get all nodes in sorted order, 
+    then build a balanced BST from that sorted list, but you didn't know how to build a balanced BST from a sorted list, 
+    so you searched that part on the internet and found out that it's as simple as building a tree from in-order traversal or sorted list.
+    Later when you used AI to debug, you found out that you can skip the sorting step, if you process the given BST in-order, 
+    you will get the nodes in sorted order, you were having trouble dealing with left and right pointers limits, but AI helped you with those bugs.
+    '''
+    def balanceBST(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
+        allNodes = []
+        def process(node):
+            nonlocal allNodes
+            if not node:
+                return
+            process(node.left)
+            allNodes.append(node)
+            process(node.right)
+            node.left = None
+            node.right = None
+            
+        process(root)
+
+        # allNodes.sort(key=lambda x: x.val) # No need to sort if you do in-order traversal of BST when processing, this gives you sorted order
+
+        n = len(allNodes)
+        head = allNodes[(n-1)//2] # Previously, you were doing n//2, but in function you were giving n-1, which was causing the head to be the second middle node in case of even number of nodes, so you corrected it to (n-1)//2 later
+        def build(l, r):
+            if l > r:
+                return None
+            m = (l+r)//2
+            node = allNodes[m]
+            node.left = build(l,m-1)
+            node.right = build(m+1,r)
+            return node
+        
+        build(0, n-1)
+        return head
+
+
+
 
 
 ############## TEST CASES ##############
