@@ -4538,6 +4538,53 @@ class Solution:
         return head
 
 
+# 3719. Longest Balanced Subarray I (https://leetcode.com/problems/longest-balanced-subarray-i/description/) - Medium - 2026-02-10
+from collections import defaultdict
+class Solution:
+    '''
+    Time Complexity: O(n^2)
+    Space Complexity: O(n^2)
+    where, n is the length of nums
+    Solved in algo in 7 mins, coding and debugging took 1hr! Ok job!
+    '''
+    def longestBalanced(self, nums: List[int]) -> int:
+        even = defaultdict(int)
+        odd = defaultdict(int)
+        
+        def add(num):
+            if num%2 == 0:
+                even[num] += 1
+            else:
+                odd[num] += 1
+
+        def pop(num):
+            if num%2 == 0:
+                even[num] -= 1
+                if even[num] == 0:
+                    even.pop(num)
+            else:
+                odd[num] -= 1
+                if odd[num] == 0:
+                    odd.pop(num)
+
+        for w in range(len(nums), 1, -1):
+            even = defaultdict(int)
+            odd = defaultdict(int)    
+            
+            for i in range(w):
+                add(nums[i])
+            
+            if len(even) == len(odd):
+                return w
+            
+            for i in range(1, len(nums)-w+1):
+                pop(nums[i-1])
+                add(nums[i+w-1])
+                if len(even) == len(odd):
+                    return w
+
+        return 0
+
 
 
 
