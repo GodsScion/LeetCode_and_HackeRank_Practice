@@ -4543,9 +4543,10 @@ from collections import defaultdict
 class Solution:
     '''
     Time Complexity: O(n^2)
-    Space Complexity: O(n^2)
+    Space Complexity: O(n)
     where, n is the length of nums
     Solved in algo in 7 mins, coding and debugging took 1hr! Ok job!
+    NOTE: This is over-engineering, look below the simpler solution, more performant one in real life
     '''
     def longestBalanced(self, nums: List[int]) -> int:
         even = defaultdict(int)
@@ -4585,6 +4586,33 @@ class Solution:
 
         return 0
 
+# 3719. Longest Balanced Subarray I (https://leetcode.com/problems/longest-balanced-subarray-i/description/) - Medium - 2026-02-10 - Duplicate
+class Solution:
+    '''
+    Time Complexity: O(n^2)
+    Space Complexity: O(n)
+    where, n is the length of nums
+    NOTE: Theoretically, both solutions have same time and space complexity, 
+    but this one is much more performant in real life, and simple to code, PREFER THIS!!
+    '''
+    def longestBalanced(self, nums: List[int]) -> int:
+        n = len(nums)
+        res = 0
+
+        for i in range(n):
+            seen = set()
+            balance = 0
+            if res > n-i:
+                return res
+            for j in range(i, n):
+                num = nums[j]
+                if num not in seen:
+                    balance += 1 if num%2==0 else -1
+                seen.add(num)
+                if balance == 0:
+                    res = max(res, j-i+1)
+        
+        return res
 
 
 
