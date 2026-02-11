@@ -4546,7 +4546,7 @@ class Solution:
     Space Complexity: O(n)
     where, n is the length of nums
     Solved in algo in 7 mins, coding and debugging took 1hr! Ok job!
-    NOTE: This is over-engineering, look below the simpler solution, more performant one in real life
+    NOTE: This is OVER ENGINEERING, look below the simpler solution, more performant one in real life
     '''
     def longestBalanced(self, nums: List[int]) -> int:
         even = defaultdict(int)
@@ -4613,6 +4613,94 @@ class Solution:
                     res = max(res, j-i+1)
         
         return res
+
+
+# 3721. Longest Balanced Subarray II (https://leetcode.com/problems/longest-balanced-subarray-ii/description/) - Hard - 2026-02-11
+from collections import defaultdict, deque
+from typing import List
+class SegmentTree:
+    '''
+    Did not go through the solution yet!
+    '''
+    def __init__(self, n):
+        self.n = n
+        self.mn = [0] * (4 * n)
+        self.lazy = [0] * (4 * n)
+
+    def _push(self, i):
+        if self.lazy[i]:
+            for c in (i * 2, i * 2 + 1):
+                self.mn[c] += self.lazy[i]
+                self.lazy[c] += self.lazy[i]
+            self.lazy[i] = 0
+
+    def _add(self, i, l, r, ql, qr, v):
+        if ql > r or qr < l:
+            return
+        if ql <= l and r <= qr:
+            self.mn[i] += v
+            self.lazy[i] += v
+            return
+        self._push(i)
+        m = (l + r) // 2
+        self._add(i * 2, l, m, ql, qr, v)
+        self._add(i * 2 + 1, m + 1, r, ql, qr, v)
+        self.mn[i] = min(self.mn[i * 2], self.mn[i * 2 + 1])
+
+    def add(self, l, r, v):
+        if l <= r:
+            self._add(1, 0, self.n - 1, l, r, v)
+
+    def _rightmost_zero(self, i, l, r, ql):
+        if r < ql or self.mn[i] > 0:
+            return -1
+        if l == r:
+            return l
+        self._push(i)
+        m = (l + r) // 2
+        res = self._rightmost_zero(i * 2 + 1, m + 1, r, ql)
+        if res != -1:
+            return res
+        return self._rightmost_zero(i * 2, l, m, ql)
+
+    def rightmost_zero(self, l):
+        return self._rightmost_zero(1, 0, self.n - 1, l)
+
+class Solution:
+    def longestBalanced(self, nums: List[int]) -> int:
+        n = len(nums)
+        pos = defaultdict(deque)
+        for i, v in enumerate(nums):
+            pos[v].append(i)
+
+        seg = SegmentTree(n)
+
+        def sign(x):
+            return 1 if x % 2 else -1
+
+        # Initial contributions
+        for v, dq in pos.items():
+            p = dq[0]
+            seg.add(p, n - 1, sign(v))
+
+        ans = 0
+
+        for l in range(n):
+            r = seg.rightmost_zero(l)
+            if r != -1:
+                ans = max(ans, r - l + 1)
+
+            v = nums[l]
+            s = sign(v)
+            dq = pos[v]
+            dq.popleft()
+            nxt = dq[0] if dq else n
+
+            # remove old contribution
+            seg.add(l, nxt - 1, -s)
+
+        return ans
+
 
 
 
