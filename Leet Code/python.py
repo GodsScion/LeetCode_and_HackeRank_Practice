@@ -4575,7 +4575,7 @@ class Solution:
     Time Complexity: O(n^2)
     Space Complexity: O(n)
     where, n is the length of nums
-    Solved in algo in 7 mins, coding and debugging took 1hr! Ok job!
+    Solved algorithm theoretically in 7 mins, coding and debugging took 1hr! Something's better than nothing, keep going and you'll improve your time, good job on problem solving skills!
     NOTE: This is OVER ENGINEERING, look below the simpler solution, more performant one in real life
     '''
     def longestBalanced(self, nums: List[int]) -> int:
