@@ -4732,6 +4732,30 @@ class Solution:
         return ans
 
 
+# 799. Champagne Tower (https://leetcode.com/problems/champagne-tower/description/) - Medium - 2026-02-14
+class Solution:
+    '''
+    Time Complexity: O(R^2)
+    Space Complexity: O(R)
+    where, R is query_row
+    NOTE: You can optimize this further by only calculating first half of the row, since it's symmetric, 
+    but this is good enough for the constraints given in the problem, and it's simple to understand and implement, good job!
+    '''
+    def champagneTower(self, poured: int, query_row: int, query_glass: int) -> float:
+        curRow = [poured]
+        nextRow = [0.0]*2
+
+        for _ in range(query_row):
+            for j in range(len(curRow)):
+                excess = curRow[j]-1
+                if excess > 0:
+                    nextRow[j] += excess/2
+                    nextRow[j+1] += excess/2
+            curRow = nextRow
+            nextRow = [0.0] * (len(curRow) + 1)
+        
+        return 1.0 if curRow[query_glass] > 1 else curRow[query_glass]
+
 
 
 ############## TEST CASES ##############
