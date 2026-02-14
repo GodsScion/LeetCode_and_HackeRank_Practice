@@ -3200,6 +3200,36 @@ class Solution:
         return sorted(out)
 
 
+# 743. Network Delay Time (https://leetcode.com/problems/network-delay-time/description/) - Medium
+from heapq import heappush, heappop
+class Solution:
+    '''
+    Time Complexity: O(E log E)
+    Space Complexity: O(E + V)
+    where, E is the number of edges and V is the number of vertices in the graph.
+    Solved in 19 mins, all by yourself! Good job! You did see the solution before, when you were researching for Dijkstra's algorithm
+    '''
+    def networkDelayTime(self, times: List[List[int]], n: int, k: int) -> int:
+        visited = set()
+        queue = []
+        nodes = {}
+        time = 0
+
+        for a, b, w in times:
+            nodes.setdefault(a, []).append((b, w))
+
+        heappush(queue, (0, k))
+
+        while queue and len(visited) < n:
+            time, node = heappop(queue)
+            for child, dist in nodes.get(node, []):
+                if child not in visited:
+                    heappush(queue, (time + dist, child))
+            visited.add(node)
+            
+        return time if len(visited) == n else -1
+
+
 
 
 #######  DAILY CHALLENGES  #######
