@@ -4757,6 +4757,24 @@ class Solution:
         return 1.0 if curRow[query_glass] > 1 else curRow[query_glass]
 
 
+# 67. Add Binary (https://leetcode.com/problems/add-binary/description/) - Easy - 2026-02-15
+class Solution:
+    '''
+    Time Complexity: O(n)
+    Space Complexity: O(n)
+    where, n is the length of nums
+    Solved in 9 mins, had to lookup syntax! Good job!
+    NOTE: You were first trying to do it in different approach without looking up the syntax,
+    but it was taking too long, and you were over engineering it, 
+    so you decided to look up the syntax for converting binary string to integer and back to binary string, 
+    which is much simpler and more efficient, good job on knowing when to look up and when to try on your own, keep it up!
+    You could have solved this in less than 2 mins if you had looked up the syntax right away! 
+    Anyways bit manipulation questions are not very common in real life!
+    '''
+    def addBinary(self, a: str, b: str) -> str:
+        return str(bin(int(a, 2) + int(b, 2)))[2:]
+
+
 
 ############## TEST CASES ##############
 
