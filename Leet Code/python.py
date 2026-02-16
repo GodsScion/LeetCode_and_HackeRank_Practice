@@ -4775,6 +4775,14 @@ class Solution:
         return str(bin(int(a, 2) + int(b, 2)))[2:]
 
 
+# 190. Reverse Bits (https://leetcode.com/problems/reverse-bits/description/) - Easy - 2026-02-16
+class Solution:
+    def reverseBits(self, n: int) -> int:
+        out = str(bin(n)[2:])
+        out = "0"*(32-len(out)) + out
+        out = out[::-1]
+        return int(out, 2)
+
 
 ############## TEST CASES ##############
 
