@@ -4784,6 +4784,23 @@ class Solution:
         return int(out, 2)
 
 
+# 693. Binary Number with Alternating Bits (https://leetcode.com/problems/binary-number-with-alternating-bits/description/) - Easy - 2026-02-18
+class Solution:
+    '''
+    Time Complexity: O(1)
+    Space Complexity: O(1)
+    Python generates only 32 bits for integers, so the length is fixed
+    Solved in 2 mins, all by yourself! Good job!
+    '''
+    def hasAlternatingBits(self, n: int) -> bool:
+        s = bin(n)[2:]
+        for i in range(1, len(s)):
+            if s[i-1] == s[i]:
+                return False
+        return True
+
+
+
 ############## TEST CASES ##############
 
 # testCases = [
