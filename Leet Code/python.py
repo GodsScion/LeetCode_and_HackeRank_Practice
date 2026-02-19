@@ -4800,6 +4800,29 @@ class Solution:
         return True
 
 
+# 696. Count Binary Substrings (https://leetcode.com/problems/count-binary-substrings/description/) - Easy - 2026-02-19
+class Solution:
+    '''
+    Time Complexity: O(n)
+    Space Complexity: O(n)
+    where, n is the length of s
+    '''
+    def countBinarySubstrings(self, s: str) -> int:
+        r = 0
+        count = 0
+        prevC = 0
+        while r < len(s):
+            check = s[r]
+            l = r
+            while l < len(s) and s[l] == check:
+                l += 1
+            count += min(l-r, prevC)
+            prevC = l-r
+            r = l
+        return count 
+
+
+
 
 ############## TEST CASES ##############
 
