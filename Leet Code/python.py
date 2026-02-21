@@ -4822,6 +4822,27 @@ class Solution:
         return count 
 
 
+# 762. Prime Number of Set Bits in Binary Representation (https://leetcode.com/problems/prime-number-of-set-bits-in-binary-representation/description/) - Easy - 2026-02-21
+class Solution:
+    '''
+    Time Complexity: O(n)
+    Space Complexity: O(n)
+    where, n = right - left + 1
+    Solved in 8 mins, all by yourself! Good job!
+    NOTE: Getting the count of set bits can be done more efficiently using Brian Kernighan’s Algorithm,
+    which repeatedly flips the least significant set bit of the number to zero and counts how many times this operation can be performed until the number becomes zero. 
+    This approach has a time complexity of O(k), where k is the number of set bits, which is more efficient than counting '1's in the binary string representation, especially for numbers with a large number of bits.
+    But for this problem, since the bit length is limited (up to 32 bits for integers), the string counting method is sufficient and simpler to implement, good job on choosing simplicity over optimization in this case!
+    That's why Time Complexity is O(n) and not O(n*k), because k is at most 32, which is a constant, so it can be considered O(1) in terms of big O notation, making the overall complexity O(n).
+    '''
+    def countPrimeSetBits(self, left: int, right: int) -> int:
+        primes = {2,3,5,7,11,13,17,19,23,29,31}
+        count = 0
+        for n in range(left, right+1):
+            if str(bin(n)[2:]).count('1') in primes:
+                count += 1
+        return count
+
 
 
 ############## TEST CASES ##############
