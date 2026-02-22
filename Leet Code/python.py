@@ -4850,7 +4850,7 @@ class Solution:
     Time Complexity: O(1)
     Space Complexity: O(1)
     Python generates only 32 bits for integers, so the length is usually fixed
-    Solved in 5 mins, all by yourself! Good job!
+    Solved in 5 mins, all by yourself! Great job!
     '''
     def binaryGap(self, n: int) -> int:
         b = str(bin(n))[2:]
