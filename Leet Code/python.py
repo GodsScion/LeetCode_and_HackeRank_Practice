@@ -4844,6 +4844,24 @@ class Solution:
         return count
 
 
+# 868. Binary Gap (https://leetcode.com/problems/binary-gap/description/) - Easy - 2026-02-22
+class Solution:
+    '''
+    Time Complexity: O(1)
+    Space Complexity: O(1)
+    Python generates only 32 bits for integers, so the length is usually fixed
+    Solved in 5 mins, all by yourself! Good job!
+    '''
+    def binaryGap(self, n: int) -> int:
+        b = str(bin(n))[2:]
+        m = 0
+        l = 0
+        for r in range(len(b)):
+            if b[r] == '1':
+                m = max(m, r-l)
+                l = r
+        return m
+
 
 ############## TEST CASES ##############
 
