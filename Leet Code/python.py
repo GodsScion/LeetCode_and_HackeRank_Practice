@@ -4853,7 +4853,7 @@ class Solution:
     Solved in 5 mins, all by yourself! Great job!
     '''
     def binaryGap(self, n: int) -> int:
-        b = str(bin(n))[2:]
+        b = bin(n)[2:]
         m = 0
         l = 0
         for r in range(len(b)):
