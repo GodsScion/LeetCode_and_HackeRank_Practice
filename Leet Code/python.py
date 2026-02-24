@@ -4863,6 +4863,29 @@ class Solution:
         return m
 
 
+# 1022. Sum of Root To Leaf Binary Numbers (https://leetcode.com/problems/sum-of-root-to-leaf-binary-numbers/description/) - Easy - 2026-02-24
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    '''
+    Time Complexity: O(n)
+    Space Complexity: O(n)
+    where, n is the number of nodes in the tree
+    Solved in 12 mins, all by yourself! Good job!
+    '''
+    def sumRootToLeaf(self, root: Optional[TreeNode]) -> int:
+        def traverse(node):
+            if not node:
+                return []
+            children = traverse(node.left) + traverse(node.right)
+            return [str(node.val)] if not children else [str(node.val) + child for child in children]
+        return sum(int(x,2) for x in traverse(root))
+
+
 ############## TEST CASES ##############
 
 # testCases = [
