@@ -4885,6 +4885,20 @@ class Solution:
             return [str(node.val)] if not children else [str(node.val) + child for child in children]
         return sum(int(x,2) for x in traverse(root))
 
+# 1689. Partitioning Into Minimum Number Of Deci-Binary Numbers (https://leetcode.com/problems/partitioning-into-minimum-number-of-deci-binary-numbers/description/) - Medium - 2026-03-01
+class Solution:
+    '''
+    Time Complexity: O(l)
+    Space Complexity: O(l)
+    where, l is number of digits in n
+    Solved in 7 mins, after 1 hint! Ok job!
+    '''
+    def minPartitions(self, n: str) -> int:
+        if '9' in n: # Since we can only use digits 0 and 1 in deci-binary numbers, if there is a digit '9' in n, we will need at least 9 deci-binary numbers to sum up to it, so we can directly return 9 in that case, otherwise we need to find the maximum digit in n, which will be the minimum number of deci-binary numbers needed to sum up to n, since each deci-binary number can contribute at most 1 to each digit place.
+            return 9
+        return int(max(c for c in n))
+
+
 
 ############## TEST CASES ##############
 
