@@ -17,7 +17,7 @@ NOTES:
 
 6.  Definition of a balanced tree is, for all nodes, the difference between depth of left subtree and right subtree 
     is less than or equal to 1 level. It's NOT height of the tree is equal to least possible height for given number of nodes, 
-    IT'S NOT the same, inspiration from 543!!
+    IT'S NOT the same, inspiration from 110!!
 
 7. When using heapq with custom classes/objects, use a tuple of the form to be stored (key, unique_id, object),
     - heapq does not support a custom comparator or key function.
@@ -1832,6 +1832,25 @@ class KthLargest:
 # Your KthLargest object will be instantiated and called as such:
 # obj = KthLargest(k, nums)
 # param_1 = obj.add(val)
+
+
+# 1046. Last Stone Weight (https://leetcode.com/problems/last-stone-weight/description/) - Easy
+from heapq import heapify_max, heappush_max, heappop_max
+class Solution:
+    '''
+    Time Complexity: O(n log n)
+    Space Complexity: O(n)
+    where, n is the length of nums
+    Solved in 5 mins, all by yourself! Good job!
+    '''
+    def lastStoneWeight(self, stones: List[int]) -> int:
+        heapify_max(stones)
+        while len(stones) > 1:
+            stone1 = heappop_max(stones)
+            stone2 = heappop_max(stones)
+            if stone1 != stone2:
+                heappush_max(stones, stone1-stone2)
+        return stones[0] if stones else 0
 
 
 # 295. Find Median from Data Stream (https://leetcode.com/problems/find-median-from-data-stream/description/) - Hard
