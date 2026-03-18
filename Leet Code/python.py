@@ -1853,6 +1853,22 @@ class Solution:
         return stones[0] if stones else 0
 
 
+# 973. K Closest Points to Origin () - Medium
+from heapq import heapify, heappush, nsmallest
+class Solution:
+    '''
+    Time Complexity: O(n log n)
+    Space Complexity: O(n)
+    where, n is the length of points
+    Solved in 8 mins, all by yourself! Good job!
+    '''
+    def kClosest(self, points: List[List[int]], k: int) -> List[List[int]]:
+        heap = []
+        for i, [x, y] in enumerate(points):
+            heappush(heap, ((x**2+y**2)**(0.5), i, x, y))
+        return [(x,y) for d, i, x, y in nsmallest(k, heap)]
+
+
 # 295. Find Median from Data Stream (https://leetcode.com/problems/find-median-from-data-stream/description/) - Hard
 import heapq
 class MedianFinder:
