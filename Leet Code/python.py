@@ -1869,6 +1869,57 @@ class Solution:
         return [(x,y) for d, i, x, y in nsmallest(k, heap)]
 
 
+# 215. Kth Largest Element in an Array (https://leetcode.com/problems/kth-largest-element-in-an-array/description/) - Medium
+from heapq import heapify, nlargest
+class Solution:
+    '''
+    Time Complexity: O(n log n)
+    Space Complexity: O(n)
+    where, n is the length of nums
+    Solved in 3 mins, all by yourself! Amazing job!
+    '''
+    def findKthLargest(self, nums: List[int], k: int) -> int:
+        heapify(nums)
+        return nlargest(k,nums)[-1]
+
+# 215. Kth Largest Element in an Array (https://leetcode.com/problems/kth-largest-element-in-an-array/description/) - Medium - Duplicate
+from heapq import heapify, heappop
+class Solution:
+    '''
+    Time Complexity: O(n log n)
+    Space Complexity: O(n)
+    where, n is the length of nums
+    Solved in 2 mins, all by yourself! Good job!
+    '''
+    def findKthLargest(self, nums: List[int], k: int) -> int:
+        heapify(nums)
+        for _ in range(len(nums) - k):
+            heappop(nums)
+        return nums[0]
+
+# 215. Kth Largest Element in an Array (https://leetcode.com/problems/kth-largest-element-in-an-array/description/) - Medium - Duplicate
+from heapq import heapify, heappop
+class Solution:
+    '''
+    Time Complexity: O(n log n)
+    Space Complexity: O(n)
+    where, n is the length of nums
+    Solved in 4 mins, all by yourself! Good job!
+    '''
+    def findKthLargest(self, nums: List[int], k: int) -> int:
+        if k > len(nums)/2:
+            heapify_max(nums)
+            for _ in range(k-1):
+                heappop_max(nums)
+            return nums[0]
+        heapify(nums)
+        for _ in range(len(nums)-k):
+            heappop(nums)
+        return nums[0]
+        
+
+
+
 # 295. Find Median from Data Stream (https://leetcode.com/problems/find-median-from-data-stream/description/) - Hard
 import heapq
 class MedianFinder:
