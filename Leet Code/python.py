@@ -1853,7 +1853,7 @@ class Solution:
         return stones[0] if stones else 0
 
 
-# 973. K Closest Points to Origin () - Medium
+# 973. K Closest Points to Origin (https://leetcode.com/problems/k-closest-points-to-origin/description/) - Medium
 from heapq import heapify, heappush, nsmallest
 class Solution:
     '''
