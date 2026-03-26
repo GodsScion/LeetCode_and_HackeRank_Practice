@@ -1918,6 +1918,46 @@ class Solution:
         return nums[0]
         
 
+# 355. Design Twitter (https://leetcode.com/problems/design-twitter/description/) - Medium
+from heapq import nlargest
+class Twitter:
+    '''
+    Time Complexity: O(n)
+    Since, O(n log 10) will reduce to O(n)
+    Space Complexity: O(n)
+    where, n is total number of posts
+    Solved in 37 mins, all by yourself! Good job!
+    NOTE: You missed the point that for getNewsFeed you have to also get the posts created by user, 
+    not just the posts from users they follow! This wasted a lot of time!
+    '''
+    def __init__(self):
+        self.following = dict()
+        self.posts = dict()
+        self.time = 0
+
+    def postTweet(self, userId: int, tweetId: int) -> None:
+        self.time += 1
+        self.posts.setdefault(userId, list()).append((self.time, tweetId))
+
+    def getNewsFeed(self, userId: int) -> List[int]:
+        feed = []
+        for user in self.following.get(userId, [userId]):
+            feed += self.posts.get(user, [])
+        return [tweet for _, tweet in nlargest(10, feed)]
+
+    def follow(self, followerId: int, followeeId: int) -> None:
+        self.following.setdefault(followerId, set([followerId])).add(followeeId)
+
+    def unfollow(self, followerId: int, followeeId: int) -> None:
+        self.following.get(followerId, set()).discard(followeeId)
+
+# Your Twitter object will be instantiated and called as such:
+# obj = Twitter()
+# obj.postTweet(userId,tweetId)
+# param_2 = obj.getNewsFeed(userId)
+# obj.follow(followerId,followeeId)
+# obj.unfollow(followerId,followeeId)
+
 
 
 # 295. Find Median from Data Stream (https://leetcode.com/problems/find-median-from-data-stream/description/) - Hard
