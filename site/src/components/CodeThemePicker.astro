@@ -1,0 +1,80 @@
+---
+/**
+ * Code-theme picker.
+ *
+ * All five palettes are already in the HTML — every token span carries a colour
+ * per theme as a CSS variable — so this control does exactly one thing: set
+ * `data-code-theme` on `<html>` and remember it. No re-highlighting, no fetch.
+ *
+ * A native `<select>` on purpose: real keyboard support, real mobile picker,
+ * and it degrades to a harmless, correctly-labelled control with JS off (the
+ * default theme is what the page already renders).
+ *
+ * Below 60rem the label would crowd the nav, so the select goes transparent on
+ * top of a swatch button and only the icon shows. It is still the same focusable
+ * control; `:focus-within` moves the ring onto the wrapper. See `global.css`.
+ */
+import { CODE_THEMES, DEFAULT_CODE_THEME } from './codeThemes.ts';
+---
+
+<div class="theme-picker">
+  <svg
+    class="theme-picker-icon"
+    width="14"
+    height="14"
+    viewBox="0 0 16 16"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.3"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path
+      d="M8 1.75a6.25 6.25 0 1 0 0 12.5c.76 0 1.2-.6 1.2-1.2 0-.34-.14-.63-.35-.85a1.2 1.2 0 0 1 .85-2.05h1.35a2.7 2.7 0 0 0 2.7-2.7c0-3.17-2.72-5.7-5.75-5.7Z"
+      stroke-linejoin="round"></path>
+    <circle cx="5.05" cy="6.1" r=".85" fill="currentColor" stroke="none"></circle>
+    <circle cx="8" cy="4.6" r=".85" fill="currentColor" stroke="none"></circle>
+    <circle cx="10.9" cy="6.4" r=".85" fill="currentColor" stroke="none"></circle>
+  </svg>
+
+  <select
+    id="code-theme-select"
+    class="theme-select"
+    aria-label="Code theme"
+    title="Code theme"
+    autocomplete="off"
+  >
+    {
+      CODE_THEMES.map((theme) => (
+        <option value={theme.key} selected={theme.key === DEFAULT_CODE_THEME}>
+          {theme.label}
+        </option>
+      ))
+    }
+  </select>
+</div>
+
+<script>
+  import { CODE_THEME_STORAGE_KEY, DEFAULT_CODE_THEME } from './codeThemes.ts';
+
+  const select = document.getElementById('code-theme-select') as HTMLSelectElement | null;
+
+  if (select) {
+    const root = document.documentElement;
+
+    // The blocking script in <head> has already validated and applied the stored
+    // choice, so trust the attribute over storage and keep the two in step.
+    select.value = root.dataset.codeTheme || DEFAULT_CODE_THEME;
+    // An unknown value leaves a <select> with selectedIndex -1 and value ''.
+    if (!select.value) select.value = DEFAULT_CODE_THEME;
+
+    select.addEventListener('change', () => {
+      root.dataset.codeTheme = select.value;
+      try {
+        localStorage.setItem(CODE_THEME_STORAGE_KEY, select.value);
+      } catch {
+        // Private mode / storage disabled: the choice just won't outlive the page.
+      }
+    });
+  }
+</script>
