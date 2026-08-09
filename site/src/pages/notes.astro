@@ -1,0 +1,63 @@
+---
+import Base from '../layouts/Base.astro';
+import { href } from '../components/site.ts';
+import { proseToHtml } from '../components/prose.ts';
+import { parseAll } from '../lib/parser.ts';
+
+const { notes, problems } = parseAll();
+
+// "inspiration from 19" → a link to problem 19, when it exists here.
+const links = new Map<number, string>();
+for (const p of problems) {
+  if (typeof p.number === 'number' && !links.has(p.number)) {
+    links.set(p.number, href(`/problems/${p.slug}/`));
+  }
+}
+
+const rendered = notes.map((note) => ({
+  index: note.index,
+  html: proseToHtml(note.text, links),
+}));
+---
+
+<Base
+  title="Interview notes"
+  description="Lessons from interview practice — clarifying questions, dummy nodes, heapq tie-breakers, and when to trade space for clarity."
+>
+  <div class="shell pt-stack pb-stack">
+    <header class="max-w-[52ch]">
+      <p class="eyebrow">Notes</p>
+      <h1 class="mt-3 text-4xl">Things I keep re-learning.</h1>
+      <p class="prose mt-5">
+        Written down the moment a problem taught me something, so the lesson survives
+        past the problem. {notes.length} of them, in the order they were learned.
+      </p>
+    </header>
+
+    {
+      rendered.length === 0 ? (
+        <p class="mt-10 text-sm text-fg-subtle">No notes parsed yet.</p>
+      ) : (
+        <ol class="mt-stack flex max-w-[47rem] flex-col gap-4">
+          {rendered.map((note) => (
+            <li class="glass grid gap-x-5 gap-y-3 p-5 sm:grid-cols-[2.25rem_minmax(0,1fr)] sm:p-7">
+              <span
+                class="font-mono text-lg leading-none tabular-nums text-fg-subtle sm:pt-0.5"
+                aria-hidden="true"
+              >
+                {String(note.index).padStart(2, '0')}
+              </span>
+              <div class="prose min-w-0" set:html={note.html} />
+            </li>
+          ))}
+        </ol>
+      )
+    }
+
+    <p class="mt-stack text-sm text-fg-subtle">
+      These live at the top of <span class="font-mono text-fg-muted">Leet Code/python.py</span>.
+      <a class="link-underline hover:text-fg" href={href('/add/')}>Adding a new one</a> means
+      adding a numbered paragraph there.
+    </p>
+  </div>
+</Base>

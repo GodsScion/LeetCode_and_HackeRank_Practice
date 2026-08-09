@@ -1,0 +1,79 @@
+name: Deploy site
+
+# The site under site/ is generated at build time by parsing the solution files
+# in this repo. Pushes to main verify, build and deploy. Pull requests verify and
+# build only, so a malformed header comment is caught before it reaches main.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Never cancel a deploy that is already running against main; superseded PR
+# builds are safe to drop.
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+defaults:
+  run:
+    working-directory: site
+
+jobs:
+  build:
+    name: Verify and build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Runs BEFORE the build on purpose. The site is only as good as the header
+      # comments it is parsed from, and a solution with a malformed header would
+      # otherwise be dropped from the site silently. Fail loudly instead.
+      - name: Verify every solution still parses
+        run: node --experimental-strip-types scripts/verify-parse.ts
+
+      - name: Configure Pages
+        if: github.event_name != 'pull_request'
+        uses: actions/configure-pages@v6
+
+      - name: Build
+        run: npm run build
+
+      - name: Upload artifact
+        if: github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v5
+        with:
+          # Relative to the workspace root: `defaults.run.working-directory`
+          # only applies to `run` steps, not to action inputs.
+          path: site/dist
+
+  deploy:
+    name: Deploy to GitHub Pages
+    if: github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v5

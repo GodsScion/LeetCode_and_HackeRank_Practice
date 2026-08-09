@@ -1,0 +1,90 @@
+---
+import type { Approach } from '../lib/types.ts';
+import { proseToHtml } from './prose.ts';
+import Prose from './Prose.astro';
+import LangTabs from './LangTabs.astro';
+
+interface Props {
+  approach: Approach;
+  /** 1-based position within the problem. */
+  index: number;
+  problemSlug: string;
+}
+
+const { approach, index, problemSlug } = Astro.props;
+
+// "Solution 1 — Sorted Key" when the author tagged it, plain "Solution 1" when
+// the name was auto-generated.
+const heading = `Solution ${index}`;
+const subtitle = approach.named ? approach.name : undefined;
+const anchor = `solution-${index}`;
+const pitfalls = proseToHtml(approach.pitfalls);
+const complexity = [
+  { label: 'Time', value: approach.timeComplexity },
+  { label: 'Space', value: approach.spaceComplexity },
+].filter((c) => c.value);
+---
+
+<section class="scroll-mt-28" id={anchor} aria-labelledby={`${anchor}-h`}>
+  <header class="flex flex-wrap items-center gap-x-3 gap-y-2">
+    <h2 id={`${anchor}-h`} class="text-xl min-w-0">
+      <span>{heading}</span>
+      {
+        subtitle && (
+          <>
+            <span class="text-fg-faint font-normal mx-1.5" aria-hidden="true">
+              —
+            </span>
+            <span class="text-fg-muted font-normal">{subtitle}</span>
+          </>
+        )
+      }
+    </h2>
+    {
+      complexity.length > 0 && (
+        <ul class="flex flex-wrap items-center gap-1.5 list-none">
+          {complexity.map((c) => (
+            <li class="chip">
+              <span class="text-fg-faint">{c.label}</span>
+              <span class="mx-1 text-fg-faint" aria-hidden="true">
+                ·
+              </span>
+              <span class="text-fg">{c.value}</span>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+  </header>
+
+  <Prose text={approach.explanation} class="mt-3 max-w-[68ch]" />
+
+  {
+    pitfalls && (
+      <div class="callout mt-4">
+        <svg
+          class="callout-icon"
+          width="16"
+          height="16"
+          viewBox="0 0 16 16"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          aria-hidden="true"
+          focusable="false"
+        >
+          <path d="M8 1.5 15 14H1L8 1.5Z" stroke-linejoin="round" />
+          <path d="M8 6v3.5" />
+          <path d="M8 11.75v.25" />
+        </svg>
+        <p class="callout-title">Pitfalls</p>
+        <div class="prose" set:html={pitfalls} />
+      </div>
+    )
+  }
+
+  <div class="mt-4">
+    <LangTabs implementations={approach.implementations} group={`${problemSlug}--${approach.id}`} />
+  </div>
+</section>

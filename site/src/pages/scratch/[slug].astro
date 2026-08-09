@@ -1,0 +1,122 @@
+---
+import Base from '../../layouts/Base.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+import ExternalIcon from '../../components/ExternalIcon.astro';
+import { href, githubBlobUrl, githubDevUrl, LANG_LABEL } from '../../components/site.ts';
+import { parseAll } from '../../lib/parser.ts';
+import type { ScratchFile } from '../../lib/types.ts';
+
+export async function getStaticPaths() {
+  const { scratch } = parseAll();
+  return scratch.map((file, i) => ({
+    params: { slug: file.slug },
+    props: { file, prev: scratch[i - 1] ?? null, next: scratch[i + 1] ?? null },
+  }));
+}
+
+interface Props {
+  file: ScratchFile;
+  prev: ScratchFile | null;
+  next: ScratchFile | null;
+}
+
+const { file, prev, next } = Astro.props;
+const label = LANG_LABEL[file.lang] ?? file.lang;
+---
+
+<Base
+  title={`${file.name} · Scratch`}
+  description={`${file.path} — a working file from the scratch pad, rendered read-only.`}
+>
+  <div class="shell pt-6 pb-stack">
+    <nav class="meta flex flex-wrap items-center gap-1.5" aria-label="Breadcrumb">
+      <a class="transition-colors hover:text-fg" href={href('/scratch/')}>Scratch pad</a>
+      <span class="text-fg-faint" aria-hidden="true">/</span>
+      <span class="font-mono text-fg-muted">{file.name}</span>
+    </nav>
+
+    <div class="mt-6 flex flex-wrap items-end justify-between gap-x-6 gap-y-4">
+      <div class="min-w-0">
+        <h1 class="font-mono text-3xl">{file.name}</h1>
+        <p class="meta mt-2 flex flex-wrap items-center gap-x-2 gap-y-1">
+          <span class="font-mono">{file.path}</span>
+          <span class="text-fg-faint" aria-hidden="true">·</span>
+          <span>{label}</span>
+          <span class="text-fg-faint" aria-hidden="true">·</span>
+          <span class="tnum">{file.lineCount} {file.lineCount === 1 ? 'line' : 'lines'}</span>
+        </p>
+      </div>
+      <div class="flex flex-wrap items-center gap-2">
+        <a
+          class="btn btn-quiet"
+          href={githubBlobUrl(file.path)}
+          target="_blank"
+          rel="noopener noreferrer">View on GitHub <ExternalIcon /></a
+        >
+        <a
+          class="btn btn-primary"
+          href={githubDevUrl(file.path)}
+          target="_blank"
+          rel="noopener noreferrer">Edit in github.dev <ExternalIcon /></a
+        >
+      </div>
+    </div>
+
+    <p
+      class="mt-6 flex items-start gap-2.5 rounded-chip border border-line bg-surface px-4 py-3 text-sm text-fg-muted"
+      role="note"
+    >
+      <svg
+        class="mt-1 shrink-0 text-fg-faint"
+        width="14"
+        height="14"
+        viewBox="0 0 16 16"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.5"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <circle cx="8" cy="8" r="6.5"></circle>
+        <path d="M8 7.25v4" stroke-linecap="round"></path>
+        <path d="M8 4.5v.25" stroke-linecap="round"></path>
+      </svg>
+      <span>
+        Read-only. This is working scratch, not reference material — it may not compile,
+        may not be correct, and will change without warning.
+      </span>
+    </p>
+
+    <div class="mt-6">
+      <CodeBlock code={file.code} lang={file.lang} label={label} />
+    </div>
+
+    <nav class="mt-12 grid gap-3 border-t border-line pt-6 sm:grid-cols-2" aria-label="Adjacent files">
+      {
+        prev ? (
+          <a class="glass group p-4 transition-colors hover:bg-surface-2" href={href(`/scratch/${prev.slug}/`)}>
+            <span class="eyebrow">Previous</span>
+            <span class="mt-1.5 block font-mono text-sm text-fg-muted transition-colors group-hover:text-fg">
+              {prev.name}
+            </span>
+          </a>
+        ) : (
+          <span />
+        )
+      }
+      {
+        next && (
+          <a
+            class="glass group p-4 text-right transition-colors hover:bg-surface-2 sm:col-start-2"
+            href={href(`/scratch/${next.slug}/`)}
+          >
+            <span class="eyebrow">Next</span>
+            <span class="mt-1.5 block font-mono text-sm text-fg-muted transition-colors group-hover:text-fg">
+              {next.name}
+            </span>
+          </a>
+        )
+      }
+    </nav>
+  </div>
+</Base>

@@ -1,0 +1,175 @@
+---
+import Base from '../../layouts/Base.astro';
+import ApproachSection from '../../components/ApproachSection.astro';
+import DifficultyBadge from '../../components/DifficultyBadge.astro';
+import ExternalIcon from '../../components/ExternalIcon.astro';
+import Prose from '../../components/Prose.astro';
+import { href, githubBlobUrl, problemRef, SOURCE_LABEL } from '../../components/site.ts';
+import { toPlain } from '../../components/prose.ts';
+import { parseAll } from '../../lib/parser.ts';
+import { LANG_META, type Problem } from '../../lib/types.ts';
+
+export async function getStaticPaths() {
+  const { problems } = parseAll();
+  return problems.map((problem, i) => ({
+    params: { slug: problem.slug },
+    props: {
+      problem,
+      prev: problems[i - 1] ?? null,
+      next: problems[i + 1] ?? null,
+    },
+  }));
+}
+
+interface Props {
+  problem: Problem;
+  prev: Problem | null;
+  next: Problem | null;
+}
+
+const { problem, prev, next } = Astro.props;
+
+const sourceLabel = SOURCE_LABEL[problem.source] ?? problem.source;
+const first = problem.approaches[0]?.implementations[0];
+const sourceHref = first ? githubBlobUrl(first.sourceFile, first.startLine, first.endLine) : undefined;
+
+const description =
+  toPlain(problem.summary) ||
+  toPlain(problem.approaches.find((a) => a.explanation?.trim())?.explanation) ||
+  `${problem.title} — ${problem.difficulty} ${sourceLabel} problem in ${problem.category}, with ${problem.approaches.length} worked ${problem.approaches.length === 1 ? 'solution' : 'solutions'}.`;
+
+const solutionCount = problem.approaches.length;
+---
+
+<Base title={problem.title} description={description}>
+  <div class="shell pt-6 pb-stack">
+    <nav class="meta flex flex-wrap items-center gap-1.5" aria-label="Breadcrumb">
+      <a class="hover:text-fg transition-colors" href={href('/')}>Problems</a>
+      <span class="text-fg-faint" aria-hidden="true">/</span>
+      <span class="text-fg-muted">{problem.category}</span>
+    </nav>
+
+    <div class="mt-6 grid gap-10 lg:grid-cols-[19rem_minmax(0,1fr)] lg:gap-14">
+      <!-- LEFT: identity + jump-off points -->
+      <aside class="min-w-0 lg:sticky lg:top-20 lg:self-start">
+        <p class="font-mono text-xs text-fg-faint">
+          <span>{sourceLabel}</span>
+          <span class="mx-1.5" aria-hidden="true">·</span>
+          <span>{problemRef(problem)}</span>
+        </p>
+
+        <h1 class="mt-2 text-3xl">{problem.title}</h1>
+
+        <div class="mt-4 flex flex-wrap items-center gap-2">
+          <DifficultyBadge difficulty={problem.difficulty} />
+          <span class="chip chip-text">{problem.category}</span>
+        </div>
+
+        {problem.summary && <Prose text={problem.summary} class="mt-5 text-sm" />}
+
+        <div class="mt-6 flex flex-col gap-2">
+          <a
+            class="btn btn-block"
+            href={problem.url}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span>Open on {sourceLabel}</span>
+            <ExternalIcon />
+          </a>
+          {
+            problem.neetcodeUrl && (
+              <a
+                class="btn btn-block btn-quiet"
+                href={problem.neetcodeUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span>NeetCode solution</span>
+                <ExternalIcon />
+              </a>
+            )
+          }
+          {
+            sourceHref && (
+              <a class="btn btn-block btn-quiet" href={sourceHref} target="_blank" rel="noopener noreferrer">
+                <span>View source on GitHub</span>
+                <ExternalIcon />
+              </a>
+            )
+          }
+        </div>
+
+        {
+          solutionCount > 1 && (
+            <nav class="mt-8 hidden lg:block" aria-label="Solutions on this page">
+              <p class="eyebrow">
+                {solutionCount} solutions
+              </p>
+              <ul class="mt-3 flex flex-col gap-0.5 border-l border-line">
+                {problem.approaches.map((a, i) => (
+                  <li>
+                    <a
+                      class="-ml-px flex items-baseline justify-between gap-2 border-l border-transparent py-1 pl-3 text-sm text-fg-subtle transition-colors hover:border-line-strong hover:text-fg"
+                      href={`#solution-${i + 1}`}
+                    >
+                      <span>{a.named ? a.name : `Solution ${i + 1}`}</span>
+                      <span class="font-mono text-2xs text-fg-faint">
+                        {[...new Set(a.implementations.map((impl) => impl.lang))]
+                          .map((l) => LANG_META[l]?.label ?? l)
+                          .join(' · ')}
+                      </span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          )
+        }
+      </aside>
+
+      <!-- RIGHT: the actual solutions -->
+      <div class="min-w-0">
+        {
+          problem.approaches.length === 0 ? (
+            <p class="text-sm text-fg-subtle">No solutions parsed for this problem yet.</p>
+          ) : (
+            <div class="flex flex-col gap-12">
+              {problem.approaches.map((approach, i) => (
+                <ApproachSection approach={approach} index={i + 1} problemSlug={problem.slug} />
+              ))}
+            </div>
+          )
+        }
+
+        <nav class="mt-14 grid gap-3 border-t border-line pt-6 sm:grid-cols-2" aria-label="Adjacent problems">
+          {
+            prev ? (
+              <a class="glass group p-4 transition-colors hover:bg-surface-2" href={href(`/problems/${prev.slug}/`)}>
+                <span class="eyebrow">Previous</span>
+                <span class="mt-1.5 block text-sm text-fg-muted transition-colors group-hover:text-fg">
+                  {prev.title}
+                </span>
+              </a>
+            ) : (
+              <span />
+            )
+          }
+          {
+            next && (
+              <a
+                class="glass group p-4 text-right transition-colors hover:bg-surface-2 sm:col-start-2"
+                href={href(`/problems/${next.slug}/`)}
+              >
+                <span class="eyebrow">Next</span>
+                <span class="mt-1.5 block text-sm text-fg-muted transition-colors group-hover:text-fg">
+                  {next.title}
+                </span>
+              </a>
+            )
+          }
+        </nav>
+      </div>
+    </div>
+  </div>
+</Base>

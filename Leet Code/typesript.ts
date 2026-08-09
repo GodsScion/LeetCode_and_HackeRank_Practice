@@ -7,7 +7,7 @@ class ListNode {
         this.next = (next===undefined ? null : next)
     }
 }
-// 141
+// 141 [floyd-cycle]
 /**
  * Definition for singly-linked list.
  * class ListNode {
@@ -59,7 +59,7 @@ class TreeNode {
     }
 }
 
-// 226. Invert Binary Tree (https://leetcode.com/problems/invert-binary-tree/description/)
+// 226. Invert Binary Tree (https://leetcode.com/problems/invert-binary-tree/description/) [dfs-recursive]
 /**
  * Definition for a binary tree node.
  * class TreeNode {
@@ -81,7 +81,7 @@ function invertTree(root: TreeNode | null): TreeNode | null {
     return root;
 };
 
-// 104. Maximum Depth of Binary Tree (https://leetcode.com/problems/maximum-depth-of-binary-tree/description/)
+// 104. Maximum Depth of Binary Tree (https://leetcode.com/problems/maximum-depth-of-binary-tree/description/) [dfs-recursive]
 /**
  * Definition for a binary tree node.
  * class TreeNode {

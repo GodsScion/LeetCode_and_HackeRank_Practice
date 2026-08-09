@@ -1,0 +1,139 @@
+---
+import Base from '../layouts/Base.astro';
+import CodeBlock from '../components/CodeBlock.astro';
+import ExternalIcon from '../components/ExternalIcon.astro';
+import { githubDevUrl, LANG_LABEL } from '../components/site.ts';
+import { parseAll } from '../lib/parser.ts';
+
+const { problems } = parseAll();
+
+// The files that actually feed this site, in first-seen order.
+const files = new Map<string, string>();
+for (const p of problems) {
+  for (const a of p.approaches) {
+    for (const impl of a.implementations) {
+      if (!files.has(impl.sourceFile)) files.set(impl.sourceFile, impl.lang);
+    }
+  }
+}
+
+const headerExample = `####### ARRAYS AND HASHING #######
+
+# 49. Group Anagrams (https://leetcode.com/problems/group-anagrams/description/) - Medium [sorted-key]
+class Solution:
+    '''
+    Sort every word into a canonical key, then bucket words by that key.
+
+    Time Complexity: O(n * k log k)
+    Space Complexity: O(n * k)
+    Pitfalls: dict.values() returns a view, not a list.
+    '''
+    def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
+        ...`;
+
+const tagExample = `# 49. Group Anagrams (...) - Medium [sorted-key]
+// 49. Group Anagrams (...) - Medium [sorted-key]`;
+
+const anatomy = [
+  { part: '#  //', note: 'Comment marker for the file you are in.' },
+  { part: '49.', note: 'LeetCode number. Leave it out for HackerRank challenges.' },
+  { part: 'Group Anagrams', note: 'Title, exactly as the site spells it.' },
+  { part: '( … )', note: 'Canonical problem URL, in parentheses.' },
+  { part: '- Medium', note: 'Difficulty: Easy, Medium or Hard, after a hyphen.' },
+  { part: '[sorted-key]', note: 'Optional approach tag. See below.' },
+];
+---
+
+<Base
+  title="Add a problem"
+  description="The header-comment format this site parses: one line above your solution and it shows up on the next build."
+>
+  <div class="shell pt-stack pb-stack">
+    <header class="max-w-[58ch]">
+      <p class="eyebrow">Contributing to my own repo</p>
+      <h1 class="mt-3 text-4xl">One comment line, then just write the code.</h1>
+      <p class="prose mt-5">
+        Nothing on this site is written twice. Every page is parsed out of the solution
+        files at build time, so a new problem is a header comment and a solution — no
+        front-matter, no index to update, no separate write-up to keep in sync.
+      </p>
+    </header>
+
+    <div class="mt-stack grid gap-x-12 gap-y-10 lg:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)]">
+      <!-- The format -->
+      <section aria-labelledby="format" class="min-w-0">
+        <h2 id="format" class="text-xl">The format</h2>
+        <p class="prose mt-2 text-sm">
+          Paste this above your solution and change the parts that differ.
+        </p>
+        <div class="mt-4">
+          <CodeBlock code={headerExample} lang="python" label="Python" />
+        </div>
+      </section>
+
+      <!-- Anatomy -->
+      <section aria-labelledby="anatomy" class="min-w-0">
+        <h2 id="anatomy" class="text-xl">Line by line</h2>
+        <dl class="mt-4 flex flex-col">
+          {
+            anatomy.map((row) => (
+              <div class="flex flex-col gap-1 border-b border-line py-3 first:pt-0 last:border-0 sm:flex-row sm:gap-4">
+                <dt class="shrink-0 font-mono text-xs text-fg sm:w-32">{row.part}</dt>
+                <dd class="text-sm text-fg-muted">{row.note}</dd>
+              </div>
+            ))
+          }
+        </dl>
+        <p class="prose mt-5 text-sm">
+          The <code>####### SECTION #######</code> banner above a block sets the category
+          for everything under it. Inside the docstring, <code>Time Complexity:</code>,
+          <code>Space Complexity:</code> and <code>Pitfalls:</code> are pulled out and rendered
+          as their own elements; whatever prose is left becomes the explanation. All of it
+          is optional — a bare header line is enough.
+        </p>
+      </section>
+
+      <!-- Tags -->
+      <section aria-labelledby="tags" class="min-w-0">
+        <h2 id="tags" class="text-xl">Grouping one approach across languages</h2>
+        <p class="prose mt-2 max-w-[62ch] text-sm">
+          Give the same approach the same <code>[tag]</code> in every language — here in
+          <code>python.py</code> and <code>java.java</code> — and the two blocks merge into
+          one solution with language tabs. Untagged blocks each become their own numbered
+          solution, so tagging is an upgrade, never a requirement.
+        </p>
+        <div class="mt-4">
+          <CodeBlock code={tagExample} lang="python" label="tag example" gutter={false} />
+        </div>
+      </section>
+
+      <!-- Files -->
+      <section aria-labelledby="files" class="min-w-0">
+        <h2 id="files" class="text-xl">Open the file</h2>
+        <p class="prose mt-2 text-sm">
+          Straight into the browser editor — commit from there and the site rebuilds.
+        </p>
+        <ul class="mt-4 flex flex-col gap-2">
+          {
+            [...files].map(([path, lang]) => (
+              <li>
+                <a
+                  class="btn btn-block"
+                  href={githubDevUrl(path)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <span class="min-w-0 truncate font-mono text-xs">{path}</span>
+                  <span class="flex shrink-0 items-center gap-2 text-fg-subtle">
+                    <span class="text-xs">{LANG_LABEL[lang] ?? lang}</span>
+                    <ExternalIcon />
+                  </span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+    </div>
+  </div>
+</Base>

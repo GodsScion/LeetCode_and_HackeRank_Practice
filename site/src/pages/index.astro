@@ -1,0 +1,271 @@
+---
+import Base from '../layouts/Base.astro';
+import DifficultyBadge from '../components/DifficultyBadge.astro';
+import ExternalIcon from '../components/ExternalIcon.astro';
+import { href, REPO_URL, OWNER, problemRef } from '../components/site.ts';
+import { parseAll } from '../lib/parser.ts';
+import { LANG_META, type Difficulty, type Lang } from '../lib/types.ts';
+
+const { problems, stats } = parseAll();
+
+const DIFFICULTIES: Difficulty[] = ['Easy', 'Medium', 'Hard'];
+
+const langMeta = (lang: string) =>
+  LANG_META[lang as Lang] ?? { label: lang, shiki: lang, ext: '' };
+
+// Categories in the order they first appear in the source files, so the filter
+// reads the same way the repo does.
+const categories: string[] = [];
+for (const p of problems) {
+  if (p.category && !categories.includes(p.category)) categories.push(p.category);
+}
+
+const languages: Lang[] = [];
+for (const p of problems) {
+  for (const l of p.languages) if (!languages.includes(l)) languages.push(l);
+}
+
+// ~15KB of search index. Short keys because it ships on every page load.
+// s = prebuilt lowercase haystack, d = difficulty, c = category, l = languages.
+const index = problems.map((p) => ({
+  s: [p.number ?? '', p.title, p.category, p.difficulty, p.source, ...p.languages]
+    .join(' ')
+    .toLowerCase(),
+  d: p.difficulty,
+  c: p.category,
+  l: p.languages,
+}));
+const indexJson = JSON.stringify(index).replace(/</g, '\\u003c');
+
+const solvedByDifficulty = (d: Difficulty) => stats.byDifficulty?.[d] ?? 0;
+const languageCount = Object.keys(stats.byLanguage ?? {}).length || languages.length;
+
+const cells = [
+  { label: 'Problems', value: stats.problems ?? problems.length, tone: '' },
+  { label: 'Solutions', value: stats.solutions ?? 0, tone: '' },
+  { label: 'Languages', value: languageCount, tone: '' },
+  { label: 'Easy', value: solvedByDifficulty('Easy'), tone: 'text-easy' },
+  { label: 'Medium', value: solvedByDifficulty('Medium'), tone: 'text-medium' },
+  { label: 'Hard', value: solvedByDifficulty('Hard'), tone: 'text-hard' },
+];
+---
+
+<Base
+  title="Problems"
+  description={`${stats.problems ?? problems.length} LeetCode and HackerRank problems solved by ${OWNER}, with approaches, complexity notes and source links.`}
+>
+  <!-- Hero -->
+  <section class="shell pt-stack pb-stack">
+    <p class="eyebrow">{OWNER}</p>
+    <h1 class="mt-3 max-w-[20ch] text-4xl">Solutions, approaches, and the notes I revise from.</h1>
+    <p class="prose mt-5 max-w-[62ch]">
+      Every LeetCode and HackerRank problem I have worked through, read straight out of the
+      source files in the repo at build time. The write-up cannot drift away from the code,
+      because the code <em class="not-italic text-fg">is</em> the write-up.
+    </p>
+    <div class="mt-6 flex flex-wrap items-center gap-2">
+      <a class="btn" href={href('/notes/')}>Interview notes</a>
+      <a class="btn btn-quiet" href={REPO_URL} target="_blank" rel="noopener noreferrer">
+        Repository <ExternalIcon />
+      </a>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <section class="shell" aria-label="Practice totals">
+    <dl class="stat-grid">
+      {
+        cells.map((cell) => (
+          <div class="stat">
+            <dd class:list={['stat-num', cell.tone]}>{cell.value}</dd>
+            <dt class="stat-label">{cell.label}</dt>
+          </div>
+        ))
+      }
+    </dl>
+  </section>
+
+  <!-- Browser -->
+  <section class="shell pt-stack" id="problem-browser" aria-labelledby="all-problems">
+    <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+      <h2 id="all-problems" class="text-xl">All problems</h2>
+      <p class="meta tnum" id="f-count" aria-live="polite">
+        {problems.length} problems
+      </p>
+    </div>
+
+    <!--
+      Hidden until the inline script below unhides it: with JS off these
+      controls would be dead affordances, and every row is already visible.
+    -->
+    <div id="filters" hidden class="mt-4 flex flex-wrap items-center gap-2">
+      <label class="sr-only" for="f-q">Search problems</label>
+      <input
+        class="field min-w-0 flex-1 basis-56"
+        id="f-q"
+        type="search"
+        placeholder="Search by number, title, category…"
+        autocomplete="off"
+        spellcheck="false"
+      />
+
+      <div class="seg" role="group" aria-label="Filter by difficulty">
+        <button type="button" data-diff="" aria-pressed="true">All</button>
+        {
+          DIFFICULTIES.map((d) => (
+            <button type="button" data-diff={d} data-difficulty={d} aria-pressed="false">
+              {d}
+            </button>
+          ))
+        }
+      </div>
+
+      <label class="sr-only" for="f-cat">Filter by category</label>
+      <select class="field" id="f-cat">
+        <option value="">All categories</option>
+        {categories.map((c) => <option value={c}>{c}</option>)}
+      </select>
+
+      <label class="sr-only" for="f-lang">Filter by language</label>
+      <select class="field" id="f-lang">
+        <option value="">All languages</option>
+        {languages.map((l) => <option value={l}>{langMeta(l).label}</option>)}
+      </select>
+
+      <button type="button" class="btn btn-quiet" id="f-clear" hidden>Clear</button>
+    </div>
+
+    <div class="mt-5">
+      <div class="plist-head" aria-hidden="true">
+        <span>#</span><span>Problem</span><span>Category</span><span>Languages</span>
+        <span class="justify-self-end">Level</span>
+      </div>
+
+      <ul class="plist mt-1" id="plist">
+        {
+          problems.map((p) => (
+            <li data-row>
+              <a class="prow" href={href(`/problems/${p.slug}/`)}>
+                <span class="prow-num">{problemRef(p)}</span>
+                <span class="prow-title">{p.title}</span>
+                <span class="prow-meta">
+                  <span class="prow-cat" title={p.category}>
+                    {p.category}
+                  </span>
+                  <span class="prow-langs">
+                    {p.languages.map((l) => (
+                      <span class="chip">{langMeta(l).label}</span>
+                    ))}
+                  </span>
+                </span>
+                <DifficultyBadge difficulty={p.difficulty} class="prow-diff" />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+
+      <p id="f-empty" hidden class="py-14 text-center text-sm text-fg-subtle">
+        No problems match those filters.
+      </p>
+    </div>
+  </section>
+
+  <script type="application/json" id="problem-index" set:html={indexJson} is:inline />
+
+  <script is:inline>
+    (function () {
+      var root = document.getElementById('problem-browser');
+      var blob = document.getElementById('problem-index');
+      var bar = document.getElementById('filters');
+      if (!root || !blob || !bar) return;
+
+      var data;
+      try {
+        data = JSON.parse(blob.textContent || '[]');
+      } catch (e) {
+        return;
+      }
+
+      var rows = root.querySelectorAll('[data-row]');
+      if (rows.length !== data.length) return;
+
+      var q = document.getElementById('f-q');
+      var cat = document.getElementById('f-cat');
+      var lang = document.getElementById('f-lang');
+      var clear = document.getElementById('f-clear');
+      var count = document.getElementById('f-count');
+      var empty = document.getElementById('f-empty');
+      var segs = bar.querySelectorAll('[data-diff]');
+      var difficulty = '';
+
+      bar.hidden = false;
+
+      function apply() {
+        var term = q.value.trim().toLowerCase();
+        var c = cat.value;
+        var l = lang.value;
+        var shown = 0;
+
+        for (var i = 0; i < data.length; i++) {
+          var d = data[i];
+          var ok =
+            (term === '' || d.s.indexOf(term) !== -1) &&
+            (difficulty === '' || d.d === difficulty) &&
+            (c === '' || d.c === c) &&
+            (l === '' || d.l.indexOf(l) !== -1);
+          if (rows[i].hidden === ok) rows[i].hidden = !ok;
+          if (ok) shown++;
+        }
+
+        var active = term !== '' || c !== '' || l !== '' || difficulty !== '';
+        clear.hidden = !active;
+        empty.hidden = shown !== 0;
+        count.textContent = active
+          ? shown + ' of ' + data.length + ' problems'
+          : data.length + ' problems';
+      }
+
+      q.addEventListener('input', apply);
+      cat.addEventListener('change', apply);
+      lang.addEventListener('change', apply);
+
+      Array.prototype.forEach.call(segs, function (btn) {
+        btn.addEventListener('click', function () {
+          difficulty = btn.getAttribute('data-diff');
+          Array.prototype.forEach.call(segs, function (other) {
+            other.setAttribute('aria-pressed', String(other === btn));
+          });
+          apply();
+        });
+      });
+
+      clear.addEventListener('click', function () {
+        q.value = '';
+        cat.value = '';
+        lang.value = '';
+        difficulty = '';
+        Array.prototype.forEach.call(segs, function (other) {
+          other.setAttribute('aria-pressed', String(other.getAttribute('data-diff') === ''));
+        });
+        apply();
+        q.focus();
+      });
+
+      // "/" jumps to search, Escape leaves it — the muscle memory of every
+      // dev tool worth using.
+      document.addEventListener('keydown', function (event) {
+        var tag = (event.target && event.target.tagName) || '';
+        var typing = tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT';
+        if (event.key === '/' && !typing && !event.metaKey && !event.ctrlKey) {
+          event.preventDefault();
+          q.focus();
+          q.select();
+        } else if (event.key === 'Escape' && event.target === q) {
+          q.value = '';
+          apply();
+        }
+      });
+    })();
+  </script>
+</Base>

@@ -1,0 +1,12 @@
+---
+import type { Difficulty } from '../lib/types.ts';
+
+interface Props {
+  difficulty: Difficulty;
+  class?: string;
+}
+
+const { difficulty, class: className } = Astro.props;
+---
+
+<span class:list={['badge', className]} data-difficulty={difficulty}>{difficulty}</span>

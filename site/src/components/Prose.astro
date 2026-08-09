@@ -1,0 +1,13 @@
+---
+import { proseToHtml } from './prose.ts';
+
+interface Props {
+  text?: string | null;
+  class?: string;
+}
+
+const { text, class: className } = Astro.props;
+const html = proseToHtml(text);
+---
+
+{html && <div class:list={['prose', className]} set:html={html} />}
