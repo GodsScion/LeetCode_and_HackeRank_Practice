@@ -1,13 +1,13 @@
 # LeetCode and HackerRank Practice
 
-[![Deploy site](https://github.com/GodsScion/LeetCode_and_HackeRank_Practice/actions/workflows/deploy.yml/badge.svg)](https://github.com/GodsScion/LeetCode_and_HackeRank_Practice/actions/workflows/deploy.yml)
+[![Deploy site](https://github.com/GodsScion/Syntax-Shenanigans/actions/workflows/deploy.yml/badge.svg)](https://github.com/GodsScion/Syntax-Shenanigans/actions/workflows/deploy.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 My worked solutions to LeetCode and HackerRank problems, in Python, Java, JavaScript,
 TypeScript and C — along with the notes, complexity analysis and pitfalls I collected
 while solving them.
 
-**Browse them at [godsscion.github.io/LeetCode_and_HackeRank_Practice](https://godsscion.github.io/LeetCode_and_HackeRank_Practice/)**
+**Browse them at [godsscion.github.io/Syntax-Shenanigans](https://godsscion.github.io/Syntax-Shenanigans/)**
 
 ## How this works
 
@@ -77,7 +77,7 @@ Then write the solution in the stub it left you.
 ```bash
 cd site
 npm install
-npm run dev      # http://localhost:4321/LeetCode_and_HackeRank_Practice/
+npm run dev      # http://localhost:4321/Syntax-Shenanigans/
 ```
 
 Other scripts:

@@ -2,11 +2,11 @@
  * Small build-time helpers shared by pages and components.
  *
  * NOTE: everything internal must be routed through `href()`. The site is served
- * from the GitHub Pages sub-path `/LeetCode_and_HackeRank_Practice/`, so any
+ * from the GitHub Pages sub-path `/Syntax-Shenanigans/`, so any
  * hard-coded root-absolute URL 404s in production.
  */
 
-export const REPO = 'GodsScion/LeetCode_and_HackeRank_Practice';
+export const REPO = 'GodsScion/Syntax-Shenanigans';
 export const REPO_URL = `https://github.com/${REPO}`;
 export const BRANCH = 'main';
 export const OWNER = 'Sai Vignesh Golla';

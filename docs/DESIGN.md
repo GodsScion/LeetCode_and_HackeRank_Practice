@@ -1,6 +1,6 @@
 # System Design — Solutions Site
 
-How this repo becomes <https://godsscion.github.io/LeetCode_and_HackeRank_Practice/>.
+How this repo becomes <https://godsscion.github.io/Syntax-Shenanigans/>.
 
 ## The one constraint everything else follows from
 
