@@ -1,4 +1,4 @@
-# LeetCode and HackerRank Practice
+# Syntax Shenanigans
 
 [![Deploy site](https://github.com/GodsScion/Syntax-Shenanigans/actions/workflows/deploy.yml/badge.svg)](https://github.com/GodsScion/Syntax-Shenanigans/actions/workflows/deploy.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)

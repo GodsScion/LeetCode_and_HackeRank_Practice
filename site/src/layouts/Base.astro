@@ -32,7 +32,7 @@ const isCurrent = (path: string) => {
 };
 
 const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).toString() : undefined;
-const fullTitle = title === 'Problems' ? `${OWNER} — DSA Practice` : `${title} · ${OWNER}`;
+const fullTitle = title === 'Problems' ? `Syntax Shenanigans — ${OWNER}` : `${title} · Syntax Shenanigans`;
 
 const codeThemeKeys = CODE_THEMES.map((t) => t.key);
 ---
@@ -94,7 +94,7 @@ const codeThemeKeys = CODE_THEMES.map((t) => t.key);
           >
           <span class="hidden font-mono text-xs tracking-[0.18em] uppercase sm:inline">savign</span>
           <span class="hidden text-xs text-fg-faint md:inline" aria-hidden="true">/</span>
-          <span class="hidden text-xs text-fg-subtle md:inline">Practice</span>
+          <span class="hidden text-xs text-fg-subtle md:inline">Syntax Shenanigans</span>
         </a>
 
         <nav
