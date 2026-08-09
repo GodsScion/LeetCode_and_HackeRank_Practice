@@ -87,6 +87,35 @@
     color-scheme: dark;
     --code-line-height: 1.65;
     --code-font-size: 0.8125rem;
+
+    /* Each code theme's own canvas and body text, so a block looks like the
+       editor it came from rather than a recolour of one flat surface. These
+       mirror `surface` in `src/components/codeThemes.ts`; the build throws if
+       Shiki's values drift from that file. They cannot simply be read off the
+       `<pre>` — Shiki sets `--s-<key>-bg` there, and a custom property does not
+       cascade back up to the card wrapping it.
+
+       Default = VS Code Dark Modern, which overrides Dark+'s #1E1E1E canvas
+       with #1F1F1F. All five are dark: the page is #050505 and a light code
+       block would read as a bug. */
+    --code-bg: #1f1f1f;
+    --code-fg: #d4d4d4;
+  }
+  [data-code-theme="vt"] {
+    --code-bg: #121212;
+    --code-fg: #dbd7ca;
+  }
+  [data-code-theme="gh"] {
+    --code-bg: #0d1117;
+    --code-fg: #e6edf3;
+  }
+  [data-code-theme="tn"] {
+    --code-bg: #1a1b26;
+    --code-fg: #a9b1d6;
+  }
+  [data-code-theme="mk"] {
+    --code-bg: #272822;
+    --code-fg: #f8f8f2;
   }
 
   html {
@@ -233,6 +262,14 @@
     transition: color 140ms var(--ease-out-quart),
       background-color 140ms var(--ease-out-quart);
   }
+  /* The header runs out of room at 390px once the theme picker is in it. Four
+     nav items, a logo, a picker and a repo link fit if each link gives back a
+     few pixels of side padding — the 2rem hit height is unchanged. */
+  @media (max-width: 29.99rem) {
+    .nav-link {
+      padding-inline: 0.45rem;
+    }
+  }
   .nav-link:hover {
     color: #fff;
     background: var(--color-surface);
@@ -240,6 +277,96 @@
   .nav-link[aria-current="page"] {
     color: #fff;
     background: var(--color-surface-2);
+  }
+
+  /* --- code theme picker --------------------------------------------------
+     Native <select>, styled to the header's own chip language. Two shapes:
+     wide enough to read the theme name where there is room, and a 2rem swatch
+     button everywhere else — the select is still the control, just transparent
+     on top of the icon, so keyboard, screen readers and the mobile picker all
+     behave. Sized so it never competes with the nav for horizontal space. */
+  .theme-picker {
+    position: relative;
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: var(--radius-chip);
+    border: 1px solid var(--color-line);
+    background: var(--color-surface);
+    color: var(--color-fg-subtle);
+    transition: color 140ms var(--ease-out-quart),
+      border-color 140ms var(--ease-out-quart);
+  }
+  .theme-picker:hover {
+    color: #fff;
+    border-color: var(--color-line-strong);
+  }
+  .theme-picker:focus-within {
+    outline: 2px solid #ffffff;
+    outline-offset: 2px;
+  }
+  .theme-picker-icon {
+    flex: none;
+    pointer-events: none;
+  }
+  .theme-select {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    appearance: none;
+    -webkit-appearance: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    /* the icon underneath is the visible affordance at this size */
+    opacity: 0;
+    cursor: pointer;
+  }
+  .theme-select:focus-visible {
+    outline: none;
+  }
+  .theme-select option {
+    background: #101010;
+    color: #fff;
+  }
+
+  @media (min-width: 60rem) {
+    .theme-picker {
+      width: auto;
+      justify-content: flex-start;
+      padding-inline: 0.55rem;
+      gap: 0.4rem;
+    }
+    .theme-select {
+      position: static;
+      width: auto;
+      max-width: 11.5rem;
+      height: 100%;
+      padding-right: 1.05rem;
+      opacity: 1;
+      font-size: var(--text-xs);
+      color: var(--color-fg-muted);
+      text-overflow: ellipsis;
+      background-image: linear-gradient(
+          45deg,
+          transparent 50%,
+          currentColor 50%
+        ),
+        linear-gradient(135deg, currentColor 50%, transparent 50%);
+      background-position: calc(100% - 5px) 55%, calc(100% - 1px) 55%;
+      background-size: 4px 4px, 4px 4px;
+      background-repeat: no-repeat;
+    }
+    .theme-picker:hover .theme-select {
+      color: #fff;
+    }
   }
 
   /* --- difficulty badge -------------------------------------------------- */
@@ -458,10 +585,11 @@
   /* --- code -------------------------------------------------------------- */
   .code {
     position: relative;
-    background: #0b0b0b;
+    background: var(--code-bg);
     border: 1px solid var(--color-line);
     border-radius: var(--radius-chip);
     overflow: hidden;
+    transition: background-color 180ms var(--ease-out-quart);
   }
   .code-body {
     display: flex;
@@ -470,16 +598,20 @@
     font-size: var(--code-font-size);
     line-height: var(--code-line-height);
   }
+  /* The gutter has to stay readable on canvases from #0d1117 to #272822, so it
+     is derived from the active theme's own foreground rather than a fixed
+     white alpha. 58% of Dark Modern's #D4D4D4 lands on ~#858585 — VS Code's
+     actual line-number colour. */
   .code-gutter {
     flex: none;
     padding: 1rem 0.75rem 1rem 1rem;
     text-align: right;
-    color: var(--color-fg-faint);
+    color: color-mix(in srgb, var(--code-fg) 58%, transparent);
     font-variant-numeric: tabular-nums;
     user-select: none;
     -webkit-user-select: none;
-    border-right: 1px solid var(--color-line);
-    background: rgba(255, 255, 255, 0.015);
+    border-right: 1px solid color-mix(in srgb, var(--code-fg) 12%, transparent);
+    background: color-mix(in srgb, var(--code-fg) 3%, transparent);
   }
   .code-gutter span {
     display: block;
@@ -492,7 +624,9 @@
     padding: 1rem 4.5rem 1rem 1.125rem;
     overflow-x: auto;
     overscroll-behavior-x: contain;
-    background: transparent !important;
+    /* the card owns the canvas so the gutter shares it; in multi-theme mode
+       Shiki emits `--s-<key>-bg` variables and no `background-color` anyway */
+    background: transparent;
     font-family: inherit;
     font-size: inherit;
     line-height: inherit;
@@ -511,7 +645,52 @@
   .code .shiki .line {
     display: inline;
   }
-  /* right-side fade hints at horizontal overflow without hiding content */
+
+  /* --- code theme switching -------------------------------------------------
+     Shiki runs in multi-theme mode with `defaultColor: false`, so every token
+     span carries `--s-vs` / `--s-vt` / … instead of an inline `color` and all
+     five palettes ship in a single build. Plain CSS reads the default (VS Code
+     Dark Modern); the four blocks below are the entire cost of switching.
+
+     `highlighter.ts` strips the `--s-<key>-font-style: inherit` filler Shiki
+     writes for themes that leave a token alone, so an absent variable already
+     means "don't touch it" — hence the `inherit` fallbacks. */
+  .code .shiki,
+  .code .shiki span {
+    color: var(--s-vs);
+    font-style: var(--s-vs-font-style, inherit);
+    font-weight: var(--s-vs-font-weight, inherit);
+    text-decoration: var(--s-vs-text-decoration, inherit);
+  }
+  [data-code-theme="vt"] .code .shiki,
+  [data-code-theme="vt"] .code .shiki span {
+    color: var(--s-vt);
+    font-style: var(--s-vt-font-style, inherit);
+    font-weight: var(--s-vt-font-weight, inherit);
+    text-decoration: var(--s-vt-text-decoration, inherit);
+  }
+  [data-code-theme="gh"] .code .shiki,
+  [data-code-theme="gh"] .code .shiki span {
+    color: var(--s-gh);
+    font-style: var(--s-gh-font-style, inherit);
+    font-weight: var(--s-gh-font-weight, inherit);
+    text-decoration: var(--s-gh-text-decoration, inherit);
+  }
+  [data-code-theme="tn"] .code .shiki,
+  [data-code-theme="tn"] .code .shiki span {
+    color: var(--s-tn);
+    font-style: var(--s-tn-font-style, inherit);
+    font-weight: var(--s-tn-font-weight, inherit);
+    text-decoration: var(--s-tn-text-decoration, inherit);
+  }
+  [data-code-theme="mk"] .code .shiki,
+  [data-code-theme="mk"] .code .shiki span {
+    color: var(--s-mk);
+    font-style: var(--s-mk-font-style, inherit);
+    font-weight: var(--s-mk-font-weight, inherit);
+    text-decoration: var(--s-mk-text-decoration, inherit);
+  }
+
   .code-copy {
     position: absolute;
     top: 0.5rem;
@@ -525,10 +704,13 @@
     text-transform: uppercase;
     /* kept at an AA-legible contrast at rest rather than fading in on hover —
        a control you cannot see is a control keyboard and touch users lose */
-    color: var(--color-fg-subtle);
-    background: rgba(11, 11, 11, 0.92);
+    color: color-mix(in srgb, var(--code-fg) 62%, transparent);
+    /* sits on the code canvas, so it has to follow it */
+    background: color-mix(in srgb, var(--code-bg) 92%, transparent);
+    border-color: color-mix(in srgb, var(--code-fg) 14%, transparent);
     backdrop-filter: blur(var(--blur-glass-sm));
     transition: color 140ms var(--ease-out-quart),
+      background-color 180ms var(--ease-out-quart),
       border-color 140ms var(--ease-out-quart);
   }
   .code:hover .code-copy,

@@ -1,6 +1,8 @@
 ---
 import '../styles/global.css';
 import { href, REPO_URL, OWNER } from '../components/site.ts';
+import CodeThemePicker from '../components/CodeThemePicker.astro';
+import { CODE_THEMES, CODE_THEME_STORAGE_KEY } from '../components/codeThemes.ts';
 
 interface Props {
   title: string;
@@ -30,7 +32,9 @@ const isCurrent = (path: string) => {
 };
 
 const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).toString() : undefined;
-const fullTitle = title === 'Problems' ? `${OWNER} — DSA Practice` : `${title} · ${OWNER}`;
+const fullTitle = title === 'Problems' ? `Syntax Shenanigans — ${OWNER}` : `${title} · Syntax Shenanigans`;
+
+const codeThemeKeys = CODE_THEMES.map((t) => t.key);
 ---
 
 <!doctype html>
@@ -50,6 +54,24 @@ const fullTitle = title === 'Problems' ? `${OWNER} — DSA Practice` : `${title}
     <meta property="og:description" content={description} />
     <meta name="twitter:card" content="summary" />
     <meta name="generator" content={Astro.generator} />
+
+    {/*
+      Apply the stored code theme before the first paint. Parser-blocking and
+      inline by design: deferring it, or bundling it, would show one frame of
+      Dark Modern to a reader who chose Monokai. Unknown values are ignored, so
+      a stale or hand-edited key falls back to the default the CSS already
+      renders. `data-code-theme` is the only thing this touches.
+    */}
+    <script is:inline define:vars={{ storageKey: CODE_THEME_STORAGE_KEY, keys: codeThemeKeys }}>
+      try {
+        var stored = localStorage.getItem(storageKey);
+        if (stored && keys.indexOf(stored) !== -1) {
+          document.documentElement.setAttribute('data-code-theme', stored);
+        }
+      } catch (e) {
+        /* storage blocked — the default theme is already correct */
+      }
+    </script>
   </head>
 
   <body class={bodyClass}>
@@ -58,10 +80,12 @@ const fullTitle = title === 'Problems' ? `${OWNER} — DSA Practice` : `${title}
     <header
       class="sticky top-0 z-50 border-b border-line bg-bg/72 backdrop-blur-glass supports-[backdrop-filter]:bg-bg/72"
     >
-      <div class="shell flex h-14 items-center gap-3">
+      {/* gap and logo padding tighten below sm so the theme picker fits at
+          390px without pushing "Add" into the nav's overflow scroller */}
+      <div class="shell flex h-14 items-center gap-2 sm:gap-3">
         <a
           href={href('/')}
-          class="group flex shrink-0 items-center gap-2.5 rounded-chip px-1 py-1"
+          class="group flex shrink-0 items-center gap-2.5 rounded-chip px-0.5 py-1 sm:px-1"
           aria-label={`${OWNER} — home`}
         >
           <span
@@ -70,7 +94,7 @@ const fullTitle = title === 'Problems' ? `${OWNER} — DSA Practice` : `${title}
           >
           <span class="hidden font-mono text-xs tracking-[0.18em] uppercase sm:inline">savign</span>
           <span class="hidden text-xs text-fg-faint md:inline" aria-hidden="true">/</span>
-          <span class="hidden text-xs text-fg-subtle md:inline">Practice</span>
+          <span class="hidden text-xs text-fg-subtle md:inline">Syntax Shenanigans</span>
         </a>
 
         <nav
@@ -89,6 +113,8 @@ const fullTitle = title === 'Problems' ? `${OWNER} — DSA Practice` : `${title}
             ))
           }
         </nav>
+
+        <CodeThemePicker />
 
         <a
           class="nav-link shrink-0"

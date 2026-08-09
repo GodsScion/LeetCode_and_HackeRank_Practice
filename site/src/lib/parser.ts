@@ -44,8 +44,6 @@ const LEETCODE_FILES: { rel: string; lang: Lang }[] = [
   { rel: 'Leet Code/c.c', lang: 'c' },
 ];
 
-/** Directory of standalone multi-file solutions, one numbered directory per problem. */
-const STANDALONE_JAVA_DIR = 'Leet Code/java';
 const HACKERRANK_FILE = 'Hacker Rank/python.py';
 const SCRATCH_DIR = 'scratch pad';
 
@@ -510,47 +508,6 @@ function scanLeetCodeFile(rel: string, lang: Lang, unparsed: string[]): RawBlock
   return blocks;
 }
 
-/**
- * Standalone multi-file solutions: "Leet Code/java/<number>/*.java". These have
- * no header comment, so the problem number comes from the directory name and
- * every other field is inherited from that problem's headers elsewhere.
- */
-function scanStandaloneJava(unparsed: string[]): RawBlock[] {
-  const dirAbs = join(REPO_ROOT, STANDALONE_JAVA_DIR);
-  if (!existsSync(dirAbs) || !statSync(dirAbs).isDirectory()) return [];
-
-  const blocks: RawBlock[] = [];
-  for (const entry of readdirSync(dirAbs).sort()) {
-    if (!/^\d+$/.test(entry)) continue;
-    const problemAbs = join(dirAbs, entry);
-    if (!statSync(problemAbs).isDirectory()) continue;
-
-    for (const file of readdirSync(problemAbs).sort()) {
-      if (extname(file) !== '.java') continue;
-      const rel = `${STANDALONE_JAVA_DIR}/${entry}/${file}`;
-      const lines = readRepoLines(rel);
-      if (!lines) continue;
-      const [from, to] = trimBlankRange(lines, 0, lines.length);
-      if (to <= from) {
-        unparsed.push(`${rel}:1: standalone solution file is empty`);
-        continue;
-      }
-      blocks.push({
-        source: 'leetcode',
-        number: Number(entry),
-        lang: 'java',
-        code: lines.slice(from, to).join('\n'),
-        sourceFile: rel,
-        startLine: from + 1,
-        endLine: to,
-        explanation: '',
-        headerText: `standalone solution file (problem number from the "${entry}" directory)`,
-      });
-    }
-  }
-  return blocks;
-}
-
 // ---------------------------------------------------------------------------
 // HackerRank
 // ---------------------------------------------------------------------------
@@ -970,9 +927,6 @@ export function parseAllWithDiagnostics(): { data: SiteData; diagnostics: ParseD
     blocks.push(...scanLeetCodeFile(rel, lang, unparsedHeaders));
   }
   blocks.push(...scanHackerRank(unparsedHeaders));
-  // Header-less standalone files go last so they append after the languages
-  // that do carry a header for the same problem.
-  blocks.push(...scanStandaloneJava(unparsedHeaders));
 
   const problems = buildProblems(resolveInheritedMetadata(blocks, unparsedHeaders));
   const scratch = parseScratch();

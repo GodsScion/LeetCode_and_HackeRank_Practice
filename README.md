@@ -1,4 +1,4 @@
-# LeetCode and HackerRank Practice
+# Syntax Shenanigans
 
 [![Deploy site](https://github.com/GodsScion/Syntax-Shenanigans/actions/workflows/deploy.yml/badge.svg)](https://github.com/GodsScion/Syntax-Shenanigans/actions/workflows/deploy.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
@@ -95,7 +95,6 @@ Requires Node 24 (the scripts use native TypeScript type stripping).
 | Path | What's in it |
 | --- | --- |
 | `Leet Code/` | LeetCode solutions, one file per language (`python.py`, `java.java`, `javascript.js`, `typesript.ts`, `c.c`) |
-| `Leet Code/java/212/` | The one problem that needed multiple Java classes in its own files |
 | `Hacker Rank/python.py` | HackerRank challenges, with the original stub code kept inline for context |
 | `Interviews/` | Problems from real interview loops (not published to the site) |
 | `Others/` | Older one-off scripts and experiments (not published to the site) |
