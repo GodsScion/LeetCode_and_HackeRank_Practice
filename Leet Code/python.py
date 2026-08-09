@@ -59,7 +59,7 @@ import bisect
 from functools import cache
 
 ####### ARRAYS AND HASHING #######
-# 217. Contains Duplicate (https://leetcode.com/problems/contains-duplicate/description/) - Easy
+# 217. Contains Duplicate (https://leetcode.com/problems/contains-duplicate/description/) - Easy [hash-set]
 class Solution:
     def containsDuplicate(self, nums: List[int]) -> bool:
         prev = set()
@@ -68,19 +68,19 @@ class Solution:
                 return True
             prev.add(n)
         return False
-# 217. Contains Duplicate (https://leetcode.com/problems/contains-duplicate/description/) - Easy
+# 217. Contains Duplicate (https://leetcode.com/problems/contains-duplicate/description/) - Easy [set-length]
 class Solution:
     def containsDuplicate(self, nums: List[int]) -> bool:
         return len(nums) != len(set(nums))
     
 
-# 242. Valid Anagram (https://leetcode.com/problems/valid-anagram/description/) - Easy
+# 242. Valid Anagram (https://leetcode.com/problems/valid-anagram/description/) - Easy [char-count]
 class Solution:
     def isAnagram(self, s: str, t: str) -> bool:
         return Counter(s) == Counter(t)
     
 
-# 1. Two Sum (https://leetcode.com/problems/two-sum/description/) - Easy
+# 1. Two Sum (https://leetcode.com/problems/two-sum/description/) - Easy [one-pass-hash]
 class Solution:
     def twoSum(self, nums: List[int], target: int) -> List[int]:
         visited = {}
@@ -89,7 +89,7 @@ class Solution:
             visited[num] = i
 
 
-# 49. Group Anagrams (https://leetcode.com/problems/group-anagrams/description/) - Medium
+# 49. Group Anagrams (https://leetcode.com/problems/group-anagrams/description/) - Medium [sorted-key]
 class Solution:
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
         hashMap = dict()
@@ -100,7 +100,7 @@ class Solution:
             else:
                 hashMap[key].append(word)
         return hashMap.values()
-# 49. Group Anagrams (https://leetcode.com/problems/group-anagrams/description/) - Medium
+# 49. Group Anagrams (https://leetcode.com/problems/group-anagrams/description/) - Medium [char-count]
 class Solution:
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
         hashMap = defaultdict(list)
@@ -111,7 +111,7 @@ class Solution:
             key = str(key)
             hashMap[key].append(word)
         return hashMap.values()
-# 49. Group Anagrams (https://leetcode.com/problems/group-anagrams/description/) - Medium
+# 49. Group Anagrams (https://leetcode.com/problems/group-anagrams/description/) - Medium [prime-hash]
 class Solution:
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
         values = {'a':2,'b':3,'c':5,'d':7,'e':11,'f':13,'g':17,'h':19,'i':23,'j':29,'k':31,'l':37,'m':41,'n':43,'o':47,'p':53,'q':59,'r':61,'s':67,'t':71,'u':73,'v':79,'w':83,'x':89,'y':97,'z':101}
@@ -123,7 +123,7 @@ class Solution:
         return hashSet.values()
 
 
-# 347. Top K Frequent Elements (https://leetcode.com/problems/top-k-frequent-elements/description/) - Medium
+# 347. Top K Frequent Elements (https://leetcode.com/problems/top-k-frequent-elements/description/) - Medium [bucket-sort]
 class Solution:
     def topKFrequent(self, nums: List[int], k: int) -> List[int]:
         freq = Counter(nums)
@@ -136,7 +136,7 @@ class Solution:
         return output
 
 
-# 238. Product of Array Except Self (https://leetcode.com/problems/product-of-array-except-self/description/) - Medium
+# 238. Product of Array Except Self (https://leetcode.com/problems/product-of-array-except-self/description/) - Medium [prefix-suffix]
 class Solution:
     def productExceptSelf(self, nums: List[int]) -> List[int]:
         p = 1
@@ -151,7 +151,7 @@ class Solution:
         return result
 
 
-# 36. Valid Sudoku (https://leetcode.com/problems/valid-sudoku/description/) - Medium
+# 36. Valid Sudoku (https://leetcode.com/problems/valid-sudoku/description/) - Medium [hash-set]
 class Solution:
     def isValidSudoku(self, board: List[List[str]]) -> bool:
         boxes = [[set() for _ in range(3)] for _ in range(3)]
@@ -168,7 +168,7 @@ class Solution:
         return True
 
 
-# 128. Longest Consecutive Sequence (https://leetcode.com/problems/longest-consecutive-sequence/description/) - Medium
+# 128. Longest Consecutive Sequence (https://leetcode.com/problems/longest-consecutive-sequence/description/) - Medium [set-expand]
 class Solution:
     def longestConsecutive(self, nums: List[int]) -> int:
         numSet = set(nums)
@@ -190,7 +190,7 @@ class Solution:
 
 
 #######  TWO POINTERS  #######
-# 125. Valid Palindrome (https://leetcode.com/problems/valid-palindrome/description/) - Easy
+# 125. Valid Palindrome (https://leetcode.com/problems/valid-palindrome/description/) - Easy [two-pointer]
 class Solution:
     def isPalindrome(self, s: str) -> bool:
         s = s.lower()
@@ -209,24 +209,24 @@ class Solution:
             while right > 0 and not s[right].isalnum():
                 right -= 1
         return True
-# 125. Valid Palindrome (https://leetcode.com/problems/valid-palindrome/description/) - Easy
+# 125. Valid Palindrome (https://leetcode.com/problems/valid-palindrome/description/) - Easy [regex-reverse]
 class Solution:
     def isPalindrome(self, s: str) -> bool:
         s = re.sub(r'[^a-z0-9]+', '', s.lower())
         return s == s[::-1]
-# 125. Valid Palindrome (https://leetcode.com/problems/valid-palindrome/description/) - Easy
+# 125. Valid Palindrome (https://leetcode.com/problems/valid-palindrome/description/) - Easy [filter-reverse]
 class Solution:
     def isPalindrome(self, s: str) -> bool:
         s = [ch for ch in s.lower() if ch.isalnum()]
         return s == list(reversed(s))
-# 125. Valid Palindrome (https://leetcode.com/problems/valid-palindrome/description/) - Easy
+# 125. Valid Palindrome (https://leetcode.com/problems/valid-palindrome/description/) - Easy [half-compare]
 class Solution:
     def isPalindrome(self, s: str) -> bool:
         s = ''.join([ch for ch in s.lower() if ch.isalnum()])
         return s[:len(s)//2] == s[-1:-(len(s)//2)-1:-1]
 
 
-# 167. Two Sum II - Input Array Is Sorted (https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/description/) - Medium
+# 167. Two Sum II - Input Array Is Sorted (https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/description/) - Medium [two-pointer]
 class Solution:
     def twoSum(self, numbers: List[int], target: int) -> List[int]:
         left = 0
@@ -240,7 +240,7 @@ class Solution:
             else:
                 left += 1
         return []
-# 167. Two Sum II - Input Array Is Sorted (https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/description/) - Medium
+# 167. Two Sum II - Input Array Is Sorted (https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/description/) - Medium [binary-search]
 class Solution:
     def twoSum(self, numbers: List[int], target: int) -> List[int]:
         '''
@@ -257,7 +257,7 @@ class Solution:
         return []
 
 
-# 15. 3Sum (https://leetcode.com/problems/3sum/description/) - Medium
+# 15. 3Sum (https://leetcode.com/problems/3sum/description/) - Medium [sort-binary-search]
 class Solution:
     def threeSum(self, nums: List[int]) -> List[List[int]]:
         '''
@@ -335,7 +335,7 @@ class Solution:
         return need == have
 
 
-# 76. Minimum Window Substring (https://leetcode.com/problems/minimum-window-substring/description/) - Hard
+# 76. Minimum Window Substring (https://leetcode.com/problems/minimum-window-substring/description/) - Hard [sliding-window]
 class Solution:
     '''
     Time Complexity: O(|s| + |t|) where |s| and |t| are the lengths of strings s and t respectively.
@@ -372,7 +372,7 @@ class Solution:
                     minL = l
         return s[minL:minR]
 
-# 76. Minimum Window Substring (https://leetcode.com/problems/minimum-window-substring/description/) - Hard - Duplicate
+# 76. Minimum Window Substring (https://leetcode.com/problems/minimum-window-substring/description/) - Hard - Duplicate [important-indices]
 class Solution:
     def minWindow(self, s: str, t: str) -> str:
         if len(t) > len(s):
@@ -443,7 +443,7 @@ class Solution:
 
 ####### STACK #######
 
-# 20. Valid Parentheses (https://leetcode.com/problems/valid-parentheses/description/) - Easy
+# 20. Valid Parentheses (https://leetcode.com/problems/valid-parentheses/description/) - Easy [stack-match]
 class Solution:
     '''
     Time Complexity: O(n)
@@ -467,7 +467,7 @@ class Solution:
         return False if openedBras else True
 
 
-# 155. Min Stack (https://leetcode.com/problems/min-stack/description/) - Medium
+# 155. Min Stack (https://leetcode.com/problems/min-stack/description/) - Medium [two-stack]
 # Your MinStack object will be instantiated and called as such:
 # obj = MinStack()
 # obj.push(val)
@@ -756,7 +756,7 @@ class ListNode:
         self.val = x
         self.next = None
 
-# 206. Reverse Linked List (https://leetcode.com/problems/reverse-linked-list/) - Easy
+# 206. Reverse Linked List (https://leetcode.com/problems/reverse-linked-list/) - Easy [iterative]
 # Definition for singly-linked list.
 # class ListNode:
 #     def __init__(self, val=0, next=None):
@@ -781,7 +781,7 @@ class Solution:
         return oldNode
 
 
-# 21. Merge Two Sorted Lists (https://leetcode.com/problems/merge-two-sorted-lists/description/) - Easy
+# 21. Merge Two Sorted Lists (https://leetcode.com/problems/merge-two-sorted-lists/description/) - Easy [dummy-node]
 # Definition for singly-linked list.
 # class ListNode:
 #     def __init__(self, val=0, next=None):
@@ -813,7 +813,7 @@ class Solution:
         return dummy.next
 
 
-# 141. Linked List Cycle (https://leetcode.com/problems/linked-list-cycle/description/) - Easy
+# 141. Linked List Cycle (https://leetcode.com/problems/linked-list-cycle/description/) - Easy [floyd-cycle]
 # Definition for singly-linked list.
 # class ListNode:
 #     def __init__(self, x):
@@ -833,7 +833,7 @@ class Solution:
         return False
 
 
-# 143. Reorder List (https://leetcode.com/problems/reorder-list/description/) - Medium
+# 143. Reorder List (https://leetcode.com/problems/reorder-list/description/) - Medium [node-array]
 # Definition for singly-linked list.
 # class ListNode:
 #     def __init__(self, val=0, next=None):
@@ -864,7 +864,7 @@ class Solution:
             order[i].next = temp
             node = temp
         
-# 143. Reorder List (https://leetcode.com/problems/reorder-list/description/) - Medium - Duplicate
+# 143. Reorder List (https://leetcode.com/problems/reorder-list/description/) - Medium - Duplicate [reverse-merge]
 # Definition for singly-linked list.
 # class ListNode:
 #     def __init__(self, val=0, next=None):
@@ -908,7 +908,7 @@ class Solution:
             first, second = tmp1, tmp2
 
 
-# 19. Remove Nth Node From End of List (https://leetcode.com/problems/remove-nth-node-from-end-of-list/) - Medium
+# 19. Remove Nth Node From End of List (https://leetcode.com/problems/remove-nth-node-from-end-of-list/) - Medium [two-pointer]
 # Definition for singly-linked list.
 # class ListNode:
 #     def __init__(self, val=0, next=None):
@@ -1194,7 +1194,7 @@ class LRUCache:
             del self.cache[lru.key]
 
 
-# 23. Merge k Sorted Lists (https://leetcode.com/problems/merge-k-sorted-lists/description/) - Hard
+# 23. Merge k Sorted Lists (https://leetcode.com/problems/merge-k-sorted-lists/description/) - Hard [min-heap]
 # Definition for singly-linked list.
 # class ListNode:
 #     def __init__(self, val=0, next=None):
@@ -1302,7 +1302,7 @@ class TreeNode:
         self.left = left
         self.right = right
 
-# 104. Maximum Depth of Binary Tree (https://leetcode.com/problems/maximum-depth-of-binary-tree/description/) - Easy
+# 104. Maximum Depth of Binary Tree (https://leetcode.com/problems/maximum-depth-of-binary-tree/description/) - Easy [dfs-recursive]
 # Definition for a binary tree node.
 # class TreeNode:
 #     def __init__(self, val=0, left=None, right=None):
@@ -1371,7 +1371,7 @@ class Solution:
         return False if check(root) == -1 else True
 
 
-# 100. Same Tree (https://leetcode.com/problems/same-tree/description/) - Easy
+# 100. Same Tree (https://leetcode.com/problems/same-tree/description/) - Easy [dfs-recursive]
 # Definition for a binary tree node.
 # class TreeNode:
 #     def __init__(self, val=0, left=None, right=None):
@@ -1386,7 +1386,7 @@ class Solution:
             return False
         return self.isSameTree(p.left, q.left) and self.isSameTree(p.right, q.right)
 
-# 572. Subtree of Another Tree (https://leetcode.com/problems/subtree-of-another-tree/description/) - Easy
+# 572. Subtree of Another Tree (https://leetcode.com/problems/subtree-of-another-tree/description/) - Easy [dfs-recursive]
 # Definition for a binary tree node.
 # class TreeNode:
 #     def __init__(self, val=0, left=None, right=None):
@@ -1412,7 +1412,7 @@ class Solution:
         if root1 == None or root2 == None or root1.val != root2.val:
             return False
         return self.isSametree(root1.left, root2.left) and self.isSametree(root1.right, root2.right)
-# 572. Subtree of Another Tree (https://leetcode.com/problems/subtree-of-another-tree/description/) - Easy - Duplicate
+# 572. Subtree of Another Tree (https://leetcode.com/problems/subtree-of-another-tree/description/) - Easy - Duplicate [serialize]
 # Definition for a binary tree node.
 # class TreeNode:
 #     def __init__(self, val=0, left=None, right=None):
@@ -1428,7 +1428,7 @@ class Solution:
         return f"({node.val},{self.serialize(node.left)},{self.serialize(node.right)})"
 
 
-# 235. Lowest Common Ancestor of a Binary Search Tree (https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/description/) - Medium
+# 235. Lowest Common Ancestor of a Binary Search Tree (https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/description/) - Medium [bst-recursive]
 # Definition for a binary tree node.
 # class TreeNode:
 #     def __init__(self, x):
@@ -1583,7 +1583,7 @@ class Solution:
         return dfs(root, root.val)
 
 
-# 98. Validate Binary Search Tree (https://leetcode.com/problems/validate-binary-search-tree/description/) - Medium
+# 98. Validate Binary Search Tree (https://leetcode.com/problems/validate-binary-search-tree/description/) - Medium [min-max-bounds]
 # Definition for a binary tree node.
 # class TreeNode:
 #     def __init__(self, val=0, left=None, right=None):
@@ -1605,7 +1605,7 @@ class Solution:
         return self.isValidChild(root.left, minNeeded, root.val) and self.isValidChild(root.right, root.val, maxAllowed)
 
 
-# 230. Kth Smallest Element in a BST (https://leetcode.com/problems/kth-smallest-element-in-a-bst/description/) - Medium
+# 230. Kth Smallest Element in a BST (https://leetcode.com/problems/kth-smallest-element-in-a-bst/description/) - Medium [iterative-stack]
 # Definition for a binary tree node.
 # class TreeNode:
 #     def __init__(self, val=0, left=None, right=None):
@@ -1638,7 +1638,7 @@ class Solution:
         return node.val
 
 
-# 105. Construct Binary Tree from Preorder and Inorder Traversal (https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/description/) - Medium
+# 105. Construct Binary Tree from Preorder and Inorder Traversal (https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/description/) - Medium [index-map]
 # Definition for a binary tree node.
 # class TreeNode:
 #     def __init__(self, val=0, left=None, right=None):
@@ -1666,7 +1666,7 @@ class Solution:
         
         return subTree(0, n, 0, n)
 
-# 105. Construct Binary Tree from Preorder and Inorder Traversal (https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/description/) - Medium
+# 105. Construct Binary Tree from Preorder and Inorder Traversal (https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/description/) - Medium [list-slicing]
 # Definition for a binary tree node.
 # class TreeNode:
 #     def __init__(self, val=0, left=None, right=None):
@@ -1688,7 +1688,7 @@ class Solution:
         root.right = self.buildTree(preorder[leftLimit:], inorder[leftLimit:])
         return root
 
-# 105. Construct Binary Tree from Preorder and Inorder Traversal (https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/description/) - Medium
+# 105. Construct Binary Tree from Preorder and Inorder Traversal (https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/description/) - Medium [index-scan]
 # Definition for a binary tree node.
 # class TreeNode:
 #     def __init__(self, val=0, left=None, right=None):
@@ -1713,7 +1713,7 @@ class Solution:
             return root
         return subTree(0, n, 0, n)
 
-# 105. Construct Binary Tree from Preorder and Inorder Traversal (https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/description/) - Medium
+# 105. Construct Binary Tree from Preorder and Inorder Traversal (https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/description/) - Medium [optimal-index-map]
 # Definition for a binary tree node.
 # class TreeNode:
 #     def __init__(self, val=0, left=None, right=None):
@@ -1741,7 +1741,7 @@ class Solution:
         return subTree(0, n, 0, n)
 
 
-# 124. Binary Tree Maximum Path Sum (https://leetcode.com/problems/binary-tree-maximum-path-sum/description/) - Hard
+# 124. Binary Tree Maximum Path Sum (https://leetcode.com/problems/binary-tree-maximum-path-sum/description/) - Hard [dfs-recursive]
 # Definition for a binary tree node.
 # class TreeNode:
 #     def __init__(self, val=0, left=None, right=None):
@@ -1994,7 +1994,7 @@ class MedianFinder:
 
 ###### TRIES ######
 
-# 212. Word Search II (https://leetcode.com/problems/word-search-ii/description/) - Hard
+# 212. Word Search II (https://leetcode.com/problems/word-search-ii/description/) - Hard [trie-backtrack]
 class Trie:
     def __init__(self):
         self.children = {}
@@ -2058,7 +2058,7 @@ class Solution:
 
         return list(found)
 
-# 212. Word Search II (https://leetcode.com/problems/word-search-ii/description/) - Hard
+# 212. Word Search II (https://leetcode.com/problems/word-search-ii/description/) - Hard [pruned-trie]
 class PrefixTree:
     '''
     Same thing not much difference, just added same pruning, didn't make much difference, Over engineered!
@@ -2888,7 +2888,7 @@ class Solution:
 
 ###### 2-D DYNAMIC PROGRAMMING ######
 
-# 62. Unique Paths (https://leetcode.com/problems/unique-paths/description/) - Medium
+# 62. Unique Paths (https://leetcode.com/problems/unique-paths/description/) - Medium [memoization]
 class Solution:
     '''
     Time Complexity: O(m * n)
@@ -3021,7 +3021,7 @@ class Solution:
         self.visited.remove((r,c))
 
 
-# 78. Subsets (https://leetcode.com/problems/subsets/description/) - Medium
+# 78. Subsets (https://leetcode.com/problems/subsets/description/) - Medium [iterative-cascade]
 from copy import deepcopy
 class Solution:
     '''

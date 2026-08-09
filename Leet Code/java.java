@@ -2,7 +2,7 @@ import java.util.*;
 
 class Solution {
 //#######  ARRAYS AND HASHING  #######//
-// 217. Contains Duplicate (https://leetcode.com/problems/contains-duplicate/description/) - Easy
+// 217. Contains Duplicate (https://leetcode.com/problems/contains-duplicate/description/) - Easy [hash-set]
     public boolean containsDuplicate(int[] nums) {
         Set<Integer> prevNums = new HashSet<Integer>();
         for(int num: nums) {
@@ -14,7 +14,7 @@ class Solution {
         return false;
     }
 
-// 242. Valid Anagram (https://leetcode.com/problems/valid-anagram/description/) - Easy
+// 242. Valid Anagram (https://leetcode.com/problems/valid-anagram/description/) - Easy [char-count]
     public boolean isAnagram(String s, String t) {
         if (s.length() != t.length()) { return false; }
         int[] count = new int[26];
@@ -30,7 +30,7 @@ class Solution {
         return true;
     }
 
-// 1. Two Sum (https://leetcode.com/problems/two-sum/description/) - Easy
+// 1. Two Sum (https://leetcode.com/problems/two-sum/description/) - Easy [one-pass-hash]
     public int[] twoSum(int[] nums, int target) {
         Map<Integer, Integer> prev = new HashMap<>();
         for (int i=0; i<nums.length; i++) {
@@ -43,7 +43,7 @@ class Solution {
         return null;
     }
 
-    // 49. Group Anagrams (https://leetcode.com/problems/group-anagrams/description/) - Medium
+    // 49. Group Anagrams (https://leetcode.com/problems/group-anagrams/description/) - Medium [sorted-key]
     public List<List<String>> groupAnagrams(String[] strs) {
         HashMap<String,List<String>> hash_map = new HashMap<>();
         for (String word: strs) {
@@ -59,7 +59,7 @@ class Solution {
 
         return new ArrayList<>(hash_map.values());
     }
-    // 49. Group Anagrams (https://leetcode.com/problems/group-anagrams/description/) - Medium
+    // 49. Group Anagrams (https://leetcode.com/problems/group-anagrams/description/) - Medium [char-count]
     public List<List<String>> groupAnagrams2(String[] strs) {
         Map<String,ArrayList<String>> hash = new HashMap<>();
         for(String word: strs) {
@@ -73,7 +73,7 @@ class Solution {
         }
         return new ArrayList<>(hash.values());
     }
-    // 49. Group Anagrams (https://leetcode.com/problems/group-anagrams/description/) - Medium
+    // 49. Group Anagrams (https://leetcode.com/problems/group-anagrams/description/) - Medium [count-signature]
     public List<List<String>> groupAnagrams3(String[] strs) {
         Map<String, ArrayList<String>> map = new HashMap<>();
         for (String word: strs) {
@@ -94,7 +94,7 @@ class Solution {
         return new ArrayList<List<String>>(map.values());
     }
 
-    // 347. Top K Frequent Elements (https://leetcode.com/problems/top-k-frequent-elements/description/) - Medium
+    // 347. Top K Frequent Elements (https://leetcode.com/problems/top-k-frequent-elements/description/) - Medium [max-heap]
     public int[] topKFrequent(int[] nums, int k) {
         Map<Integer, Integer> freq = new HashMap<>();
         for (int num : nums) {
@@ -114,7 +114,7 @@ class Solution {
 
         return output;
     }
-    // 347. Top K Frequent Elements (https://leetcode.com/problems/top-k-frequent-elements/description/) - Medium
+    // 347. Top K Frequent Elements (https://leetcode.com/problems/top-k-frequent-elements/description/) - Medium [bucket-sort]
     public int[] topKFrequent2(int[] nums, int k) {
         
         List<List<Integer>> buckets = new ArrayList<>();
@@ -148,7 +148,7 @@ class Solution {
         return output;
     }
 
-    // 238. Product of Array Except Self (https://leetcode.com/problems/product-of-array-except-self/description/) - Medium
+    // 238. Product of Array Except Self (https://leetcode.com/problems/product-of-array-except-self/description/) - Medium [suffix-array]
     public int[] productExceptSelf(int[] nums) {
         int n = nums.length;
         int[] back = new int[n];
@@ -167,7 +167,7 @@ class Solution {
         }
         return output;
     }
-    // 238. Product of Array Except Self (https://leetcode.com/problems/product-of-array-except-self/description/) - Medium
+    // 238. Product of Array Except Self (https://leetcode.com/problems/product-of-array-except-self/description/) - Medium [prefix-suffix]
     public int[] productExceptSelf2(int[] nums) {
         int n = nums.length;
         int[] arr = new int[n];
@@ -183,7 +183,7 @@ class Solution {
         return arr;
     }
 
-    // 36. Valid Sudoku (https://leetcode.com/problems/valid-sudoku/description/) - Medium
+    // 36. Valid Sudoku (https://leetcode.com/problems/valid-sudoku/description/) - Medium [three-passes]
     public boolean isValidSudoku(char[][] board) {
         for (int i = 0; i < 9; i++) {
             int[] rowDuplicates = new int[10];
@@ -224,7 +224,7 @@ class Solution {
         }
         return true;
     }
-    // 36. Valid Sudoku (https://leetcode.com/problems/valid-sudoku/description/) - Medium
+    // 36. Valid Sudoku (https://leetcode.com/problems/valid-sudoku/description/) - Medium [hash-set]
     public boolean isValidSudoku2(char[][] board) {
         for (int i=0; i<9; i++) {
             Set<Character> row = new HashSet<>();
@@ -244,7 +244,7 @@ class Solution {
         }
         return true;
     }
-    // 36. Valid Sudoku (https://leetcode.com/problems/valid-sudoku/description/) - Medium
+    // 36. Valid Sudoku (https://leetcode.com/problems/valid-sudoku/description/) - Medium [count-array]
     public boolean isValidSudoku3(char[][] board) {
         for (int i=0; i<9; i++) {
             int[] row = new int[9];
@@ -278,7 +278,7 @@ class Solution {
 
 
 
-    // 128. Longest Consecutive Sequence (https://leetcode.com/problems/longest-consecutive-sequence/description/) - Medium
+    // 128. Longest Consecutive Sequence (https://leetcode.com/problems/longest-consecutive-sequence/description/) - Medium [sort-scan]
     public int longestConsecutive(int[] nums) {
         if (nums.length == 0) { return 0; }
         Arrays.sort(nums);
@@ -296,7 +296,7 @@ class Solution {
         }
         return Math.max(count,max);
     }
-    // 128. Longest Consecutive Sequence (https://leetcode.com/problems/longest-consecutive-sequence/description/) - Medium
+    // 128. Longest Consecutive Sequence (https://leetcode.com/problems/longest-consecutive-sequence/description/) - Medium [sequence-start]
     public int longestConsecutive2(int[] nums) {
         Set<Integer> set = new HashSet<>();
         for (int num : nums) {
@@ -317,7 +317,7 @@ class Solution {
     }
 
     //#######  TWO POINTERS  #######//
-    // 125. Valid Palindrome (https://leetcode.com/problems/valid-palindrome/description/) - Easy
+    // 125. Valid Palindrome (https://leetcode.com/problems/valid-palindrome/description/) - Easy [two-pointer]
     public boolean isAlNum(char c) {
         return (c >= '0' && c <= '9') || (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'); 
     }
@@ -340,7 +340,7 @@ class Solution {
         return true;
     }
 
-    // 167. Two Sum II - Input Array Is Sorted (https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/description/) - Medium
+    // 167. Two Sum II - Input Array Is Sorted (https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/description/) - Medium [two-pointer]
     public int[] twoSumII(int[] numbers, int target) {
         /* 
          * Change function name from twoSumII to twoSum
@@ -361,7 +361,7 @@ class Solution {
         return new int[] {};
     }
     
-    // 15. 3Sum (https://leetcode.com/problems/3sum/description/) - Medium
+    // 15. 3Sum (https://leetcode.com/problems/3sum/description/) - Medium [sort-two-pointer]
     public List<List<Integer>> threeSum(int[] nums) {
         int len = nums.length;
         Arrays.sort(nums);
@@ -475,7 +475,7 @@ class Solution {
         return max;
     }
 
-    // 424. Longest Repeating Character Replacement (https://leetcode.com/problems/longest-repeating-character-replacement/description/) - Medium
+    // 424. Longest Repeating Character Replacement (https://leetcode.com/problems/longest-repeating-character-replacement/description/) - Medium [sliding-window]
     public int characterReplacement(String s, int k) {
         int[] freq = new int[26];
         int start = 0, count = 0;
@@ -490,7 +490,7 @@ class Solution {
         return s.length() - start;
     }
 
-    // 76. Minimum Window Substring (https://leetcode.com/problems/minimum-window-substring/description/) - Hard
+    // 76. Minimum Window Substring (https://leetcode.com/problems/minimum-window-substring/description/) - Hard [important-indices]
     public String minWindow(String s, String t) {
         if (t.length() > s.length()) { return ""; }
         int need = 0, have = 0, i = 0, oi = 0, oj = s.length()+t.length();
@@ -534,7 +534,7 @@ class Solution {
         }
         return s.substring(oi,oj+1);
     }
-    // 76. Minimum Window Substring (https://leetcode.com/problems/minimum-window-substring/description/) - Hard
+    // 76. Minimum Window Substring (https://leetcode.com/problems/minimum-window-substring/description/) - Hard [sliding-window]
     // // Similar logic but is quicker because of using arrays as hashmaps
     public String minWindow2(String s, String t) {
         if (t.length() > s.length()) {return "";}
@@ -588,7 +588,7 @@ class Solution {
         
     
     //#######  STACK  #######//
-    // 20. Valid Parentheses (https://leetcode.com/problems/valid-parentheses/description/) - Easy
+    // 20. Valid Parentheses (https://leetcode.com/problems/valid-parentheses/description/) - Easy [stack-match]
     public boolean isValid(String s) {
         Stack<Character> stack = new Stack<>();
         String par = "{([";
@@ -612,7 +612,7 @@ class Solution {
         return stack.isEmpty();
     }
 
-    // 155. Min Stack (https://leetcode.com/problems/min-stack/description/) - Medium
+    // 155. Min Stack (https://leetcode.com/problems/min-stack/description/) - Medium [linked-list-rescan]
     // // Competitive level optimized solution, kind of overkill for real world scenarios
     /**
      * Your MinStack object will be instantiated and called as such:
@@ -657,7 +657,7 @@ class Solution {
         }
     }
 
-    // 155. Min Stack (https://leetcode.com/problems/min-stack/description/) - Medium
+    // 155. Min Stack (https://leetcode.com/problems/min-stack/description/) - Medium [two-stack]
     // Typical Solution
     // // This solution can be considered as optimized for interview purposes, but for competitive coding level use ListNode solution. 
     /**
@@ -757,7 +757,7 @@ class Solution {
         ListNode(int val, ListNode next) { this.val = val; this.next = next; }
     }
 
-    // 206. Reverse Linked List (https://leetcode.com/problems/reverse-linked-list/description/) - Easy
+    // 206. Reverse Linked List (https://leetcode.com/problems/reverse-linked-list/description/) - Easy [iterative]
     /**
      * Definition for singly-linked list.
      * public class ListNode {
@@ -780,7 +780,7 @@ class Solution {
         return prev;
     }
 
-    // 21. Merge Two Sorted Lists (https://leetcode.com/problems/merge-two-sorted-lists/description/) - Easy
+    // 21. Merge Two Sorted Lists (https://leetcode.com/problems/merge-two-sorted-lists/description/) - Easy [dummy-node]
     /**
      * Definition for singly-linked list.
      * public class ListNode {
@@ -812,7 +812,7 @@ class Solution {
         return dummy.next;
     }
 
-    // 143. Reorder List (https://leetcode.com/problems/reorder-list/description/) - Medium
+    // 143. Reorder List (https://leetcode.com/problems/reorder-list/description/) - Medium [reverse-merge]
     /**
      * Definition for singly-linked list.
      * public class ListNode {
@@ -855,7 +855,7 @@ class Solution {
         }
     }
 
-    // 19. Remove Nth Node From End of List (https://leetcode.com/problems/remove-nth-node-from-end-of-list/description/) - Medium
+    // 19. Remove Nth Node From End of List (https://leetcode.com/problems/remove-nth-node-from-end-of-list/description/) - Medium [two-pointer]
     /**
      * Definition for singly-linked list.
      * public class ListNode {
@@ -881,7 +881,7 @@ class Solution {
         return dummy.next;
     }
 
-    // 141. Linked List Cycle (https://leetcode.com/problems/linked-list-cycle/description/) - Easy
+    // 141. Linked List Cycle (https://leetcode.com/problems/linked-list-cycle/description/) - Easy [floyd-cycle]
     /**
      * Definition for singly-linked list.
      * public class ListNode {
@@ -904,7 +904,7 @@ class Solution {
         return false;
     }
 
-    // 23. Merge k Sorted Lists (https://leetcode.com/problems/merge-k-sorted-lists/description/) - Hard
+    // 23. Merge k Sorted Lists (https://leetcode.com/problems/merge-k-sorted-lists/description/) - Hard [min-heap]
     // // Priority Queue (As quick as Divide and Conquer, theoretical time complexity is best)
     /**
      * Definition for singly-linked list.
@@ -945,7 +945,7 @@ class Solution {
         return dummy.next;
     }
 
-    // 23. Merge k Sorted Lists (https://leetcode.com/problems/merge-k-sorted-lists/description/) - Hard
+    // 23. Merge k Sorted Lists (https://leetcode.com/problems/merge-k-sorted-lists/description/) - Hard [divide-conquer]
     // // Divide and Conquer (Better than Priority Queue in real world, not by theoretical time complexity)
     /**
      * Definition for singly-linked list.
@@ -1002,7 +1002,7 @@ class Solution {
         }
     }
 
-    // 226. Invert Binary Tree (https://leetcode.com/problems/invert-binary-tree/description/) - Easy
+    // 226. Invert Binary Tree (https://leetcode.com/problems/invert-binary-tree/description/) - Easy [dfs-recursive]
     /**
      * Definition for a binary tree node.
      * public class TreeNode {
@@ -1029,7 +1029,7 @@ class Solution {
         return root;
     }
 
-    // 104. Maximum Depth of Binary Tree (https://leetcode.com/problems/maximum-depth-of-binary-tree/description/) - Easy
+    // 104. Maximum Depth of Binary Tree (https://leetcode.com/problems/maximum-depth-of-binary-tree/description/) - Easy [dfs-recursive]
     /**
      * Definition for a binary tree node.
      * public class TreeNode {
@@ -1050,7 +1050,7 @@ class Solution {
         return Math.max(maxDepth(root.left), maxDepth(root.right)) + 1;
     }
 
-    // 100. Same Tree (https://leetcode.com/problems/same-tree/description/) - Easy
+    // 100. Same Tree (https://leetcode.com/problems/same-tree/description/) - Easy [dfs-recursive]
     /**
      * Definition for a binary tree node.
      * public class TreeNode {
@@ -1076,7 +1076,7 @@ class Solution {
         return isSameTree(p.left, q.left) && isSameTree(p.right, q.right);
     }
 
-    // 572. Subtree of Another Tree (https://leetcode.com/problems/subtree-of-another-tree/description/) - Easy
+    // 572. Subtree of Another Tree (https://leetcode.com/problems/subtree-of-another-tree/description/) - Easy [dfs-recursive]
     /**
      * Definition for a binary tree node.
      * public class TreeNode {
@@ -1116,7 +1116,7 @@ class Solution {
         return isSametree(root1.left, root2.left) && isSametree(root1.right, root2.right);
     }
 
-    // 235. Lowest Common Ancestor of a Binary Search Tree (https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/description/) - Medium
+    // 235. Lowest Common Ancestor of a Binary Search Tree (https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/description/) - Medium [bst-recursive]
     /**
      * Definition for a binary tree node.
      * public class TreeNode {
@@ -1136,7 +1136,7 @@ class Solution {
         return root;
     }
     
-    // 98. Validate Binary Search Tree (https://leetcode.com/problems/validate-binary-search-tree/description/) - Medium
+    // 98. Validate Binary Search Tree (https://leetcode.com/problems/validate-binary-search-tree/description/) - Medium [min-max-bounds]
     /**
      * Definition for a binary tree node.
      * public class TreeNode {
@@ -1171,7 +1171,7 @@ class Solution {
         return isValidChild(node.left, minLimit, node.val) && isValidChild(node.right, node.val, maxLimit);
     }
 
-    // 230. Kth Smallest Element in a BST (https://leetcode.com/problems/kth-smallest-element-in-a-bst/description/) - Medium
+    // 230. Kth Smallest Element in a BST (https://leetcode.com/problems/kth-smallest-element-in-a-bst/description/) - Medium [iterative-stack]
     /**
      * Definition for a binary tree node.
      * public class TreeNode {
@@ -1208,7 +1208,7 @@ class Solution {
         return root.val;
     }
 
-    // 105. Construct Binary Tree from Preorder and Inorder Traversal (https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/description/) - Medium
+    // 105. Construct Binary Tree from Preorder and Inorder Traversal (https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/description/) - Medium [optimal-index-map]
     /**
      * Definition for a binary tree node.
      * public class TreeNode {
@@ -1247,7 +1247,7 @@ class Solution {
         return root;
     }
 
-    // 124. Binary Tree Maximum Path Sum (https://leetcode.com/problems/binary-tree-maximum-path-sum/description/) - Hard
+    // 124. Binary Tree Maximum Path Sum (https://leetcode.com/problems/binary-tree-maximum-path-sum/description/) - Hard [dfs-recursive]
     /**
      * Definition for a binary tree node.
      * public class TreeNode {
@@ -1280,7 +1280,7 @@ class Solution {
 
     
     //#######  2-D DYNAMIC PROGRAMMING  #######//
-    // 62. Unique Paths (https://leetcode.com/problems/unique-paths/description/) - Medium
+    // 62. Unique Paths (https://leetcode.com/problems/unique-paths/description/) - Medium [memoization]
     int[][] visited;
     public int uniquePaths(int m, int n) {
         visited = new int[m][n];
@@ -1356,7 +1356,7 @@ class Solution {
      */
     
 
-// 212. Word Search II (https://leetcode.com/problems/word-search-ii/description/) - Hard
+// 212. Word Search II (https://leetcode.com/problems/word-search-ii/description/) - Hard [trie-backtrack]
 class Trie {
     public Trie[] children;
     public int numberOfChildren;
@@ -1506,7 +1506,7 @@ class Solution {
 
 
     //#######  SUBSETS  #######//
-    // 78. Subsets (https://leetcode.com/problems/subsets/description/) - Medium
+    // 78. Subsets (https://leetcode.com/problems/subsets/description/) - Medium [iterative-cascade]
     public List<List<Integer>> subsets(int[] nums) {
         List<List<Integer>> output = new ArrayList<>();
         output.add(new ArrayList<Integer>());

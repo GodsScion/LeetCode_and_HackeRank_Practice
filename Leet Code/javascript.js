@@ -1,6 +1,6 @@
 // const x = 2; let y = 4; function update(arg) { return Math.random() + y * arg; } y = 2; y=3; const result = update(x); console.log(result);;
 
-// Problem 424 
+// Problem 424 [sliding-window]
 var characterReplacement = function(s,k) {
     let window = {}, i = 0, maxLen = 1;
     for (let j=0; j<s.length; j++) {
@@ -19,7 +19,7 @@ var characterReplacement = function(s,k) {
 };
 
 // ##### LINKED LIST ##### //
-// 141
+// 141 [floyd-cycle]
 /**
  * Definition for singly-linked list.
  * function ListNode(val) {
@@ -45,7 +45,7 @@ var hasCycle = function(head) {
 };
 
 // ##### TREES ##### //
-// 226. Invert Binary Tree (https://leetcode.com/problems/invert-binary-tree/description/)
+// 226. Invert Binary Tree (https://leetcode.com/problems/invert-binary-tree/description/) [dfs-recursive]
 /**
  * Definition for a binary tree node.
  * function TreeNode(val, left, right) {
@@ -66,7 +66,7 @@ var invertTree = function(root) {
     return root;
 };
 
-// 104. Maximum Depth of Binary Tree (https://leetcode.com/problems/maximum-depth-of-binary-tree/description/)
+// 104. Maximum Depth of Binary Tree (https://leetcode.com/problems/maximum-depth-of-binary-tree/description/) [dfs-recursive]
 /**
  * Definition for a binary tree node.
  * function TreeNode(val, left, right) {
