@@ -1,0 +1,38 @@
+---
+import { highlight } from './highlighter.ts';
+
+interface Props {
+  code: string;
+  /** Shiki grammar id: python | java | javascript | typescript | c | html */
+  lang: string;
+  /** Used in the copy button's accessible name, e.g. "Python". */
+  label?: string;
+  /** Hide the line-number gutter (used for the tiny snippets on /add). */
+  gutter?: boolean;
+}
+
+const { code, lang, label, gutter = true } = Astro.props;
+const { html, lineCount } = await highlight(code, lang);
+const lines = Array.from({ length: lineCount }, (_, i) => i + 1);
+---
+
+<div class="code">
+  <button
+    type="button"
+    class="btn code-copy"
+    data-copy
+    aria-label={label ? `Copy ${label} code` : 'Copy code'}>Copy</button
+  >
+  <div class="code-body">
+    {
+      gutter && (
+        <div class="code-gutter" aria-hidden="true">
+          {lines.map((n) => (
+            <span>{n}</span>
+          ))}
+        </div>
+      )
+    }
+    <Fragment set:html={html} />
+  </div>
+</div>

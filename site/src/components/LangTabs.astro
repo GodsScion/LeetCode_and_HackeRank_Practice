@@ -1,0 +1,76 @@
+---
+/**
+ * Language switcher for one approach — ZERO JavaScript.
+ *
+ * A hidden radio group drives `:checked ~` sibling selectors defined in
+ * global.css. Radios are real form controls, so arrow keys move between
+ * languages and Tab reaches the group, for free. The `name` must be unique per
+ * approach so approaches switch independently.
+ */
+import { LANG_META, type Implementation } from '../lib/types.ts';
+import { githubBlobUrl } from './site.ts';
+import CodeBlock from './CodeBlock.astro';
+import ExternalIcon from './ExternalIcon.astro';
+
+interface Props {
+  implementations: Implementation[];
+  /** Unique radio-group name, e.g. `49-group-anagrams--sorted-key`. */
+  group: string;
+}
+
+const { implementations, group } = Astro.props;
+
+// Max 5 slots — matches the :nth-of-type rules in global.css.
+const impls = implementations.slice(0, 5);
+const meta = (lang: string) =>
+  LANG_META[lang as keyof typeof LANG_META] ?? { label: lang, shiki: lang, ext: '' };
+const single = impls.length === 1;
+---
+
+{
+  impls.length > 0 && (
+    <div class={single ? '' : 'tabs'}>
+      {!single &&
+        impls.map((impl, i) => (
+          <input
+            type="radio"
+            name={group}
+            id={`${group}--${impl.lang}`}
+            checked={i === 0}
+          />
+        ))}
+
+      <div class="tablist" role={single ? undefined : 'group'} aria-label={single ? undefined : 'Language'}>
+        {impls.map((impl, i) =>
+          single ? (
+            <span class="tab tab-static">{meta(impl.lang).label}</span>
+          ) : (
+            <label class="tab" data-i={i + 1} for={`${group}--${impl.lang}`}>
+              {meta(impl.lang).label}
+            </label>
+          ),
+        )}
+      </div>
+
+      <div class={single ? '' : 'tabpanels'}>
+        {impls.map((impl, i) => (
+          <div class={single ? '' : 'tabpanel'} data-i={single ? undefined : i + 1}>
+            <CodeBlock code={impl.code} lang={meta(impl.lang).shiki} label={meta(impl.lang).label} />
+            <a
+              class="mt-2 inline-flex items-center gap-1.5 text-xs text-fg-subtle transition-colors hover:text-fg"
+              href={githubBlobUrl(impl.sourceFile, impl.startLine, impl.endLine)}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span class="font-mono">
+                {impl.sourceFile}
+                {impl.startLine ? ` · L${impl.startLine}–${impl.endLine}` : ''}
+              </span>
+              <ExternalIcon size={10} />
+            </a>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
