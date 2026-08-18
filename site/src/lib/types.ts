@@ -66,6 +66,16 @@ export interface Approach {
   spaceComplexity?: string;
   /** Parsed from an optional `Pitfalls:` line. */
   pitfalls?: string;
+  /**
+   * Reason this approach would not be accepted in an interview, from an optional
+   * `Do not use in interview:` line. Present means flagged; the string is the why.
+   *
+   * These are still worth keeping — they are usually the first thing that came to
+   * mind, and knowing why they fail is the lesson. They are sorted to the end of
+   * `Problem.approaches` and rendered with a danger label so they can never be
+   * mistaken for the answer.
+   */
+  doNotUseInInterview?: string;
   implementations: Implementation[];
 }
 

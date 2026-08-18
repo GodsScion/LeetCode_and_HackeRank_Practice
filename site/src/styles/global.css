@@ -29,6 +29,8 @@
   --color-easy: #5cc98d; /*  9.89:1 on bg */
   --color-medium: #e2b25a; /* 10.43:1 on bg */
   --color-hard: #ff8189; /*  8.50:1 on bg */
+  /* Not a difficulty: marks a solution that must not be used in an interview. */
+  --color-danger: #ff6b74; /*  7.38:1 on bg */
 
   /* Fluid type scale */
   --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
@@ -580,6 +582,37 @@
     grid-column: 2;
     color: rgba(255, 255, 255, 0.8);
     font-size: var(--text-sm);
+  }
+
+  /* Louder than .callout: this one says "do not copy this into an interview". */
+  .callout-danger {
+    background: color-mix(in srgb, var(--color-danger) 10%, transparent);
+    border-color: color-mix(in srgb, var(--color-danger) 34%, transparent);
+    border-left-color: var(--color-danger);
+    border-left-width: 3px;
+  }
+  .callout-danger .callout-title,
+  .callout-danger .callout-icon {
+    color: var(--color-danger);
+  }
+
+  .chip-danger {
+    background: color-mix(in srgb, var(--color-danger) 14%, transparent);
+    border-color: color-mix(in srgb, var(--color-danger) 40%, transparent);
+    color: var(--color-danger);
+    font-weight: 600;
+  }
+
+  /* Sidebar entry for a flagged solution. */
+  .dot-danger::before {
+    content: '';
+    display: inline-block;
+    width: 0.375rem;
+    height: 0.375rem;
+    margin-right: 0.4rem;
+    border-radius: 50%;
+    background: var(--color-danger);
+    vertical-align: middle;
   }
 
   /* --- code -------------------------------------------------------------- */

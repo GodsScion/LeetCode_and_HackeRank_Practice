@@ -19,6 +19,7 @@ const heading = `Solution ${index}`;
 const subtitle = approach.named ? approach.name : undefined;
 const anchor = `solution-${index}`;
 const pitfalls = proseToHtml(approach.pitfalls);
+const banned = proseToHtml(approach.doNotUseInInterview);
 const complexity = [
   { label: 'Time', value: approach.timeComplexity },
   { label: 'Space', value: approach.spaceComplexity },
@@ -41,6 +42,13 @@ const complexity = [
       }
     </h2>
     {
+      banned && (
+        <span class="chip chip-danger" title="This solution would not be accepted in an interview">
+          Do not use in an interview
+        </span>
+      )
+    }
+    {
       complexity.length > 0 && (
         <ul class="flex flex-wrap items-center gap-1.5 list-none">
           {complexity.map((c) => (
@@ -56,6 +64,30 @@ const complexity = [
       )
     }
   </header>
+
+  {
+    banned && (
+      <div class="callout callout-danger mt-4" role="note">
+        <svg
+          class="callout-icon"
+          width="16"
+          height="16"
+          viewBox="0 0 16 16"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          aria-hidden="true"
+          focusable="false"
+        >
+          <circle cx="8" cy="8" r="6.5" />
+          <path d="M4.5 4.5 11.5 11.5" />
+        </svg>
+        <p class="callout-title">Do not use in an interview</p>
+        <div class="prose" set:html={banned} />
+      </div>
+    )
+  }
 
   <Prose text={approach.explanation} class="mt-3 max-w-[68ch]" />
 

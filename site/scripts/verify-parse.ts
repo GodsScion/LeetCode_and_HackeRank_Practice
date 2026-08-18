@@ -171,6 +171,15 @@ if (partialComplexity.length) {
   console.log(`WARNING — ${partialComplexity.length} problem(s) where some approaches are missing complexity.`);
 }
 
+// Not a warning: these are deliberate. Listing them is how you audit the set.
+const banned = problems.flatMap((p) =>
+  p.approaches.filter((a) => a.doNotUseInInterview).map((a) => ({ p, a })),
+);
+console.log(
+  `\nFlagged "do not use in interview": ${banned.length} approach(es) across ${new Set(banned.map((b) => b.p.slug)).size} problem(s).`,
+);
+for (const { p, a } of banned) console.log(`  - ${p.slug} [${a.id}]  ${a.doNotUseInInterview}`);
+
 if (diagnostics.unparsedHeaders.length) {
   console.log(
     `\nWARNING — ${diagnostics.unparsedHeaders.length} line(s) looked like a problem header but did not parse:`,

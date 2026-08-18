@@ -309,11 +309,19 @@ const TIME_RE = /^\s*-?\s*time\s+complexity\s*:\s*(.+)$/i;
 const SPACE_RE = /^\s*-?\s*space\s+complexity\s*:\s*(.+)$/i;
 const PITFALL_RE = /^\s*-?\s*pitfalls?\s*:\s*(.+)$/i;
 
+/**
+ * `Do not use in interview: <reason>` — marks an approach that is accepted by the
+ * judge but would not pass a human. Also accepts "Don't"/"Do not use in an
+ * interview" so the line can be written the way it is said out loud.
+ */
+const NO_INTERVIEW_RE = /^\s*-?\s*do\s*n[o']?t\s+use\s+in\s+(?:an\s+)?interviews?\s*:\s*(.+)$/i;
+
 interface DocMeta {
   explanation: string;
   timeComplexity?: string;
   spaceComplexity?: string;
   pitfalls?: string;
+  doNotUseInInterview?: string;
 }
 
 /** Sphinx field lines that LeetCode's starter docstrings are made of. */
@@ -398,6 +406,11 @@ function parseDocMeta(code: string): DocMeta {
       meta.pitfalls = cleanValue(pitfall[1]!);
       continue;
     }
+    const noInterview = NO_INTERVIEW_RE.exec(line);
+    if (noInterview && meta.doNotUseInInterview === undefined) {
+      meta.doNotUseInInterview = cleanValue(noInterview[1]!);
+      continue;
+    }
     prose.push(line);
   }
 
@@ -448,6 +461,7 @@ interface RawBlock {
   timeComplexity?: string;
   spaceComplexity?: string;
   pitfalls?: string;
+  doNotUseInInterview?: string;
   /** The source line that opened this block, for diagnostics. */
   headerText?: string;
 }
@@ -673,7 +687,7 @@ function scanHackerRank(unparsed: string[]): RawBlock[] {
 
 /**
  * The `'''NOTES: ... '''` block at the top of "Leet Code/python.py". Items are
- * numbered `1.` through `9.`; wrapped lines are re-joined, bullets and blank
+ * numbered `1.` onward; wrapped lines are re-joined, bullets and blank
  * lines are kept as structure.
  */
 function parseNotes(): Note[] {
@@ -924,6 +938,7 @@ function buildApproaches(blocks: RawBlock[]): Approach[] {
       approach.timeComplexity ??= block.timeComplexity;
       approach.spaceComplexity ??= block.spaceComplexity;
       approach.pitfalls ??= block.pitfalls;
+      approach.doNotUseInInterview ??= block.doNotUseInInterview;
     } else {
       approaches.push({
         id: '',
@@ -933,14 +948,23 @@ function buildApproaches(blocks: RawBlock[]): Approach[] {
         timeComplexity: block.timeComplexity,
         spaceComplexity: block.spaceComplexity,
         pitfalls: block.pitfalls,
+        doNotUseInInterview: block.doNotUseInInterview,
         implementations: [implementation],
       });
     }
   }
 
+  // Anything flagged `Do not use in interview:` sinks to the bottom, keeping its
+  // relative order. Sorting here rather than in the page means the section order,
+  // the sidebar list and the "Solution N" numbering can never disagree.
+  const ordered = [
+    ...approaches.filter((a) => !a.doNotUseInInterview),
+    ...approaches.filter((a) => a.doNotUseInInterview),
+  ];
+
   // Positional ids/names for the untagged ones, then guarantee uniqueness.
   const used = new Set<string>();
-  approaches.forEach((approach, i) => {
+  ordered.forEach((approach, i) => {
     if (!approach.named) {
       approach.id = `approach-${i + 1}`;
       approach.name = `Approach ${i + 1}`;
@@ -951,7 +975,7 @@ function buildApproaches(blocks: RawBlock[]): Approach[] {
     used.add(id);
   });
 
-  return approaches;
+  return ordered;
 }
 
 // ---------------------------------------------------------------------------

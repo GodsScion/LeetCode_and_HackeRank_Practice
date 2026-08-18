@@ -46,6 +46,14 @@ NOTES:
 
 9.  Some problems are only possible to be solved using BFS, keep that in mind and don't always jump to DFS, 
     analyze and visualize before you write code, don't take too much time though. Inspiration from 994
+
+10. In maths problems with big numbers, watch for float overflow. A value can quietly become
+    inf or 0.0, so the crash lands far away from the real bug, and a failure on a huge input
+    is often a small bug that a small input would have shown you in seconds.
+    Also don't add base cases for inputs that cannot happen. I guarded x = 0 because 0 ** -1
+    felt undefined, but it is only a divide by zero and the constraints already exclude it,
+    so the guard did nothing while the actual bug sat elsewhere. Write the simple version
+    first and add cases only when a test fails. Inspiration from 50
 '''
 
 
@@ -3260,7 +3268,8 @@ class Solution:
     Time Complexity: O(n^2)
     Space Complexity: O(n^2)
     where, n is the side length, so the work is linear in the n^2 cells.
-    Pitfalls: The problem forbids allocating a second matrix and this allocates one, which is the whole reason 48 is a Medium and not an Easy. LeetCode only diffs the final contents of `matrix`, so it still gets accepted; a human would ask for the O(1) version immediately. copy.deepcopy is also the wrong tool for a grid of ints, it recurses and memoises object ids: [row[:] for row in matrix] is identical here and measured 3x faster at n=20.
+    Pitfalls: copy.deepcopy is the wrong tool for a grid of ints, it recurses and memoises object ids. [row[:] for row in matrix] is identical here and measured 3x faster at n=20.
+    Do not use in interview: The problem says in as many words not to allocate a second matrix, and this allocates one. That constraint is the whole reason 48 is a Medium and not an Easy, so answering with a deepcopy answers the Easy. LeetCode only diffs the final contents of `matrix` and accepts it; a human asks for the O(1) version on sight. Use [ring-rotate] instead.
 
     Solved unaided in 13m 18s. The mapping (r, c) -> (c, n-1-r) is the right transform and
     that part was mine, but writing into a copy dodges the constraint the problem is built
