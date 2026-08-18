@@ -39,6 +39,11 @@ const description =
   `${problem.title} — ${problem.difficulty} ${sourceLabel} problem in ${problem.category}, with ${problem.approaches.length} worked ${problem.approaches.length === 1 ? 'solution' : 'solutions'}.`;
 
 const solutionCount = problem.approaches.length;
+
+// Flagged approaches are already sorted last by the parser; this is just where the
+// divider goes, so the split is visible and not merely positional.
+const bannedFrom = problem.approaches.findIndex((a) => a.doNotUseInInterview);
+const bannedCount = bannedFrom === -1 ? 0 : problem.approaches.length - bannedFrom;
 ---
 
 <Base title={problem.title} description={description}>
@@ -112,8 +117,11 @@ const solutionCount = problem.approaches.length;
                     <a
                       class="-ml-px flex items-baseline justify-between gap-2 border-l border-transparent py-1 pl-3 text-sm text-fg-subtle transition-colors hover:border-line-strong hover:text-fg"
                       href={`#solution-${i + 1}`}
+                      title={a.doNotUseInInterview ? 'Do not use in an interview' : undefined}
                     >
-                      <span>{a.named ? a.name : `Solution ${i + 1}`}</span>
+                      <span class:list={[a.doNotUseInInterview && 'dot-danger']}>
+                        {a.named ? a.name : `Solution ${i + 1}`}
+                      </span>
                       <span class="font-mono text-2xs text-fg-faint">
                         {[...new Set(a.implementations.map((impl) => impl.lang))]
                           .map((l) => LANG_META[l]?.label ?? l)
@@ -136,7 +144,20 @@ const solutionCount = problem.approaches.length;
           ) : (
             <div class="flex flex-col gap-12">
               {problem.approaches.map((approach, i) => (
-                <ApproachSection approach={approach} index={i + 1} problemSlug={problem.slug} />
+                <>
+                  {i === bannedFrom && (
+                    <div class="border-t border-[color-mix(in_srgb,var(--color-danger)_30%,transparent)] pt-6">
+                      <p class="eyebrow text-[var(--color-danger)]">
+                        {bannedCount === 1 ? 'Not an interview answer' : 'Not interview answers'}
+                      </p>
+                      <p class="prose mt-2 max-w-[60ch] text-sm">
+                        Kept because the reason each one fails is the lesson. Accepted by the
+                        judge, rejected by a human — do not reach for {bannedCount === 1 ? 'it' : 'these'} in an interview.
+                      </p>
+                    </div>
+                  )}
+                  <ApproachSection approach={approach} index={i + 1} problemSlug={problem.slug} />
+                </>
               ))}
             </div>
           )
