@@ -57,6 +57,18 @@ jobs:
       - name: Build
         run: npm run build
 
+      # A parser that resolves the repo root wrongly finds no solution files, builds
+      # every dynamic route into nothing and still exits 0. Without this the site
+      # deploys with the problem pages silently gone.
+      - name: Guard against silent route loss
+        run: |
+          pages=$(find dist -name '*.html' | wc -l | tr -d ' ')
+          echo "built $pages pages"
+          if [ "$pages" -lt 100 ]; then
+            echo "::error::only $pages pages built - dynamic routes were dropped"
+            exit 1
+          fi
+
       - name: Upload artifact
         if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@v5
