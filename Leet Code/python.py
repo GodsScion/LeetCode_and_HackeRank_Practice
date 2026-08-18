@@ -3251,6 +3251,127 @@ class Solution:
 
 
 
+###### MATH AND GEOMETRY ######
+
+# 48. Rotate Image (https://leetcode.com/problems/rotate-image/description/) - Medium - 2026-08-18 - 13m 18s [copy-then-map]
+import copy
+class Solution:
+    '''
+    Time Complexity: O(n^2)
+    Space Complexity: O(n^2)
+    where, n is the side length, so the work is linear in the n^2 cells.
+    Pitfalls: The problem forbids allocating a second matrix and this allocates one, which is the whole reason 48 is a Medium and not an Easy. LeetCode only diffs the final contents of `matrix`, so it still gets accepted; a human would ask for the O(1) version immediately. copy.deepcopy is also the wrong tool for a grid of ints, it recurses and memoises object ids: [row[:] for row in matrix] is identical here and measured 3x faster at n=20.
+
+    Solved unaided in 13m 18s. The mapping (r, c) -> (c, n-1-r) is the right transform and
+    that part was mine, but writing into a copy dodges the constraint the problem is built
+    around. Counts as the Easy half of the problem, not a solve. See [ring-rotate] below.
+    '''
+    def rotate(self, matrix: List[List[int]]) -> None:
+        n = len(matrix)
+        cp = copy.deepcopy(matrix)
+        for r, row in enumerate(cp):
+            for c, p in enumerate(row):
+                matrix[c][n-1-r] = p
+
+
+# 48. Rotate Image (https://leetcode.com/problems/rotate-image/description/) - Medium - 2026-08-18 - 11m [ring-rotate]
+class Solution:
+    '''
+    Time Complexity: O(n^2)
+    Space Complexity: O(1)
+    where, n is the side length. Every cell is touched exactly once.
+    Pitfalls: range(r-l), not range(r-l+1). An edge holds r-l+1 cells but the corners are shared with the neighbouring edge, so the +1 version writes them twice and corrupts the ring. A 3x3 outer ring is 8 cells = 2 iterations x 4 moves.
+
+    Read the editorial first, code included, then wrote it out. 11m is typing time, not a
+    solve time, so this problem is still owed a cold re-solve.
+
+    Rotate four cells at a time through a single temp, ring by ring, moving the l/r bounds
+    inward. The assignments walk the cycle backwards (each slot pulls from the source that
+    feeds it), so the code reads counter-clockwise while the net rotation is clockwise, which
+    is the part that is easy to get inverted. t and b always equal l and r on a square matrix,
+    they only exist so the four expressions read as top/bottom/left/right.
+
+    Transpose the upper triangle then reverse each row is the other O(1) route: fewer indices
+    to get wrong and faster to write under pressure, at the cost of looking like a memorised
+    trick. Worth knowing both, this one is the answer when they want to see the index work.
+    '''
+    def rotate(self, matrix: List[List[int]]) -> None:
+        l, r = 0, len(matrix)-1
+        while l < r:
+            t, b = l, r
+            for i in range(r-l):
+                temp = matrix[t][l+i]
+                matrix[t][l+i] = matrix[b-i][l]
+                matrix[b-i][l] = matrix[b][r-i]
+                matrix[b][r-i] = matrix[t+i][r]
+                matrix[t+i][r] = temp
+            l += 1
+            r -= 1
+
+
+# 50. Pow(x, n) (https://leetcode.com/problems/powx-n/description/) - Medium - 2026-08-18 [binary-exponentiation]
+class Solution:
+    '''
+    Time Complexity: O(log n)
+    Space Complexity: O(log n)
+    where, n is the exponent. The stack is only ~31 frames deep at n = 2^31.
+    Pitfalls: Normalise the sign once, outside the recursion. Flipping it inside inverts on every level and the inversions cancel in pairs, which is what broke the attempt below.
+
+    Binding half to a variable is the only difference from [divide-conquer-cache] below.
+    That is enough to make it O(log n) structurally, so no memoisation is needed.
+
+    Not mine: I had landed on the @cache version below and this came from a suggestion.
+    '''
+    def myPow(self, x: float, n: int) -> float:
+        def dc(x, n):
+            if n == 0:
+                return 1.0
+            half = dc(x, n//2)
+            val = half * half
+            return val * x if n % 2 else val
+        return dc(x, n) if n >= 0 else 1 / dc(x, -n)
+
+
+# 50. Pow(x, n) (https://leetcode.com/problems/powx-n/description/) - Medium - 2026-08-18 [divide-conquer-cache]
+class Solution:
+    '''
+    Time Complexity: O(log n)
+    Space Complexity: O(log n)
+    Pitfalls: @cache is load-bearing here, not an optimisation. dc(x, n//2) * dc(x, n//2) recomputes the same subtree, so unmemoised it is T(n) = 2T(n/2) + O(1) = O(n): 2,097,151 calls at n = 1e6 versus 21 for the bound-half version, and ~2.1e9 at n = 2^31. Also `if x == 0: return 0` is dead, the recursion already yields 0 for x = 0, n > 0.
+
+    What I got to on my own, and it is accepted. Nothing wrong with @cache, it just hides
+    the recursion's real cost behind a decorator; binding half is cleaner.
+
+    How I got here: brute force first, out * x in a loop, O(n) and times out since n goes to
+    2^31. Then divide and conquer written from the concept rather than the code, which flipped
+    the sign inside the recursion:
+
+        return val if n > 0 else 1 / val
+
+    Every negative frame inverts, so inversions cancel in pairs and the answer is correct or
+    reciprocal depending on the parity of the depth. At x = 2: n = -2 gave 0.25 (right),
+    n = -4 gave 16.0 (should be 0.0625), n = -16 gave 65536.0 (should be 1.5e-05). The
+    ZeroDivisionError at n = -200000000 was the last domino, not the bug: the compounding
+    inversions made a frame compute 2^+200000000, which overflows to inf, then 1/inf is 0.0,
+    then 1/0.0 raises. It had been silently wrong from n = -4 onward. Lesson: dry run a small
+    even and a small odd case before trusting it on the extremes.
+    '''
+    def myPow(self, x: float, n: int) -> float:
+        @cache
+        def dc(x, n):
+            if x == 0:
+                return 0
+            if n == 0:
+                return 1
+            val = dc(x, n//2) * dc(x, n//2)
+            return val if n % 2 == 0 else val * x
+        return dc(x, n) if n >= 0 else 1 / dc(x, abs(n))
+
+
+
+
+
+
 #########  EXTRA PROBLEMS  #########
 
 # 3365. Rearrange K Substrings to Form Target String (https://leetcode.com/problems/rearrange-k-substrings-to-form-target-string/description/) - Medium
