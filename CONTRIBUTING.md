@@ -113,12 +113,42 @@ class Solution:
     '''
 ```
 
-- `Time Complexity:`, `Space Complexity:` and `Pitfalls:` are pulled out into their own
-  fields on the page. Everything else in the docstring renders as the explanation.
+- `Time Complexity:`, `Space Complexity:`, `Pitfalls:` and `Do not use in interview:` are
+  pulled out into their own fields on the page. Everything else in the docstring renders as
+  the explanation.
 - These belong to the *approach*, not the language — so for a tagged approach implemented in
   several languages, write them once, on the Python side. `new-problem` leaves a block
   comment on the Java/JS/TS side too; fill that in only if there is no Python implementation.
 - Leaving them out is fine. The fields just don't render.
+
+## Marking a solution that would fail an interview
+
+Some solutions pass the judge but would not pass a human — they call a built-in that does
+the exact thing the problem asks you to implement, or they break a constraint the problem
+states outright. Keep them, they are usually the first thing that came to mind and the
+reason they fail is the lesson. Just label them:
+
+```python
+class Solution:
+    '''
+    Do not use in interview: The problem says not to allocate a second matrix and this
+    allocates one. Use [ring-rotate] instead.
+    '''
+```
+
+One line, same place as `Pitfalls:`, and the text is the reason rather than a yes/no. On
+the site that approach sinks below every other solution for the problem, under a red
+"Not an interview answer" divider, and carries a red label of its own. `npm run verify`
+lists every flagged approach so the set stays auditable.
+
+The bar is deliberately high, so the label keeps meaning something:
+
+- **Flag it** when the shortcut *is* the problem (`x ** n` for Pow), or when it breaks a
+  stated rule (48 forbids a second matrix, in those words).
+- **Don't flag it** for merely being slower or using more memory than the optimal answer.
+  Note 8 in `Leet Code/python.py` is explicit that trading space for clarity is a legitimate
+  interview choice — `s == s[::-1]` for Valid Palindrome is a weaker answer, not a banned
+  one. Say that in the prose or in `Pitfalls:`, not with this label.
 
 ## CI
 
