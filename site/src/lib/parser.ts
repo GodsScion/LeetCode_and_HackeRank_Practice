@@ -14,7 +14,7 @@
  */
 
 import { readFileSync, readdirSync, existsSync, statSync } from 'node:fs';
-import { resolve, join, extname, basename } from 'node:path';
+import { dirname, join, extname, basename } from 'node:path';
 
 import type {
   Approach,
@@ -28,8 +28,26 @@ import type {
   Source,
 } from './types.ts';
 
-/** site/src/lib -> site/src -> site -> repo root. Never hardcode an absolute path. */
-const REPO_ROOT = resolve(import.meta.dirname, '..', '..', '..');
+/**
+ * Repo root, found by walking up until the solution directory appears.
+ *
+ * A fixed number of `..` hops is not stable across contexts: this module runs from
+ * src/lib under `node --experimental-strip-types`, but Astro bundles it into
+ * dist/.prerender/chunks for the build, which is one level deeper. Guessing wrong
+ * fails silently — every read misses, each file caches as null, and the site builds
+ * with zero problems and a successful exit code. Never hardcode an absolute path.
+ */
+function findRepoRoot(): string {
+  let dir = import.meta.dirname ?? process.cwd();
+  for (let i = 0; i < 8; i++) {
+    if (existsSync(join(dir, 'Leet Code'))) return dir;
+    const up = dirname(dir);
+    if (up === dir) break;
+    dir = up;
+  }
+  throw new Error(`parser: no "Leet Code" directory above ${import.meta.dirname ?? process.cwd()}`);
+}
+const REPO_ROOT = findRepoRoot();
 
 /**
  * The LeetCode files, in the order that defines canonical approach ordering:

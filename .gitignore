@@ -5,3 +5,6 @@ __pycache__/
 node_modules
 .vscode
 .DS_Store
+
+# Live state for local tooling: pids, ports and a session token. Never committed.
+.gstack/
