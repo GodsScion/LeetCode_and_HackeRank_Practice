@@ -782,7 +782,10 @@
   .tabs > input:nth-of-type(2):checked ~ .tablist > .tab[data-i="2"],
   .tabs > input:nth-of-type(3):checked ~ .tablist > .tab[data-i="3"],
   .tabs > input:nth-of-type(4):checked ~ .tablist > .tab[data-i="4"],
-  .tabs > input:nth-of-type(5):checked ~ .tablist > .tab[data-i="5"] {
+  .tabs > input:nth-of-type(5):checked ~ .tablist > .tab[data-i="5"],
+  .tabs > input:nth-of-type(6):checked ~ .tablist > .tab[data-i="6"],
+  .tabs > input:nth-of-type(7):checked ~ .tablist > .tab[data-i="7"],
+  .tabs > input:nth-of-type(8):checked ~ .tablist > .tab[data-i="8"] {
     color: #fff;
     background: var(--color-surface-2);
     border-color: var(--color-line);
@@ -791,7 +794,10 @@
   .tabs > input:nth-of-type(2):checked ~ .tabpanels > .tabpanel[data-i="2"],
   .tabs > input:nth-of-type(3):checked ~ .tabpanels > .tabpanel[data-i="3"],
   .tabs > input:nth-of-type(4):checked ~ .tabpanels > .tabpanel[data-i="4"],
-  .tabs > input:nth-of-type(5):checked ~ .tabpanels > .tabpanel[data-i="5"] {
+  .tabs > input:nth-of-type(5):checked ~ .tabpanels > .tabpanel[data-i="5"],
+  .tabs > input:nth-of-type(6):checked ~ .tabpanels > .tabpanel[data-i="6"],
+  .tabs > input:nth-of-type(7):checked ~ .tabpanels > .tabpanel[data-i="7"],
+  .tabs > input:nth-of-type(8):checked ~ .tabpanels > .tabpanel[data-i="8"] {
     display: block;
   }
   /* keyboard focus must be visible even though the radio itself is not */
@@ -799,7 +805,10 @@
   .tabs > input:nth-of-type(2):focus-visible ~ .tablist > .tab[data-i="2"],
   .tabs > input:nth-of-type(3):focus-visible ~ .tablist > .tab[data-i="3"],
   .tabs > input:nth-of-type(4):focus-visible ~ .tablist > .tab[data-i="4"],
-  .tabs > input:nth-of-type(5):focus-visible ~ .tablist > .tab[data-i="5"] {
+  .tabs > input:nth-of-type(5):focus-visible ~ .tablist > .tab[data-i="5"],
+  .tabs > input:nth-of-type(6):focus-visible ~ .tablist > .tab[data-i="6"],
+  .tabs > input:nth-of-type(7):focus-visible ~ .tablist > .tab[data-i="7"],
+  .tabs > input:nth-of-type(8):focus-visible ~ .tablist > .tab[data-i="8"] {
     outline: 2px solid #ffffff;
     outline-offset: 2px;
   }
