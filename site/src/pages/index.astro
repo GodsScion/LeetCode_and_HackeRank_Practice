@@ -26,7 +26,8 @@ for (const p of problems) {
 }
 
 // ~15KB of search index. Short keys because it ships on every page load.
-// s = prebuilt lowercase haystack, d = difficulty, c = category, l = languages.
+// s = prebuilt lowercase haystack, d = difficulty, c = category, l = languages,
+// a = newest attempt date ('' when the problem has none).
 const index = problems.map((p) => ({
   s: [p.number ?? '', p.title, p.category, p.difficulty, p.source, ...p.languages]
     .join(' ')
@@ -34,6 +35,7 @@ const index = problems.map((p) => ({
   d: p.difficulty,
   c: p.category,
   l: p.languages,
+  a: p.lastAttempt || '',
 }));
 const indexJson = JSON.stringify(index).replace(/</g, '\\u003c');
 
@@ -132,6 +134,11 @@ const cells = [
         {languages.map((l) => <option value={l}>{langMeta(l).label}</option>)}
       </select>
 
+      <div class="seg" role="group" aria-label="Sort order">
+        <button type="button" data-sort="" aria-pressed="true">Default</button>
+        <button type="button" data-sort="recent" aria-pressed="false">Recent</button>
+      </div>
+
       <button type="button" class="btn btn-quiet" id="f-clear" hidden>Clear</button>
     </div>
 
@@ -198,6 +205,27 @@ const cells = [
       var empty = document.getElementById('f-empty');
       var segs = bar.querySelectorAll('[data-diff]');
       var difficulty = '';
+      var list = document.getElementById('plist');
+      var sorts = bar.querySelectorAll('[data-sort]');
+      var recent = false;
+
+      // Moves the existing <li>s with appendChild rather than re-rendering, so the
+      // rows[i] <-> data[i] mapping the filter relies on survives untouched.
+      function resort() {
+        var seq = [];
+        for (var i = 0; i < data.length; i++) seq.push(i);
+        if (recent) {
+          seq.sort(function (i, j) {
+            var a = data[i].a;
+            var b = data[j].a;
+            if (a === b) return i - j; // undated, or same day: keep source order
+            if (!a) return 1; // undated sorts last
+            if (!b) return -1;
+            return a < b ? 1 : -1; // ISO dates compare as strings, newest first
+          });
+        }
+        for (var k = 0; k < seq.length; k++) list.appendChild(rows[seq[k]]);
+      }
 
       bar.hidden = false;
 
@@ -225,6 +253,16 @@ const cells = [
           ? shown + ' of ' + data.length + ' problems'
           : data.length + ' problems';
       }
+
+      Array.prototype.forEach.call(sorts, function (btn) {
+        btn.addEventListener('click', function () {
+          recent = btn.getAttribute('data-sort') === 'recent';
+          Array.prototype.forEach.call(sorts, function (other) {
+            other.setAttribute('aria-pressed', String(other === btn));
+          });
+          resort();
+        });
+      });
 
       q.addEventListener('input', apply);
       cat.addEventListener('change', apply);

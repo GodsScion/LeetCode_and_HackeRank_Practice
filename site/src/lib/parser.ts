@@ -207,6 +207,20 @@ const TAIL_BANNER_RE = /^TEST(?:ING|\s*CASES?)?$/i;
 /** `[approach-tag]` suffix on a header. */
 const TAG_RE = /\[([^\]]+)\]/;
 
+/** `2026-08-17` anywhere in the header tail. ISO so it sorts as a plain string. */
+const DATE_RE = /\b(\d{4}-\d{2}-\d{2})\b/;
+
+/**
+ * A `- 14m` / `- 9m 40sec` segment in the header tail.
+ *
+ * Requires a digit followed by a time unit, which is what stops the existing
+ * `- Medium - 2026-01-07 - Duplicate` headers from reporting a solve time of
+ * "Duplicate", and stops the date's own `-01-07` from matching. Units are ordered
+ * longest-first so `min` never settles for `m`.
+ */
+const SOLVE_TIME_RE =
+  /-\s*(\d+\s*(?:hours|hour|hrs|hr|h|minutes|minute|mins|min|m|seconds|second|secs|sec|s)\b[^-\[]*)/i;
+
 /** Everything but `number` is absent on a shorthand header. */
 interface HeaderMatch {
   number: number;
@@ -214,19 +228,24 @@ interface HeaderMatch {
   url?: string;
   difficulty?: Difficulty;
   tag?: string;
+  attemptedOn?: string;
+  solveTime?: string;
 }
 
 function matchHeader(line: string): HeaderMatch | null {
   const m = HEADER_RE.exec(line);
   if (!m) return null;
   const [, num, title, url, difficulty, rest] = m;
-  const tag = TAG_RE.exec(rest ?? '')?.[1]?.trim();
+  const tail = rest ?? '';
+  const tag = TAG_RE.exec(tail)?.[1]?.trim();
   return {
     number: Number(num),
     title: (title ?? '').trim(),
     url: (url ?? '').trim(),
     difficulty: difficulty ? (titleCase(difficulty) as Difficulty) : undefined,
     tag: tag || undefined,
+    attemptedOn: DATE_RE.exec(tail)?.[1],
+    solveTime: SOLVE_TIME_RE.exec(tail)?.[1]?.trim(),
   };
 }
 
@@ -400,6 +419,8 @@ interface RawBlock {
   difficulty?: Difficulty;
   category?: string;
   tag?: string;
+  attemptedOn?: string;
+  solveTime?: string;
   lang: Lang;
   code: string;
   sourceFile: string;
@@ -446,6 +467,8 @@ function scanLeetCodeFile(rel: string, lang: Lang, unparsed: string[]): RawBlock
         difficulty: header.difficulty,
         category: headerCategory,
         tag: header.tag,
+        attemptedOn: header.attemptedOn,
+        solveTime: header.solveTime,
         lang,
         code,
         sourceFile: rel,
@@ -833,6 +856,12 @@ function buildProblems(blocks: RawBlock[]): Problem[] {
       summary: undefined,
       approaches,
       languages,
+      lastAttempt: approaches
+        .flatMap((a) => a.implementations)
+        .map((i) => i.attemptedOn)
+        .filter((d): d is string => !!d)
+        .sort()
+        .at(-1),
     });
   }
 
@@ -854,6 +883,8 @@ function buildApproaches(blocks: RawBlock[]): Approach[] {
       sourceFile: block.sourceFile,
       startLine: block.startLine,
       endLine: block.endLine,
+      attemptedOn: block.attemptedOn,
+      solveTime: block.solveTime,
     };
 
     const tagId = block.tag ? kebab(block.tag) : '';

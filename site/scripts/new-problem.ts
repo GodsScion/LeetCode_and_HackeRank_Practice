@@ -334,12 +334,17 @@ interface StubInput {
 
 function renderStub(o: StubInput): string[] {
   const tagSuffix = o.tag ? ` [${o.tag}]` : '';
+  // Stamp today so an attempt date is never a thing you remember to type. Built from
+  // local parts rather than toISOString(), which would roll over to tomorrow for an
+  // evening solve west of UTC. Append the solve time by hand: `- 2026-08-17 - 14m`.
+  const now = new Date();
+  const dated = ` - ${now.getFullYear()}-${`${now.getMonth() + 1}`.padStart(2, '0')}-${`${now.getDate()}`.padStart(2, '0')}`;
   const fn = camelFromTitle(o.title);
 
   if (o.source === 'hackerrank') {
     // HackerRank blocks are explicitly delimited and always top level.
     return [
-      `#<< ${o.title} (${o.url}) - ${o.difficulty}${tagSuffix}`,
+      `#<< ${o.title} (${o.url}) - ${o.difficulty}${dated}${tagSuffix}`,
       `def ${fn}():`,
       `    '''`,
       `    Time Complexity: TODO`,
@@ -354,7 +359,7 @@ function renderStub(o: StubInput): string[] {
   if (o.lang === 'python') {
     // Python solutions are module level, so indentation is always zero.
     return [
-      `# ${o.number}. ${o.title} (${o.url}) - ${o.difficulty}${tagSuffix}`,
+      `# ${o.number}. ${o.title} (${o.url}) - ${o.difficulty}${dated}${tagSuffix}`,
       `class Solution:`,
       `    '''`,
       `    Time Complexity: TODO`,
@@ -375,7 +380,7 @@ function renderStub(o: StubInput): string[] {
   };
 
   return [
-    `${pad}// ${o.number}. ${o.title} (${o.url}) - ${o.difficulty}${tagSuffix}`,
+    `${pad}// ${o.number}. ${o.title} (${o.url}) - ${o.difficulty}${dated}${tagSuffix}`,
     `${pad}/**`,
     `${pad} * Time Complexity: TODO`,
     `${pad} * Space Complexity: TODO`,

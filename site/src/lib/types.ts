@@ -32,6 +32,10 @@ export interface Implementation {
   startLine: number;
   /** 1-indexed line where the block ends (inclusive). */
   endLine: number;
+  /** ISO date this attempt was solved, e.g. "2026-08-17". Absent when undated. */
+  attemptedOn?: string;
+  /** Verbatim solve time from the header, e.g. "14m". Display only, never parsed. */
+  solveTime?: string;
 }
 
 /**
@@ -87,6 +91,8 @@ export interface Problem {
   approaches: Approach[];
   /** Union of languages across all approaches, for list-page filtering. */
   languages: Lang[];
+  /** Newest `attemptedOn` across every implementation. Undefined when none are dated. */
+  lastAttempt?: string;
 }
 
 /** A file under "scratch pad/" — rendered read-only with a github.dev edit link. */

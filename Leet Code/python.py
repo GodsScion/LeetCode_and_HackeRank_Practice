@@ -136,6 +136,85 @@ class Solution:
         return output
 
 
+# 347. Top K Frequent Elements (https://leetcode.com/problems/top-k-frequent-elements/description/) - Medium - 2026-08-17 - 9m 40s [sort-by-freq]
+class Solution:
+    '''
+    Time Complexity: O(n + u log u)
+    Space Complexity: O(u)
+    where, n is len(nums) and u is the number of distinct values.
+    Pitfalls: [c[n], n] builds a mutable list per entry and `for n in c` then `c[n]` hashes every key twice. Swapping both out for sorted(c.items(), key=...) measured 8.17ms -> 3.59ms at n=1e5, u~20k. Same algorithm, same complexity, 2.3x apart.
+
+    The first one I reached for.
+
+    The log factor never really bites here: values are capped at [-10^4, 10^4], so u <= 20001
+    and log2(u) <= 15 however big n gets. Counter(nums) is the actual bottleneck and every
+    approach below pays it too.
+    '''
+    def topKFrequent(self, nums: List[int], k: int) -> List[int]:
+        c = Counter(nums)
+        l = list(sorted(([c[n],n] for n in c), reverse=True))
+        return list(l[i][1] for i in range(k))
+
+
+# 347. Top K Frequent Elements (https://leetcode.com/problems/top-k-frequent-elements/description/) - Medium - 2026-08-17 - 8m 30s [bucket-sort-freq-index]
+class Solution:
+    '''
+    Time Complexity: O(n)
+    Space Complexity: O(n)
+    Pitfalls: `while len(out) < k` has no floor, so it raises IndexError once the buckets run dry, i.e. whenever k > the number of distinct values. It also overshoots k on ties. LeetCode guarantees neither case, so it passes there. The 2024 [bucket-sort] version above avoids both by slicing [0: k-len(output)].
+
+    Intuition said bucket sort before I saw NeetCode's approach list, but I only wrote
+    it after (never read their code).
+
+    Index the buckets by frequency instead of comparing frequencies and the log factor
+    disappears. Frequencies are bounded by n, so n+1 buckets covers every possible count
+    and bucket i holds every value seen exactly i times. Popping from the tail walks them
+    in descending frequency order.
+
+    n+1 buckets is wasteful though: only max(c.values()) of them can ever fill. Sizing by
+    max(c.values())+1 and building via comprehension instead of an append loop measured
+    5.58ms -> 1.37ms at n=1e5 with 100 distinct values.
+    '''
+    def topKFrequent(self, nums: List[int], k: int) -> List[int]:
+        c = Counter(nums)
+        l = []
+        for _ in range(len(nums)+1):
+            l.append([])
+        for num in c:
+            l[c[num]].append(num)
+        out = []
+        while len(out) < k:
+            out.extend(l.pop(-1))
+        return out
+
+
+# 347. Top K Frequent Elements (https://leetcode.com/problems/top-k-frequent-elements/description/) - Medium - 2026-08-17 - 5m 40s [max-heap]
+import heapq
+class Solution:
+    '''
+    Time Complexity: O(n + u + k log u)
+    Space Complexity: O(u)
+    where, n is len(nums), u is the number of distinct values.
+    Pitfalls: heapify_max/heappop_max only became public heapq API in Python 3.14. Before that they were the private heapq._heapify_max/_heappop_max, so this is not portable to older runtimes.
+
+    The quickest of the three and the cleanest to write.
+
+    heapify_max is O(u) and each pop is O(log u), so only the k values actually wanted
+    pay the log. Better than a full sort while k stays small, but the k log u term means
+    it converges on the sort version as k approaches u: measured 3.30ms at k=10 vs 8.76ms
+    at k=u (n=1e5, u~20k), where bucket sort stayed flat at 2.7-2.9ms.
+    '''
+    def topKFrequent(self, nums: List[int], k: int) -> List[int]:
+        c = Counter(nums)
+        l = [(freq, num) for num, freq in c.items()]
+        heapq.heapify_max(l)
+        out = []
+        for _ in range(k):
+            out.append(heapq.heappop_max(l)[1])
+        return out
+
+
+
 # 238. Product of Array Except Self (https://leetcode.com/problems/product-of-array-except-self/description/) - Medium [prefix-suffix]
 class Solution:
     def productExceptSelf(self, nums: List[int]) -> List[int]:
@@ -149,6 +228,50 @@ class Solution:
             result[i] *= p
             p *= nums[i]
         return result
+
+
+# 36. Valid Sudoku (https://leetcode.com/problems/valid-sudoku/description/) - Medium - 2026-08-17 - 14m [three-passes]
+class Solution:
+    '''
+    Time Complexity: O(1)
+    Space Complexity: O(1)
+    Pitfalls: '.' is added to `dup` unconditionally, so the sets fill with dots. That is harmless only because `board[r][c] != '.'` is evaluated first and short-circuits before the membership test can ever fire on a dot. A `continue` on '.' would say it directly.
+
+    Strictly O(1): the board is fixed at 9x9, so the work is pinned at 243 cell visits
+    (81 x 3 passes) and no set ever exceeds 9 entries. That label fits any correct
+    solution though, brute force included, so the useful form is the generalised one:
+    on an n x n board this is O(n^2) time, which is linear in the input (the input IS
+    n^2 cells) and therefore optimal, with O(n) space.
+
+    Three passes costs 3x the cell reads of the single-pass [hash-set] version below,
+    but holds one set alive at a time instead of 3n of them, O(n) space against O(n^2).
+    At 9x9 both collapse to O(1), but the trade is real on a generalised board.
+    '''
+    def isValidSudoku(self, board: List[List[str]]) -> bool:
+        for r in range(9):
+            dup = set()
+            for c in range(9):
+                if board[r][c] != '.' and board[r][c] in dup:
+                    return False
+                dup.add(board[r][c])
+
+        for c in range(9):
+            dup = set()
+            for r in range(9):
+                if board[r][c] != '.' and board[r][c] in dup:
+                    return False
+                dup.add(board[r][c])
+
+        for ra in [0, 3, 6]:
+            for ca in [0, 3, 6]:
+                dup = set()
+                for r in range(ra, ra+3):
+                    for c in range(ca, ca+3):
+                        if board[r][c] != '.' and board[r][c] in dup:
+                            return False
+                        dup.add(board[r][c])
+
+        return True
 
 
 # 36. Valid Sudoku (https://leetcode.com/problems/valid-sudoku/description/) - Medium [hash-set]

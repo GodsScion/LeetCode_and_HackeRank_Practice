@@ -34,6 +34,17 @@ Rules:
 - `#` in Python, `//` in Java, JavaScript, TypeScript and C.
 - LeetCode: `<number>. <Title> (<url>) - <Easy|Medium|Hard>`. The number and the difficulty
   are both required.
+- An attempt date and a solve time may follow the difficulty, both optional and in that
+  order. `new-problem` stamps the date for you.
+
+  ```python
+  # 36. Valid Sudoku (https://leetcode.com/problems/valid-sudoku/description/) - Medium - 2026-08-17 - 14m [three-passes]
+  ```
+
+  The date must be `YYYY-MM-DD`; it feeds the Recent sort on the problem list and the
+  date shown on each tab. The solve time is free text (`14m`, `9m 40sec`, `1h 5m`) and is
+  only ever displayed — it is never sorted on. It has to contain a digit and a time unit
+  to count, which is what stops a trailing note like `- Duplicate` from being read as one.
 - HackerRank: opens with `#<<`, has no number, and **must** be closed with `#>>` on its own
   line. That closer is what bounds the block.
 - The URL goes in parentheses, with nothing else inside them.
@@ -47,6 +58,10 @@ them into a single approach on the site, with one tab per language.
 
 This is the whole reason tags exist: so one approach solved in two languages shows up as one
 approach with two tabs, not as two unrelated entries.
+
+Re-solving the same problem the same way is the other use: give the new block the same
+`[tag]` and a fresh date, and both attempts sit side by side as tabs on that approach,
+each labelled with its own date. Up to 8 blocks may share a tag.
 
 `Leet Code/python.py`:
 
