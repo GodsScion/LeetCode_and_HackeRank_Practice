@@ -3608,6 +3608,55 @@ class Solution:
             
         return time if len(visited) == n else -1
 
+# 743. Network Delay Time (https://leetcode.com/problems/network-delay-time/description/) - Medium - 2026-08-19 - 40m - Duplicate
+class Solution:
+    '''
+    Time Complexity: O(N + E log E)
+    Space Complexity: O(N + E)
+    Where, N is the number of nodes and E is the number of edges in the graph.
+
+    Pitfalls: grid[k] is both k's adjacency list and the distance table, so the run overwrites
+    k's own edge weights with distances. On [[1,2,10],[1,3,1],[3,2,1]] the edge 1->2 weighs 10
+    going in and reads 2 coming out. It is only safe because the heap is seeded with k alone, so
+    k is popped first and `visited` stops it ever being expanded a second time, and nothing in
+    the code says so. The {u: 0} self-loops are the live end of it: N wasted pushes as written,
+    but swap `visited` for the equally common `if cost > dist[source]: continue` staleness check
+    and (0, k) gets re-pushed on every expansion, 0 > 0 never fires, and the loop stops
+    terminating. Measured: non-terminating at 200k pops on a 3-node graph, versus 4 pops with
+    the self-loops removed.
+
+    Going from a 2D list to a dict of dicts was the right call, the inner loop then walks
+    outdegree instead of all N nodes. Bundling the distances into grid[k] was the overreach.
+    That was a separate aspect of the problem and wanted its own structure, and splitting it
+    back out pays for itself twice: the min() and the float('inf') sentinel both disappear,
+    because the first pop of a node is already its shortest distance.
+
+    Solved in ~40m.
+    '''
+    def networkDelayTime(self, times: List[List[int]], n: int, k: int) -> int:
+        grid = {}
+        for u in range(n+1):
+            grid[u] = {u:0}
+        for u,v,w in times:
+            grid[u][v] = w
+        
+        visited = set()
+        heap = []
+        heapq.heappush(heap, (0,k))
+
+        while heap:
+            cost, source = heapq.heappop(heap)
+            if source in visited: continue
+            visited.add(source)
+            for peer, dist in grid[source].items():
+                grid[k][peer] = min(cost + dist, grid[k].get(peer, float('inf')))
+                heapq.heappush(heap, (cost + dist, peer))
+        
+        if len(grid[k]) != n:
+            return -1
+        
+        return max(w for v,w in grid[k].items())
+
 
 
 
