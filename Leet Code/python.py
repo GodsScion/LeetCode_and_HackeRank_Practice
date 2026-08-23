@@ -427,15 +427,13 @@ class Solution:
     '''
     Time Complexity: O(n^2)
     Space Complexity: O(n^2)
-    Where n is the length of nums. The same bounds as the optimal answer, every one of them
-    paid twice.
-    Pitfalls: The second loop finds nothing the first one missed, and the set is what hides it. Swap the set for a list and the duplicates print. The first loop alone matches a brute force over 3000 random arrays and returns the same triplet count on all five n=3000 stress cases, in half the time.
-    Do not use in interview: It passes the judge. What it tells a human is that I could not prove the first loop was complete, so I ran the search a second time from the other end instead. Sorted, every triplet has exactly one smallest element, so fixing each index as the smallest and two-pointering the suffix reaches every triplet once. That argument is the problem, and the mirror loop is written in its place. Use [sort-two-pointer] instead.
+    Where n is the length of nums. Optimal bounds, paid twice.
+    Pitfalls: The second loop is dead code and the set is what hides it, swap it for a list and the duplicates print. The first loop alone matches brute force over 3000 random arrays and every n=3000 stress case, in half the time.
+    Do not use in interview: Sorted, every triplet has one smallest element, so fixing each index as the smallest and scanning the suffix reaches all of them once. The mirror loop is written in place of that argument, and on 3Sum the argument is the problem. Use [sort-two-pointer] instead.
 
-    Solved unaided in 14m 38s. The goal was the opposite of [sort-binary-search] above: no
-    cleverness, a correct O(n^2) down fast, then optimise in passes. Ran it entirely in my head
-    though, no dry run, so the belief that a left to right loop with l = i+1 would miss triplets
-    never got tested, and the mirror loop went in to cover for it.
+    Solved unaided in 14m 38s. Correct O(n^2) fast then optimise, which was the right plan. Ran
+    it in my head with no dry run though, so the belief that one left to right loop would miss
+    triplets never got tested and the mirror loop went in to cover for it.
     '''
     def threeSum(self, nums: list[int]) -> list[list[int]]:
         nums.sort()
@@ -478,23 +476,20 @@ class Solution:
     '''
     Time Complexity: O(n^2)
     Space Complexity: O(n^2)
-    Where n is the length of nums. The n^2 is the set, which holds every triplet as a tuple
-    while the return builds the list of lists out of it, so two copies are live. Measured
-    223.0 MB peak against 99.5 MB for the duplicate skipping version at n=3000, 1.1M triplets.
-    Pitfalls: bisect.bisect is bisect_right, so m is the count of elements <= 0 and range(m) stops one past the last of them. An earlier draft had m+1 to be safe, which let i reach n on an all nonpositive array, harmless only because nums[i] is read inside the while, which is already false there. Hoist nums[i] out of the inner loop and that draft dies with IndexError on [-3,-2,-1].
+    Where n is the length of nums. The n^2 is the set, live alongside the list it builds:
+    223.0 MB peak against 99.5 MB for the duplicate skipping version at n=3000.
+    Pitfalls: bisect.bisect is bisect_right, so m counts elements <= 0 and range(m) stops one past the last of them. An earlier draft had m+1 to be safe, which let i reach n, harmless only because nums[i] is read inside a while that is already false there. Hoist nums[i] out of the inner loop and it dies with IndexError on [-3,-2,-1].
 
-    This is [two-pointer-both-ends] with the redundant loop deleted and the bound added, so the
-    14m 38s belongs to that attempt, not this one. A zero-sum triplet's smallest element cannot
-    be positive, so i stops at the last non-positive one, 0.285s to 0.019s on an all-positive
-    n=3000. One line, if nums[i] > 0: break, is the same prune and measured identical.
+    [two-pointer-both-ends] with the mirror loop deleted and the bound added, so the 14m 38s
+    belongs to that attempt. A triplet's smallest element cannot be positive, so i stops at the
+    last non-positive, 0.285s to 0.019s on all-positive n=3000. One line, if nums[i] > 0: break,
+    measures identical.
 
-    Still owed is the duplicate skipping the set stands in for, and I had already written it in
-    Java for this problem: [sort-two-pointer] skips i on nums[i-1] == nums[i] and walks left past
-    its repeats, no set at all, 0.113s to 0.007s at n=3000 drawn from +-100. Also the right end
-    bound, the +8 case, which [sort-binary-search] above already does.
-
-    Verified against brute force over 5000 random arrays plus 800 each of all negative, all
-    positive, all zero and single zero inputs. Worst case 0.435s at n=3000.
+    Still owed is the duplicate skipping the set stands in for, already written in Java here.
+    [sort-two-pointer] skips i on nums[i-1] == nums[i] and walks left past its repeats with no
+    set, 0.113s to 0.007s at n=3000 from +-100. The right end bound is the other, and
+    [sort-binary-search] already does it. Brute force clean over 5000 random arrays plus all
+    negative, positive, zero and single zero inputs, worst case 0.435s at n=3000.
     '''
     def threeSum(self, nums: list[int]) -> list[list[int]]:
         nums.sort()
