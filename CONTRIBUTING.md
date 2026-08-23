@@ -60,8 +60,28 @@ This is the whole reason tags exist: so one approach solved in two languages sho
 approach with two tabs, not as two unrelated entries.
 
 Re-solving the same problem the same way is the other use: give the new block the same
-`[tag]` and a fresh date, and both attempts sit side by side as tabs on that approach,
-each labelled with its own date. Up to 8 blocks may share a tag.
+`[tag]` and a fresh date, and both attempts sit side by side as tabs on that approach.
+A tag groups by *idea*, so a re-solve is not a new approach and not a new entry — it is
+another attempt at one you already have.
+
+How attempts render:
+
+- **Order.** Newest date first, so the tab that opens by default is the most recent
+  thinking. Undated attempts sort last, in file order.
+- **Labels.** A dated attempt is labelled `Python · 2026-08-22`. An undated one is plain
+  `Python` when it is the only attempt in that language, and `Python · previous 1`,
+  `previous 2` … when it is not. Labels are guaranteed unique, so two attempts on the same
+  date get a `(2)` suffix rather than two tabs with one name.
+- **Notes.** Each attempt keeps its own docstring. When two or more attempts have something
+  to say, their complexity, prose and `Pitfalls:` render inside their own tab instead of
+  merged above them — the difference between the attempts is the reason both are kept, so
+  neither may overwrite the other. With a single set of notes nothing moves.
+- **Headline.** The Time/Space chips on the approach heading resolve from the newest attempt
+  that states them, so a re-solve that finally works out the space complexity fills a gap the
+  first attempt left without discarding what the first one did say.
+
+Up to 8 blocks may share a tag; `npm run verify` fails on the 9th rather than let the tabs
+drop it, and lists every re-solved approach so the history stays auditable.
 
 `Leet Code/python.py`:
 
@@ -119,6 +139,9 @@ class Solution:
 - These belong to the *approach*, not the language — so for a tagged approach implemented in
   several languages, write them once, on the Python side. `new-problem` leaves a block
   comment on the Java/JS/TS side too; fill that in only if there is no Python implementation.
+- They do *not* belong to the approach across time. A re-solve sharing the tag keeps its own
+  docstring, and the page renders both rather than merging them, so write what this attempt
+  learned and leave the earlier one alone. See the `[tag]` convention above.
 - Leaving them out is fine. The fields just don't render.
 
 ## Marking a solution that would fail an interview

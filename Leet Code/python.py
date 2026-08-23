@@ -1827,6 +1827,41 @@ class Solution:
             return False
         return self.isValidChild(root.left, minNeeded, root.val) and self.isValidChild(root.right, root.val, maxAllowed)
 
+# 98. Validate Binary Search Tree (https://leetcode.com/problems/validate-binary-search-tree/description/) - Medium - 2026-08-22 - 5m 28s [min-max-bounds]
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    '''
+    Time Complexity: O(n), where n is the number of nodes in the tree.
+    Space Complexity: O(n)
+    Every node is visited exactly once and each visit is O(1), so time is O(n) whatever the
+    shape. Measured 2n+1 calls on every tree tried, skewed and balanced alike, because the
+    n+1 empty slots are visited too.
+
+    Space is the recursion stack, so it is really O(h) for height h: O(log n) on a balanced
+    tree, O(n) on a fully skewed one, which is the bound quoted above. Measured max depth 15
+    on a balanced n=10000 against 10001 on a skewed n=10000.
+
+    Re-solve, not a first pass. The 2024 attempt above is the same algorithm, so 5m 28s is
+    recall speed rather than solve speed. Worth keeping both: the chained comparison states
+    the invariant once, where the older `<= minNeeded or >= maxAllowed` states the two ways
+    to fail and reads node.val twice.
+    '''
+    def isValidBST(self, root: Optional[TreeNode]) -> bool:
+
+        def validSubBST(minVal, maxVal, node):
+            if not node:
+                return True
+            if not minVal < node.val < maxVal:
+                return False
+            return validSubBST(minVal,node.val,node.left) and validSubBST(node.val,maxVal,node.right)
+
+        return validSubBST(float('-inf'),float('inf'),root)
+
 
 # 230. Kth Smallest Element in a BST (https://leetcode.com/problems/kth-smallest-element-in-a-bst/description/) - Medium [iterative-stack]
 # Definition for a binary tree node.

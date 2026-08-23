@@ -1,36 +1,54 @@
 ---
 /**
- * Language switcher for one approach — ZERO JavaScript.
+ * Attempt switcher for one approach — ZERO JavaScript.
  *
  * A hidden radio group drives `:checked ~` sibling selectors defined in
  * global.css. Radios are real form controls, so arrow keys move between
- * languages and Tab reaches the group, for free. The `name` must be unique per
+ * attempts and Tab reaches the group, for free. The `name` must be unique per
  * approach so approaches switch independently.
+ *
+ * A tab is one attempt, not one language: re-solving an approach you already
+ * have adds a tab rather than a new section, so the versions sit side by side.
+ * Labels are resolved in the parser (`Implementation.attemptLabel`) and are
+ * guaranteed unique within an approach.
  */
-import { LANG_META, type Implementation } from '../lib/types.ts';
+import type { Implementation } from '../lib/types.ts';
+import { LANG_META } from '../lib/types.ts';
 import { githubBlobUrl } from './site.ts';
 import CodeBlock from './CodeBlock.astro';
 import ExternalIcon from './ExternalIcon.astro';
+import Prose from './Prose.astro';
+import PitfallsCallout from './PitfallsCallout.astro';
 
 interface Props {
   implementations: Implementation[];
   /** Unique radio-group name, e.g. `49-group-anagrams--sorted-key`. */
   group: string;
+  /**
+   * Render each attempt's own complexity and prose inside its panel.
+   *
+   * Set when an approach has more than one attempt carrying notes, so the
+   * difference between them — which is the reason both are kept — is readable
+   * without diffing the two code blocks by eye.
+   */
+  showAttemptNotes?: boolean;
 }
 
-const { implementations, group } = Astro.props;
+const { implementations, group, showAttemptNotes = false } = Astro.props;
 
 // Max 8 slots — matches the :nth-of-type rules in global.css. Repeat attempts of
 // one approach land here too, so this is deeper than the language count.
+// verify-parse.ts fails the build before anything can be silently dropped here.
 const impls = implementations.slice(0, 8);
 const meta = (lang: string) =>
   LANG_META[lang as keyof typeof LANG_META] ?? { label: lang, shiki: lang, ext: '' };
 const single = impls.length === 1;
 
-// The date rides on the tab so repeat attempts of one approach are tellable apart
-// without clicking; the solve time sits in the panel, so neither is ever repeated.
-const tabLabel = (impl: Implementation) =>
-  impl.attemptedOn ? `${meta(impl.lang).label} · ${impl.attemptedOn}` : meta(impl.lang).label;
+const chipsFor = (impl: Implementation) =>
+  [
+    { label: 'Time', value: impl.timeComplexity },
+    { label: 'Space', value: impl.spaceComplexity },
+  ].filter((c) => c.value);
 ---
 
 {
@@ -46,13 +64,13 @@ const tabLabel = (impl: Implementation) =>
           />
         ))}
 
-      <div class="tablist" role={single ? undefined : 'group'} aria-label={single ? undefined : 'Language'}>
+      <div class="tablist" role={single ? undefined : 'group'} aria-label={single ? undefined : 'Attempt'}>
         {impls.map((impl, i) =>
           single ? (
-            <span class="tab tab-static">{tabLabel(impl)}</span>
+            <span class="tab tab-static">{impl.attemptLabel}</span>
           ) : (
             <label class="tab" data-i={i + 1} for={`${group}--${i}`}>
-              {tabLabel(impl)}
+              {impl.attemptLabel}
             </label>
           ),
         )}
@@ -61,9 +79,24 @@ const tabLabel = (impl: Implementation) =>
       <div class={single ? '' : 'tabpanels'}>
         {impls.map((impl, i) => (
           <div class={single ? '' : 'tabpanel'} data-i={single ? undefined : i + 1}>
+            {showAttemptNotes && chipsFor(impl).length > 0 && (
+              <ul class="mb-2 flex flex-wrap items-center gap-1.5 list-none">
+                {chipsFor(impl).map((c) => (
+                  <li class="chip">
+                    <span class="text-fg-faint">{c.label}</span>
+                    <span class="mx-1 text-fg-faint" aria-hidden="true">
+                      ·
+                    </span>
+                    <span class="text-fg">{c.value}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
             {impl.solveTime && (
               <p class="mb-2 text-xs text-fg-subtle">Solved in {impl.solveTime}</p>
             )}
+            {showAttemptNotes && <Prose text={impl.explanation} class="mb-3 max-w-[68ch]" />}
+            {showAttemptNotes && <PitfallsCallout text={impl.pitfalls} class="mb-3" />}
             <CodeBlock code={impl.code} lang={meta(impl.lang).shiki} label={meta(impl.lang).label} />
             <a
               class="mt-2 inline-flex items-center gap-1.5 text-xs text-fg-subtle transition-colors hover:text-fg"
