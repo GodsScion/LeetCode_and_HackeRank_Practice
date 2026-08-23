@@ -117,6 +117,27 @@ for (const problem of problems) {
     if (!approach.name) fail(`${label}: approach "${approach.id}" has no name`);
     if (approach.implementations.length === 0) fail(`${label}: approach "${approach.id}" has zero implementations`);
 
+    // LangTabs slices to 8 and global.css only defines 8 :nth-of-type slots, so a
+    // 9th attempt would vanish from the page with nothing to say it had. Fail here
+    // rather than let the build drop a solution quietly.
+    if (approach.implementations.length > 8) {
+      fail(
+        `${label}: approach "${approach.id}" has ${approach.implementations.length} attempts, the tabs render 8`,
+      );
+    }
+
+    // Labels are the only thing telling one tab from another.
+    const attemptLabels = new Set<string>();
+    for (const impl of approach.implementations) {
+      if (!impl.attemptLabel) {
+        fail(`${label}: attempt with no tab label (${impl.sourceFile}:${impl.startLine})`);
+      } else if (attemptLabels.has(impl.attemptLabel)) {
+        fail(`${label}: approach "${approach.id}" has two tabs both labelled "${impl.attemptLabel}"`);
+      } else {
+        attemptLabels.add(impl.attemptLabel);
+      }
+    }
+
     for (const impl of approach.implementations) {
       if (!impl.code.trim()) {
         fail(`${label}: empty code block (${impl.sourceFile}:${impl.startLine})`);
@@ -179,6 +200,21 @@ console.log(
   `\nFlagged "do not use in interview": ${banned.length} approach(es) across ${new Set(banned.map((b) => b.p.slug)).size} problem(s).`,
 );
 for (const { p, a } of banned) console.log(`  - ${p.slug} [${a.id}]  ${a.doNotUseInInterview}`);
+
+// Re-solves: one approach carrying more than one attempt in the same language.
+// Listed for the same reason the flagged set is — so the history stays auditable
+// and a stray duplicate tag shows up here instead of on the page.
+const resolved = problems.flatMap((p) =>
+  p.approaches
+    .filter((a) => a.implementations.length > new Set(a.implementations.map((i) => i.lang)).size)
+    .map((a) => ({ p, a })),
+);
+console.log(
+  `\nRe-solved approaches: ${resolved.length} across ${new Set(resolved.map((r) => r.p.slug)).size} problem(s).`,
+);
+for (const { p, a } of resolved) {
+  console.log(`  - ${p.slug} [${a.id}]  ${a.implementations.map((i) => i.attemptLabel).join('  |  ')}`);
+}
 
 if (diagnostics.unparsedHeaders.length) {
   console.log(

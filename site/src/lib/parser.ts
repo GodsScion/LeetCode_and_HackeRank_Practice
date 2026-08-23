@@ -16,6 +16,7 @@
 import { readFileSync, readdirSync, existsSync, statSync } from 'node:fs';
 import { dirname, join, extname, basename } from 'node:path';
 
+import { LANG_META } from './types.ts';
 import type {
   Approach,
   Difficulty,
@@ -904,6 +905,57 @@ function buildProblems(blocks: RawBlock[]): Problem[] {
  * Blocks sharing a `[tag]` merge into one approach with several language tabs.
  * Untagged blocks each become their own approach, numbered by position.
  */
+/**
+ * Newest attempt first; undated ones last, keeping file order among themselves.
+ *
+ * ISO dates compare correctly as plain strings, which is why the header contract
+ * insists on YYYY-MM-DD. Array.prototype.sort is stable, so equal dates and the
+ * undated tail stay in the order they appear in the file.
+ */
+function byRecency(a: Implementation, b: Implementation): number {
+  if (a.attemptedOn && b.attemptedOn) return b.attemptedOn.localeCompare(a.attemptedOn);
+  if (a.attemptedOn) return -1;
+  if (b.attemptedOn) return 1;
+  return 0;
+}
+
+/**
+ * Give every attempt a tab label that is unique within its approach.
+ *
+ * A dated attempt is labelled by its date, which is what it has always done. An
+ * undated one only needs disambiguating when it shares a language with another
+ * attempt, so the 149 problems that predate repeat attempts keep the bare
+ * "Python" / "Java" labels they render today.
+ */
+function labelAttempts(implementations: Implementation[]): void {
+  const perLang = new Map<Lang, number>();
+  for (const impl of implementations) perLang.set(impl.lang, (perLang.get(impl.lang) ?? 0) + 1);
+
+  const ordinal = new Map<Lang, number>();
+  for (const impl of implementations) {
+    const base = LANG_META[impl.lang]?.label ?? impl.lang;
+    if (impl.attemptedOn) {
+      impl.attemptLabel = `${base} · ${impl.attemptedOn}`;
+    } else if ((perLang.get(impl.lang) ?? 0) > 1) {
+      const n = (ordinal.get(impl.lang) ?? 0) + 1;
+      ordinal.set(impl.lang, n);
+      impl.attemptLabel = `${base} · previous ${n}`;
+    } else {
+      impl.attemptLabel = base;
+    }
+  }
+
+  // Two attempts can still collide on one date. Labels are the only thing telling
+  // tabs apart, so uniqueness is guaranteed here rather than hoped for.
+  const used = new Set<string>();
+  for (const impl of implementations) {
+    let label = impl.attemptLabel;
+    for (let n = 2; used.has(label); n++) label = `${impl.attemptLabel} (${n})`;
+    impl.attemptLabel = label;
+    used.add(label);
+  }
+}
+
 function buildApproaches(blocks: RawBlock[]): Approach[] {
   const approaches: Approach[] = [];
   const byTag = new Map<string, Approach>();
@@ -917,6 +969,11 @@ function buildApproaches(blocks: RawBlock[]): Approach[] {
       endLine: block.endLine,
       attemptedOn: block.attemptedOn,
       solveTime: block.solveTime,
+      attemptLabel: '',
+      explanation: block.explanation,
+      timeComplexity: block.timeComplexity,
+      spaceComplexity: block.spaceComplexity,
+      pitfalls: block.pitfalls,
     };
 
     const tagId = block.tag ? kebab(block.tag) : '';
@@ -934,10 +991,6 @@ function buildApproaches(blocks: RawBlock[]): Approach[] {
         approaches.push(approach);
       }
       approach.implementations.push(implementation);
-      if (!approach.explanation) approach.explanation = block.explanation;
-      approach.timeComplexity ??= block.timeComplexity;
-      approach.spaceComplexity ??= block.spaceComplexity;
-      approach.pitfalls ??= block.pitfalls;
       approach.doNotUseInInterview ??= block.doNotUseInInterview;
     } else {
       approaches.push({
@@ -951,6 +1004,20 @@ function buildApproaches(blocks: RawBlock[]): Approach[] {
         doNotUseInInterview: block.doNotUseInInterview,
         implementations: [implementation],
       });
+    }
+  }
+
+  // Order the attempts, then let the approach headline resolve from them. Newest
+  // first means a re-solve that finally pins down the space complexity fills the
+  // gap the first attempt left, instead of the file order deciding it.
+  for (const approach of approaches) {
+    approach.implementations.sort(byRecency);
+    labelAttempts(approach.implementations);
+    for (const impl of approach.implementations) {
+      if (!approach.explanation) approach.explanation = impl.explanation;
+      approach.timeComplexity ??= impl.timeComplexity;
+      approach.spaceComplexity ??= impl.spaceComplexity;
+      approach.pitfalls ??= impl.pitfalls;
     }
   }
 

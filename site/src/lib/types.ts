@@ -21,7 +21,13 @@ export const LANG_META: Record<Lang, { label: string; shiki: string; ext: string
   c: { label: 'C', shiki: 'c', ext: '.c' },
 };
 
-/** One language's implementation of a single approach. */
+/**
+ * One attempt at a single approach.
+ *
+ * Usually that means "this approach in Python" — but a re-solve of the same
+ * approach in the same language is also an attempt, and gets its own entry. See
+ * `Approach` for how they are ordered and labelled.
+ */
 export interface Implementation {
   lang: Lang;
   /** Verbatim source, exactly as it appears in the file. Never reformatted. */
@@ -36,6 +42,29 @@ export interface Implementation {
   attemptedOn?: string;
   /** Verbatim solve time from the header, e.g. "14m". Display only, never parsed. */
   solveTime?: string;
+  /**
+   * Tab label, resolved at parse time so the rendering stays dumb and
+   * `npm run verify` can audit the labels:
+   *
+   *   "Python"                  only attempt in that language
+   *   "Python · 2026-08-22"     dated
+   *   "Python · previous 1"     undated, with dated or undated siblings
+   *
+   * Always unique within an approach, which is what makes the tabs clickable
+   * targets rather than three things all called "Python".
+   */
+  attemptLabel: string;
+  /**
+   * This attempt's own docstring, kept per-attempt rather than merged up.
+   *
+   * Two attempts at one approach usually have different things to say — that
+   * difference is the whole reason both are kept — so the newer one's prose must
+   * never silently overwrite the older one's, or vice versa.
+   */
+  explanation: string;
+  timeComplexity?: string;
+  spaceComplexity?: string;
+  pitfalls?: string;
 }
 
 /**
@@ -47,9 +76,18 @@ export interface Implementation {
  *   # 49. Group Anagrams (https://...) - Medium [sorted-key]
  *   // 49. Group Anagrams (https://...) - Medium [sorted-key]
  *
- * Blocks sharing a tag merge into one approach with multiple language tabs.
- * Untagged blocks each become their own approach, numbered in file order, so
- * the site works with zero annotation and improves as tags are added.
+ * Blocks sharing a tag merge into one approach with multiple tabs. Untagged
+ * blocks each become their own approach, numbered in file order, so the site
+ * works with zero annotation and improves as tags are added.
+ *
+ * A tag groups by *idea*, not by language, so re-solving an approach you already
+ * have is just another block carrying the same tag. Every block is one attempt.
+ * Attempts sort newest first on the header date, undated ones last in file order,
+ * so the tab that opens by default is always the most recent thinking.
+ *
+ * The fields below resolve from the newest attempt that states them, so a
+ * re-solve that finally works out the space complexity fills a gap the first
+ * attempt left, without discarding what the first attempt did say.
  */
 export interface Approach {
   /** Tag slug when tagged, else a stable positional id like "approach-2". */

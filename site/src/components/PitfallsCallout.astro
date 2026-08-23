@@ -1,0 +1,43 @@
+---
+/**
+ * The `Pitfalls:` callout.
+ *
+ * Extracted because it renders in two places now: once per approach when there
+ * is a single attempt, and once per tab when an approach has several attempts
+ * that each learned something different.
+ */
+import { proseToHtml } from './prose.ts';
+
+interface Props {
+  text?: string | null;
+  class?: string;
+}
+
+const { text, class: className } = Astro.props;
+const html = proseToHtml(text);
+---
+
+{
+  html && (
+    <div class:list={['callout', className]}>
+      <svg
+        class="callout-icon"
+        width="16"
+        height="16"
+        viewBox="0 0 16 16"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <path d="M8 1.5 15 14H1L8 1.5Z" stroke-linejoin="round" />
+        <path d="M8 6v3.5" />
+        <path d="M8 11.75v.25" />
+      </svg>
+      <p class="callout-title">Pitfalls</p>
+      <div class="prose" set:html={html} />
+    </div>
+  )
+}

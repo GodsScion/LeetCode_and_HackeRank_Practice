@@ -3,6 +3,7 @@ import type { Approach } from '../lib/types.ts';
 import { proseToHtml } from './prose.ts';
 import Prose from './Prose.astro';
 import LangTabs from './LangTabs.astro';
+import PitfallsCallout from './PitfallsCallout.astro';
 
 interface Props {
   approach: Approach;
@@ -18,8 +19,16 @@ const { approach, index, problemSlug } = Astro.props;
 const heading = `Solution ${index}`;
 const subtitle = approach.named ? approach.name : undefined;
 const anchor = `solution-${index}`;
-const pitfalls = proseToHtml(approach.pitfalls);
 const banned = proseToHtml(approach.doNotUseInInterview);
+
+// More than one attempt has something of its own to say, so the notes belong in
+// the tabs where they can be compared, not merged into one block above them.
+// Below that threshold nothing moves, which is every problem logged before
+// repeat attempts existed.
+const withNotes = approach.implementations.filter(
+  (impl) => impl.explanation?.trim() || impl.pitfalls?.trim(),
+);
+const showAttemptNotes = withNotes.length > 1;
 const complexity = [
   { label: 'Time', value: approach.timeComplexity },
   { label: 'Space', value: approach.spaceComplexity },
@@ -89,34 +98,15 @@ const complexity = [
     )
   }
 
-  <Prose text={approach.explanation} class="mt-3 max-w-[68ch]" />
+  {!showAttemptNotes && <Prose text={approach.explanation} class="mt-3 max-w-[68ch]" />}
 
-  {
-    pitfalls && (
-      <div class="callout mt-4">
-        <svg
-          class="callout-icon"
-          width="16"
-          height="16"
-          viewBox="0 0 16 16"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.5"
-          stroke-linecap="round"
-          aria-hidden="true"
-          focusable="false"
-        >
-          <path d="M8 1.5 15 14H1L8 1.5Z" stroke-linejoin="round" />
-          <path d="M8 6v3.5" />
-          <path d="M8 11.75v.25" />
-        </svg>
-        <p class="callout-title">Pitfalls</p>
-        <div class="prose" set:html={pitfalls} />
-      </div>
-    )
-  }
+  {!showAttemptNotes && <PitfallsCallout text={approach.pitfalls} class="mt-4" />}
 
   <div class="mt-4">
-    <LangTabs implementations={approach.implementations} group={`${problemSlug}--${approach.id}`} />
+    <LangTabs
+      implementations={approach.implementations}
+      group={`${problemSlug}--${approach.id}`}
+      showAttemptNotes={showAttemptNotes}
+    />
   </div>
 </section>
